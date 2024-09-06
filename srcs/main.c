@@ -7,6 +7,6 @@ int	main(void)
 
 	mlx = mlx_init();
 	mlx_win = mlx_new_window(mlx, 800, 600, "minirt");
-	mlx_hook(mlx_win, 0, 0, NULL, NULL);
+	printf("%p", mlx_win);
 	return (0);
 }

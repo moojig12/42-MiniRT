@@ -1,0 +1,3 @@
+[submodule "incl/mlx"]
+	path = incl/mlx
+	url = git@github.com:42Paris/minilibx-linux.git
