@@ -5,6 +5,7 @@ With the use of minilibx, we're to develop a program that renders a set scene by
 Each scene can have a Camera, Objects and Lighting with each varying aspects of their own.
 
 # TO-DO
-*	Finish writing the parsing for object attributes and the parser.
-*	Implement the camera and light ray generation.
-*	Check the Parser for any issues.
+-	Finish writing the parsing for object attributes and the parser.
+--	Stopped at populating normalized vector for camera!
+-	Implement the camera and light ray generation.
+-	Check the Parser for any issues.
