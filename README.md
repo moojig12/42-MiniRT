@@ -6,7 +6,7 @@ Each scene can have a Camera, Objects and Lighting with each varying aspects of 
 
 # TO-DO
 *	Finish writing the parsing for object attributes and the parser.
-*		Finished Ambience, Light and Camera
-*		To finish -> Objects parsing
+		Finished Ambience, Light and Camera
+		To finish -> Objects parsing
 *	Implement the camera and light ray generation.
 *	Check the Parser for any issues.
