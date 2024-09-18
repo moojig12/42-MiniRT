@@ -45,6 +45,7 @@ typedef struct s_ray {
 typedef struct s_camera {
 	t_vec	pos;
 	t_vec	norm;
+	// t_vec	direction;
 	int		fov;
 }	t_camera;
 
@@ -82,6 +83,7 @@ typedef struct s_cylinder {
 typedef struct s_world {
 	t_ambient	*amb;
 	t_camera	*cam;
+	t_light		*light;
 	t_sphere	*sphere;
 	t_plane		*plane;
 	t_cyl		*cyl;
@@ -100,6 +102,21 @@ typedef struct s_main {
 
 }	t_ray; */
 
+// Parsing
+
 void	parse_world(t_main *main, char **argv);
+
+// Parsing utilities
+
+int		pop_color(t_rgb *rgb, char **input);
+int		pop_vec(t_vec *vec, char **input, double *range);
+
+// Utilities
+
+int		*alloc_int(int a, int b);
+double	*alloc_float(double a, double b);
+int		ft_range(int num, int min, int max);
+int		ft_range_f(double num, double min, double max);
+double	ft_atof(char *str);
 
 #endif
