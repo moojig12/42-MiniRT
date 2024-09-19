@@ -5,7 +5,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
-# include "mlx.h"
+// # include "mlx.h"
 # include "libft.h"
 # include "get_next_line.h"
 
