@@ -10,7 +10,7 @@ int	pop_color(t_rgb *rgb, char **input)
 	while (input[i])
 	{
 		if (!ft_range(ft_atof(input[i]), 0, 255))
-			printf("Error\nInvalid range");
+			printf("Error\nInvalid range for color");
 		i++;
 	}
 	if (i != 2)
@@ -39,7 +39,11 @@ int	pop_vec(t_vec *pos, char **input, double *range)
 	while (input[i])
 	{
 		if (range && !ft_range_f(ft_atof(input[i]), range[0], range[1]))
-			printf("Error\nInvalid range");
+		{
+			printf("Error\nInvalid range for vec\n");
+			printf("This is outside the range (%f, %f): %f", range[0], range[1],ft_atof(input[i]));
+			exit(0);
+		}
 		i++;
 	}
 	if (i != 3)

@@ -80,7 +80,7 @@ double	*alloc_float(double a, double b)
 // returns 1 if within range. 0 if outside of range
 int	ft_range(int num, int min, int max)
 {
-	if (num < min || num > max)
+	if (num >= min || num <= max)
 		return (1);
 	else
 		return (0);
@@ -89,7 +89,7 @@ int	ft_range(int num, int min, int max)
 // returns 1 if within range. 0 if outside of range
 int	ft_range_f(double num, double min, double max)
 {
-	if (num < min || num > max)
+	if (num >= min || num <= max)
 		return (1);
 	else
 		return (0);

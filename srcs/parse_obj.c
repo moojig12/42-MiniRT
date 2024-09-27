@@ -5,7 +5,7 @@ int	parse_cyl(t_main *main, char *input, int index)
 	if (!main->world.cyl)
 		main->world.cyl = malloc(sizeof(t_cyl));
 	if (index > 5 || index < 1)
-		printf("Error\nInvalid input for cylinder");
+		printf("Error\nInvalid input for cylinder\n");
 	if (index == 1)
 		pop_vec(&main->world.cyl->pos, ft_split(input, ','), NULL);
 	if (index == 2)
