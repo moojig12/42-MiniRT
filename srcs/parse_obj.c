@@ -2,8 +2,10 @@
 
 int	parse_cyl(t_main *main, char *input, int index)
 {
+	if (!main->world.cyl)
+		main->world.cyl = malloc(sizeof(t_cyl));
 	if (index > 5 || index < 1)
-		perror("Error\nInvalid input for cylinder");
+		printf("Error\nInvalid input for cylinder");
 	if (index == 1)
 		pop_vec(&main->world.cyl->pos, ft_split(input, ','), NULL);
 	if (index == 2)
@@ -19,6 +21,8 @@ int	parse_cyl(t_main *main, char *input, int index)
 
 int	parse_plane(t_main *main, char *input, int index)
 {
+	if (!main->world.plane)
+		main->world.plane = malloc(sizeof(t_plane));
 	if (index > 3 || index < 1)
 		return (0);
 	if (index == 1)
@@ -27,10 +31,13 @@ int	parse_plane(t_main *main, char *input, int index)
 		pop_vec(&main->world.plane->norm, ft_split(input, ','), alloc_float(-1.0, 1.0));
 	if (index == 3)
 		pop_color(&main->world.plane->color, ft_split(input, ','));
+	return (0);
 }
 
 int	parse_sphere(t_main *main, char *input, int index)
 {
+	if (!main->world.sphere)
+		main->world.sphere = malloc(sizeof(t_sphere));
 	if (index > 3 || index < 1)
 		return (0);
 	if (index == 1)
@@ -39,4 +46,5 @@ int	parse_sphere(t_main *main, char *input, int index)
 		main->world.sphere->diameter = ft_atof(input);
 	if (index == 3)
 		pop_color(&main->world.sphere->color, ft_split(input, ','));
+	return (0);
 }

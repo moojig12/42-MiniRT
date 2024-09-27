@@ -5,7 +5,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
-// # include "mlx.h"
+# include "mlx.h"
 # include "libft.h"
 # include "get_next_line.h"
 
@@ -105,6 +105,12 @@ typedef struct s_main {
 // Parsing
 
 void	parse_world(t_main *main, char **argv);
+int		parse_amb(t_main *main, char *input, int index);
+int		parse_light(t_main *main, char *input, int index);
+int		parse_cam(t_main *main, char *input, int index);
+int		parse_cyl(t_main *main, char *input, int index);
+int		parse_plane(t_main *main, char *input, int index);
+int		parse_sphere(t_main *main, char *input, int index);
 
 // Parsing utilities
 

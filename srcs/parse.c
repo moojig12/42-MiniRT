@@ -1,6 +1,6 @@
 #include "minirt.h"
 
-int	check_iden_type(char *input, t_main *main)
+int	check_iden_type(char *input)
 {
 	if (!ft_strncmp(input, "A", 1))
 		return (AMBIENCE);
@@ -35,10 +35,8 @@ int	input_par(char *input, t_main *main, int index, int type)
 	else if (type == CYLINDER)
 		parse_cyl(main, input, index);
 	else
-	{
-		perror("Error\ninvalid type");
-		return (0);
-	}
+		printf("Error\ninvalid type");
+	return (0);
 }
 
 int	check_identifier(t_main *main, char **input)
@@ -52,11 +50,12 @@ int	check_identifier(t_main *main, char **input)
 	while (input[i])
 	{
 		if (i == 0)
-			type = check_iden_type(input[i], main);
+			type = check_iden_type(input[i]);
 		else
 			input_par(input[i], main, i, type);
 		i++;
 	}
+	return (0);
 }
 
 int	check_par(t_main *main, char *input)
