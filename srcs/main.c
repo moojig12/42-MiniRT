@@ -12,6 +12,8 @@ void	initialize_main(t_main *main)
 	if (main->width == 0)
 		mlx_get_screen_size(main->mlx, &main->width, &main->height);
 	main->win = mlx_new_window(main->mlx, 800, 600, "minirt");
+	main->width = 800;
+	main->height = 600;
 	main->world->cam->width = 800;
 	main->world->cam->height = 600;
 }

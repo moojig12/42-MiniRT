@@ -2,7 +2,7 @@ NAME	=	miniRT
 
 CC		=	cc
 HEADER	=	-I./incl -I./incl/mlx -I./incl/libft -I./incl/get_next_line
-CFLAGS	=	-O2 -Wall -Werror -Wextra -Ilibmlx -g $(HEADER)
+CFLAGS	=	-fsanitize=address -O2 -Wall -Werror -Wextra -Ilibmlx -g $(HEADER)
 MFLAGS  =	-L /usr/X11R6/lib -lXext -lX11 -lm
 
 LIBS	=	./incl/libft/libft.a ./incl/mlx/libmlx.a ./incl/get_next_line/gnl.a

@@ -40,7 +40,7 @@ void print_vals(t_obj *last_object, t_rgb BRDF, t_rgb incoming, t_ray new_ray, t
 	if (last_object)
 	{
 		printf("object exists!\n");
-		printf("Type:%i\n", last_object->type);
+		// printf("Type:%i\n", last_object->type);
 	}
 	printf("BRDF\n r:%i g:%i b:%i\n", BRDF.r, BRDF.g, BRDF.b);
 	printf("new ray origin\n x:%f y:%f z:%f\n", new_ray.origin.x, new_ray.origin.y, new_ray.origin.z);
@@ -72,18 +72,23 @@ t_rgb	trace(t_ray ray, int depth, t_world *world, t_obj *last_object)
 	if (last_object != NULL)
 	{
 		// emission = last_object->material.emission;
-		emission = ret_color(0, 0, 0);
-		BRDF = BRDF_lambertan(last_object->material.reflectance);
+		emission = world->amb->color;
+		// BRDF = BRDF_lambertan(last_object->material.reflectance);
+		BRDF = ret_color(0, 0, 0);
 	}
 	else
 	{
-		emission = ret_color(0, 0, 0);
+		// emission = ret_color(0, 0, 0);
+		emission = world->amb->color;
 		BRDF = ret_color(0, 0, 0);
 	}
 	// Trace light source recursively
 	incoming = trace(new_ray, depth + 1, world, intersection.obj);
 	print_vals(last_object, BRDF, incoming, new_ray, emission);
-	return (color_add(emission, (color_multiply(BRDF, (color_scalar(incoming, dot(last_object->norm, new_ray.origin) / p))))));
+	if (last_object)
+		return (color_add(emission, (color_multiply(BRDF, (color_scalar(incoming, dot(last_object->norm, new_ray.origin) / p))))));
+	else
+		return (color_add(emission, (color_multiply(BRDF, (color_scalar(incoming, dot(vec(0, 0, 0), new_ray.origin) / p))))));
 }
 
 t_rgb	raytrace(t_world *world, int x, int y)
@@ -110,11 +115,14 @@ t_rgb	raytrace(t_world *world, int x, int y)
 void	render(t_main *main, t_world *world)
 {
 	t_rgb	color;
+	t_rgb	accumilation;
 	int	i;
 	int	j;
 
 	i = 0;
 	j = 0;
+	accumilation = ret_color(0, 0, 0);
+	printf("height and width: %i, %i\n", main->height, main->width);
 	// generate rays for each pixel and incrementally add to pixel
 	while (1)
 	{
@@ -123,16 +131,17 @@ void	render(t_main *main, t_world *world)
 			while (i < main->width)
 			{
 				color = raytrace(world, i, j);
+				accumilation = color_add(accumilation, color);
 				//	generate ray and save (to screen?)
 				//	for now adding flat values over pixels
-				mlx_pixel_put(main->mlx, main->win, i, j, pack_color(color.r, color.g, color.b));
 						// screen.color (use dot function) raytrace(world); // ???
+				mlx_pixel_put(main->mlx, main->win, i, j, pack_color(accumilation.r, accumilation.g, accumilation.b));
 				i++;
 			}
 			i = 0;
 			j++;
 		}
-		i = 0;
+		j = 0;
 	}
 }
 

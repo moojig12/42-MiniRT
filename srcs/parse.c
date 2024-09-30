@@ -27,21 +27,24 @@ int	input_par(char *input, t_main *main, int index, int type)
 	else if (type == CAMERA)
 		parse_cam(main, input, index);
 	else if (type == LIGHT)
+	{
+		main->world->obj[type - 3].type = type;
 		parse_light(main, input, index);
+	}
 	else if (type == SPHERE)
 	{
-		main->world->obj[type - 4].type = type;
-		parse_sphere(&main->world->obj[type - 4], input, index);
+		main->world->obj[type - 3].type = type;
+		parse_sphere(&main->world->obj[type - 3], input, index);
 	}
 	else if (type == PLANE)
 	{
-		main->world->obj[type - 4].type = type;
-		parse_plane(&main->world->obj[type - 4], input, index);
+		main->world->obj[type - 3].type = type;
+		parse_plane(&main->world->obj[type - 3], input, index);
 	}
 	else if (type == CYLINDER)
 	{
-		main->world->obj[type - 4].type = type;
-		parse_cyl(&main->world->obj[type - 4], input, index);
+		main->world->obj[type - 3].type = type;
+		parse_cyl(&main->world->obj[type - 3], input, index);
 	}
 	else
 		printf("Error\ninvalid type");
@@ -84,8 +87,11 @@ void	parse_world(t_main *main, char **argv)
 
 	fd = open(argv[1], O_RDONLY);
 	input = get_next_line(fd);
-	main->world->obj = malloc(3 * sizeof(t_obj));
-	main->world->object_num = 3;
+	main->world->obj = malloc(4 * sizeof(t_obj));
+	main->world->object_num = 4;
+	main->world->amb = malloc(sizeof(t_ambient));
+	main->world->light = malloc(sizeof(t_light));
+	main->world->cam = malloc(sizeof(t_camera));
 	while (input)
 	{
 		check_par(main, input);
