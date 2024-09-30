@@ -6,11 +6,11 @@
 #    By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/24 15:02:29 by nmandakh          #+#    #+#              #
-#    Updated: 2024/09/24 15:03:15 by nmandakh         ###   ########.fr        #
+#    Updated: 2024/09/30 08:43:38 by nmandakh         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS			=	get_next_line.c get_next_line_utils.c
+SRCS			= get_next_line.c get_next_line_utils.c
 
 OBJS			= $(SRCS:.c=.o)
 

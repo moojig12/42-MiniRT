@@ -29,11 +29,20 @@ int	input_par(char *input, t_main *main, int index, int type)
 	else if (type == LIGHT)
 		parse_light(main, input, index);
 	else if (type == SPHERE)
-		parse_sphere(main, input, index);
+	{
+		main->world->obj[type - 4].type = type;
+		parse_sphere(&main->world->obj[type - 4], input, index);
+	}
 	else if (type == PLANE)
-		parse_plane(main, input, index);
+	{
+		main->world->obj[type - 4].type = type;
+		parse_plane(&main->world->obj[type - 4], input, index);
+	}
 	else if (type == CYLINDER)
-		parse_cyl(main, input, index);
+	{
+		main->world->obj[type - 4].type = type;
+		parse_cyl(&main->world->obj[type - 4], input, index);
+	}
 	else
 		printf("Error\ninvalid type");
 	return (0);
@@ -75,6 +84,8 @@ void	parse_world(t_main *main, char **argv)
 
 	fd = open(argv[1], O_RDONLY);
 	input = get_next_line(fd);
+	main->world->obj = malloc(3 * sizeof(t_obj));
+	main->world->object_num = 3;
 	while (input)
 	{
 		check_par(main, input);

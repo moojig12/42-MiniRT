@@ -1,50 +1,50 @@
 #include "minirt.h"
 
-int	parse_cyl(t_main *main, char *input, int index)
+int	parse_cyl(t_obj *obj, char *input, int index)
 {
-	if (!main->world.cyl)
-		main->world.cyl = malloc(sizeof(t_cyl));
+	/* if (!obj)
+		obj = malloc(sizeof(t_cyl)); */
 	if (index > 5 || index < 1)
 		printf("Error\nInvalid input for cylinder\n");
 	if (index == 1)
-		pop_vec(&main->world.cyl->pos, ft_split(input, ','), NULL);
+		pop_vec(&obj->pos, ft_split(input, ','), NULL);
 	if (index == 2)
-		pop_vec(&main->world.cyl->norm, ft_split(input, ','), alloc_float(-1.0, 1.0));
+		pop_vec(&obj->norm, ft_split(input, ','), alloc_float(-1.0, 1.0));
 	if (index == 3)
-		main->world.cyl->diameter = ft_atof(input);
+		obj->diameter = ft_atof(input);
 	if (index == 4)
-		main->world.cyl->height = ft_atof(input);
+		obj->height = ft_atof(input);
 	if (index == 5)
-		pop_color(&main->world.cyl->color, ft_split(input, ','));
+		pop_color(&obj->material.color, ft_split(input, ','));
 	return (0);
 }
 
-int	parse_plane(t_main *main, char *input, int index)
+int	parse_plane(t_obj *obj, char *input, int index)
 {
-	if (!main->world.plane)
-		main->world.plane = malloc(sizeof(t_plane));
+	/* if (!obj)
+		obj = malloc(sizeof(t_plane)); */
 	if (index > 3 || index < 1)
 		return (0);
 	if (index == 1)
-		pop_vec(&main->world.plane->pos, ft_split(input, ','), NULL);
+		pop_vec(&obj->pos, ft_split(input, ','), NULL);
 	if (index == 2)
-		pop_vec(&main->world.plane->norm, ft_split(input, ','), alloc_float(-1.0, 1.0));
+		pop_vec(&obj->norm, ft_split(input, ','), alloc_float(-1.0, 1.0));
 	if (index == 3)
-		pop_color(&main->world.plane->color, ft_split(input, ','));
+		pop_color(&obj->material.color, ft_split(input, ','));
 	return (0);
 }
 
-int	parse_sphere(t_main *main, char *input, int index)
+int	parse_sphere(t_obj *obj, char *input, int index)
 {
-	if (!main->world.sphere)
-		main->world.sphere = malloc(sizeof(t_sphere));
+	/* if (!obj)
+		obj = malloc(sizeof(t_sphere)); */
 	if (index > 3 || index < 1)
 		return (0);
 	if (index == 1)
-		pop_vec(&main->world.sphere->pos, ft_split(input, ','), NULL);
+		pop_vec(&obj->pos, ft_split(input, ','), NULL);
 	if (index == 2)
-		main->world.sphere->diameter = ft_atof(input);
+		obj->diameter = ft_atof(input);
 	if (index == 3)
-		pop_color(&main->world.sphere->color, ft_split(input, ','));
+		pop_color(&obj->material.color, ft_split(input, ','));
 	return (0);
 }

@@ -9,22 +9,35 @@
 # include "libft.h"
 # include "get_next_line.h"
 
+// Constants
+# define PI 3.14159
+
+// Max depth of bounces for tracing
+# define MAXDEPTH 5
+
+// objects
 # define AMBIENCE 1
 # define CAMERA 2
 # define LIGHT 3
 # define SPHERE 4
 # define PLANE 5
 # define CYLINDER 6
+
+// linear congruential generator constants
+# define A 1664525
+# define C 1013904223
+# define M 0xFFFFFFFF
+
 typedef enum e_object_type {
 	OBJECT_SPHERE,
 	OBJECT_PLANE,
 	OBJECT_CYLINDER
 }	t_object_type;
 
-typedef struct s_object {
+/* typedef struct s_object {
 	t_object_type	type;
 	void			*data;
-}	t_obj;
+}	t_obj; */
 
 typedef struct s_vector {
 	double	x;
@@ -49,6 +62,12 @@ typedef struct s_camera {
 	int		height;
 	int		fov;
 }	t_camera;
+
+typedef struct s_material {
+	t_rgb	reflectance;
+	t_rgb	emission;
+	t_rgb	color;
+}	t_mat;
 
 typedef struct s_ambient {
 	double	ratio;
@@ -81,13 +100,32 @@ typedef struct s_cylinder {
 	t_rgb	color;
 }	t_cyl;
 
+typedef struct s_obj {
+	int	type;
+	t_vec	pos;
+	t_vec	norm;
+	double	diameter;
+	double	height;
+	t_mat	material;
+}	t_obj;
+
+typedef struct s_intersection {
+	t_vec	norm;
+	t_vec	point;
+	t_obj	*obj;
+	int		distance;
+	int		hit;
+}	t_intersection;
+
 typedef struct s_world {
 	t_ambient	*amb;
 	t_camera	*cam;
 	t_light		*light;
 	t_sphere	*sphere;
-	t_plane		*plane;
 	t_cyl		*cyl;
+	t_plane		*plane;
+	t_obj		*obj;
+	int			object_num;
 }	t_world;
 
 typedef struct s_main {
@@ -95,7 +133,7 @@ typedef struct s_main {
 	void	*win;
 	int		width;
 	int		height;
-	t_world	world;
+	t_world	*world;
 }	t_main;
 
 /* typedef struct s_ray
@@ -103,15 +141,19 @@ typedef struct s_main {
 
 }	t_ray; */
 
+// Main pipeline
+
+int	main_pipeline(t_main *main);
+
 // Parsing
 
 void	parse_world(t_main *main, char **argv);
 int		parse_amb(t_main *main, char *input, int index);
 int		parse_light(t_main *main, char *input, int index);
 int		parse_cam(t_main *main, char *input, int index);
-int		parse_cyl(t_main *main, char *input, int index);
-int		parse_plane(t_main *main, char *input, int index);
-int		parse_sphere(t_main *main, char *input, int index);
+int		parse_cyl(t_obj *obj, char *input, int index);
+int		parse_plane(t_obj *obj, char *input, int index);
+int		parse_sphere(t_obj *obj, char *input, int index);
 
 // Parsing utilities
 
@@ -125,5 +167,27 @@ double	*alloc_float(double a, double b);
 int		ft_range(int num, int min, int max);
 int		ft_range_f(double num, double min, double max);
 double	ft_atof(char *str);
+t_vec	vec(double x, double y, double z);
+t_vec	add(t_vec a, t_vec b);
+t_vec	subtract(t_vec a, t_vec b);
+t_vec	vec_scalar(t_vec a, double b);
+t_vec	normalize(t_vec v);
+double	dot(t_vec a, t_vec b);
+t_rgb	ret_color(int r, int g, int b);
+int		pack_color(int r, int g, int b);
+t_rgb	color_add(t_rgb a, t_rgb b);
+t_rgb	color_scalar(t_rgb color, double scalar);
+t_rgb	color_multiply(t_rgb a, t_rgb b);
+t_rgb	BRDF_lambertan(t_rgb albedo);
+t_intersection	find_path(t_ray ray, t_world *world);
+int		close_window(t_main	*main);
+
+// Randomness
+
+unsigned int	ft_rand(void);
+double			random_double(void);
+double			random_double_range(double min, double max);
+t_vec			random_vec(void);
+t_vec			random_vec_range(double min, double max);
 
 #endif

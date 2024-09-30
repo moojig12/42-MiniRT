@@ -12,6 +12,9 @@ SRCS	=	main.c \
 			parse.c \
 			parse_amb.c parse_obj.c parse_utils.c \
 			utils.c \
+			random_gen.c \
+			render.c \
+			intersect.c
 
 OBJS	=	$(addprefix srcs/, $(SRCS:.c=.o))
 
@@ -29,6 +32,7 @@ $(NAME): $(OBJS)
 
 clean:
 			make clean -C ./incl/libft
+			make clean -C ./incl/get_next_line
 			# make clean -C ./mlx
 			rm -rf $(OBJS)
 			
