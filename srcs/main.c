@@ -6,7 +6,7 @@ int	close_window(t_main	*main)
 	exit (0);
 }
 
-void	initialize_main(t_main *main)
+/* void	initialize_main(t_main *main)
 {
 	main->mlx = mlx_init();
 	if (main->width == 0)
@@ -16,13 +16,13 @@ void	initialize_main(t_main *main)
 	main->height = 600;
 	main->world->cam->width = 800;
 	main->world->cam->height = 600;
-}
+} */
 
 int	main(int argc, char **argv)
 {
 	t_main	*main;
 
-	if (argc < 2)
+	if (argc < 2 || check_file)
 		printf("Meow");
 	main = malloc(sizeof(t_main));
 	main->world = malloc(sizeof(t_world));

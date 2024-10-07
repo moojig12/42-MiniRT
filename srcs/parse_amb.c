@@ -5,19 +5,19 @@ int	parse_amb(t_main *main, char *input, int index)
 	double	*range;
 
 	range = alloc_float(0.0, 1.0);
-	if (!main->world.amb)
-		main->world.amb = malloc(sizeof(t_ambient));
+	if (!main->world->amb)
+		main->world->amb = malloc(sizeof(t_ambient)); // do I need this?
 	if (index > 2 || index < 1)
 		printf("Error\ninvalid input for ambience %i\n", index);
 	if (index == 1)
 	{
 		if (ft_range_f(ft_atof(input), range[0], range[1]))
-			main->world.amb->ratio = ft_atof(input);
+			main->world->amb->ratio = ft_atof(input);
 		else
 			printf("Error\nWrong ambience light ratio\n");
 	}
 	else if (index == 2)
-		pop_color(&main->world.amb->color, ft_split(input, ','));
+		pop_color(&main->world->amb->color, ft_split(input, ','));
 	return (0);
 }
 

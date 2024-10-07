@@ -12,9 +12,6 @@ SRCS	=	main.c \
 			parse.c \
 			parse_amb.c parse_obj.c parse_utils.c \
 			utils.c \
-			random_gen.c \
-			render.c \
-			intersect.c
 
 OBJS	=	$(addprefix srcs/, $(SRCS:.c=.o))
 

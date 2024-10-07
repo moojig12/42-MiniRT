@@ -2,21 +2,18 @@
 
 int	check_iden_type(char *input)
 {
-	if (!ft_strncmp(input, "A", 1))
+	if (ft_strcmp(input, "A"))
 		return (AMBIENCE);
-	if (!ft_strncmp(input, "C", 1))
+	if (ft_strcmp(input, "C"))
 		return (CAMERA);
-	if (!ft_strncmp(input, "L", 1))
+	if (ft_strcmp(input, "L"))
 		return (LIGHT);
-	if (ft_strlen(input) >= 2)
-	{
-		if (!ft_strncmp(input, "pl", 2))
-			return (PLANE);
-		if (!ft_strncmp(input, "sp", 2))
-			return (SPHERE);
-		if (!ft_strncmp(input, "cy", 2))
-			return (CYLINDER);
-	}
+	if (ft_strcmp(input, "pl"))
+		return (PLANE);
+	if (ft_strcmp(input, "sp"))
+		return (SPHERE);
+	if (ft_strcmp(input, "cy"))
+		return (CYLINDER);
 	return (-1);
 }
 
@@ -28,22 +25,18 @@ int	input_par(char *input, t_main *main, int index, int type)
 		parse_cam(main, input, index);
 	else if (type == LIGHT)
 	{
-		main->world->obj[type - 3].type = type;
 		parse_light(main, input, index);
 	}
 	else if (type == SPHERE)
 	{
-		main->world->obj[type - 3].type = type;
 		parse_sphere(&main->world->obj[type - 3], input, index);
 	}
 	else if (type == PLANE)
 	{
-		main->world->obj[type - 3].type = type;
 		parse_plane(&main->world->obj[type - 3], input, index);
 	}
 	else if (type == CYLINDER)
 	{
-		main->world->obj[type - 3].type = type;
 		parse_cyl(&main->world->obj[type - 3], input, index);
 	}
 	else
@@ -59,7 +52,8 @@ int	check_identifier(t_main *main, char **input)
 	if (!input)
 		return (0);
 	i = 0;
-	while (input[i])
+	type = 0;
+	while (input[i] && type != -1)
 	{
 		if (i == 0)
 			type = check_iden_type(input[i]);
@@ -67,15 +61,15 @@ int	check_identifier(t_main *main, char **input)
 			input_par(input[i], main, i, type);
 		i++;
 	}
-	return (0);
+	return (type);
 }
 
-int	check_par(t_main *main, char *input)
+int	check_par(t_main *main, char *input) // is this function necessary?
 {
 	int	type;
 
 	if (!input || !*input)
-		return (-1);
+		return (0);
 	type = check_identifier(main, ft_split(input, ' '));
 	return (type);
 }
@@ -86,15 +80,16 @@ void	parse_world(t_main *main, char **argv)
 	char	*input;
 
 	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
+		return (exit_err("failed opening files\n", 1));
 	input = get_next_line(fd);
-	main->world->obj = malloc(4 * sizeof(t_obj));
-	main->world->object_num = 4;
-	main->world->amb = malloc(sizeof(t_ambient));
-	main->world->light = malloc(sizeof(t_light));
-	main->world->cam = malloc(sizeof(t_camera));
+	main->world->amb = malloc(sizeof(t_ambient)); // do I need to do this here?
+	main->world->light = malloc(sizeof(t_light));// do I need to do this here?
+	main->world->cam = malloc(sizeof(t_camera)); // do I need to do this here?
 	while (input)
 	{
-		check_par(main, input);
+		if (check_par(main, input) == -1)
+			return (exit_err("wrong type\n", 1));
 		free(input);
 		input = get_next_line(fd);
 	}

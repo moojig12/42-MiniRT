@@ -78,18 +78,21 @@ typedef struct s_light {
 	t_vec	pos;
 	double	brightness;
 	t_rgb	color;
+	struct s_light	*next;
 }	t_light;
 
 typedef struct s_sphere {
 	t_vec	pos;
 	double	diameter;
 	t_rgb	color;
+	struct s_sphere	*next;
 }	t_sphere;
 
 typedef struct s_plane {
 	t_vec	pos;
 	t_vec	norm;
 	t_rgb	color;
+	struct s_plane	*next;
 }	t_plane;
 
 typedef struct s_cylinder {
@@ -98,21 +101,18 @@ typedef struct s_cylinder {
 	double	diameter;
 	double	height;
 	t_rgb	color;
+	struct s_cylinder	*next;
 }	t_cyl;
 
 typedef struct s_obj {
 	int	type;
-	t_vec	pos;
-	t_vec	norm;
-	double	diameter;
-	double	height;
-	t_mat	material;
+	void	*obj;
+	struct s_obj	*next;
 }	t_obj;
 
 typedef struct s_intersection {
 	t_vec	norm;
 	t_vec	point;
-	t_obj	*obj;
 	int		distance;
 	int		hit;
 }	t_intersection;
@@ -124,15 +124,14 @@ typedef struct s_world {
 	t_sphere	*sphere;
 	t_cyl		*cyl;
 	t_plane		*plane;
-	t_obj		*obj;
 	int			object_num;
 }	t_world;
 
 typedef struct s_main {
-	void	*mlx;
-	void	*win;
-	int		width;
-	int		height;
+	// void	*mlx;
+	// void	*win;
+	// int		width;
+	// int		height;
 	t_world	*world;
 }	t_main;
 

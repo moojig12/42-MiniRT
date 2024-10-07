@@ -147,7 +147,7 @@ void	render(t_main *main, t_world *world)
 
 int	main_pipeline(t_main *main)
 {
-	render(main, main->world);
+	render(main, &main->world);
 
 	loop(main);
 	return (0);
