@@ -1,8 +1,7 @@
 #include "minirt.h"
 
-t_intersection	intersect_sphere(t_ray ray, t_obj *obj)
+t_intersection	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersection intersection)
 {
-	t_intersection	intersection;
 	double	a;
 	double	b;
 	double	c;
@@ -13,10 +12,10 @@ t_intersection	intersect_sphere(t_ray ray, t_obj *obj)
 	t_vec	oc;
 
 	intersection.hit = 0;
-	oc = subtract(ray.origin, obj->pos);
+	oc = subtract(ray.origin, sphere->pos);
 	a = dot(ray.dest, ray.dest);
 	b = 2.0 * dot(oc, ray.dest);
-	c = dot(oc, oc) - (obj->diameter / 2) * (obj->diameter / 2);
+	c = dot(oc, oc) - (sphere->diameter / 2) * (sphere->diameter / 2);
 	disc = b * b - 4 * a * c;
 
 	if (disc < 0)
@@ -36,42 +35,36 @@ t_intersection	intersect_sphere(t_ray ray, t_obj *obj)
 			intersection.hit = 1;
 			intersection.distance = t;
 			intersection.point = add(ray.origin, vec_scalar(ray.dest, t));
-			intersection.norm = normalize(subtract(intersection.point, obj->pos));
+			intersection.norm = normalize(subtract(intersection.point, sphere->pos));
 		}
 	}
 	return (intersection);
 }
 
-t_intersection	intersect_plane(t_ray ray, t_obj *obj)
+t_intersection	intersect_plane(t_ray ray, t_plane *plane, t_intersection intersection)
 {
-	t_intersection intersection;
-	intersection.hit = 0;
-
-	double denominator = dot(ray.dest, obj->norm);
+	double denominator = dot(ray.dest, plane->norm);
 	if (fabs(denominator) < 1e-6)
 		return intersection; // Ray is parallel to the plane
 
-	double t = dot(subtract(obj->pos, ray.origin), obj->norm) / denominator;
+	double t = dot(subtract(plane->pos, ray.origin), plane->norm) / denominator;
 	if (t >= 0)
 	{
 		intersection.hit = 1;
 		intersection.distance = t;
 		intersection.point = add(ray.origin, vec_scalar(ray.dest, t)); // O + tD
-		intersection.norm = obj->norm; // Normal is constant
+		intersection.norm = plane->norm; // Normal is constant
 	}
 
 	return intersection;
 }
 
-t_intersection	intersect_cylinder(t_ray ray, t_obj *obj)
+t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersection)
 {
-	t_intersection intersection;
-	intersection.hit = 0;
-
 	// Define necessary vectors
-	t_vec oc = subtract(ray.origin, obj->pos); // O - P (P is the base position of the obj)
-	t_vec axis = normalize(obj->norm); // Normalize the obj axis
-	double radius_squared = (obj->diameter / 2) * (obj->diameter / 2);
+	t_vec oc = subtract(ray.origin, cyl->pos); // O - P (P is the base position of the obj)
+	t_vec axis = normalize(cyl->norm); // Normalize the obj axis
+	double radius_squared = (cyl->diameter / 2) * (cyl->diameter / 2);
 		
 	// Compute coefficients for the quadratic equation
 	double a = dot(ray.dest, ray.dest) - dot(ray.dest, axis) * dot(ray.dest, axis);
@@ -103,10 +96,10 @@ t_intersection	intersect_cylinder(t_ray ray, t_obj *obj)
 		intersection.point = add(ray.origin, vec_scalar(ray.dest, t)); // Intersection point
 		
 		// Check if the intersection point is within the height of the obj
-		t_vec point_on_axis = add(obj->pos, vec_scalar(axis, dot(subtract(intersection.point, obj->pos), axis)));
+		t_vec point_on_axis = add(cyl->pos, vec_scalar(axis, dot(subtract(intersection.point, cyl->pos), axis)));
 		double height_check = dot(subtract(intersection.point, point_on_axis), axis);
 
-		if (height_check < 0 || height_check > obj->height) {
+		if (height_check < 0 || height_check > cyl->height) {
 			intersection.hit = 0; // Outside the obj's caps
 			return intersection;
 		}
@@ -114,8 +107,13 @@ t_intersection	intersect_cylinder(t_ray ray, t_obj *obj)
 		intersection.norm = normalize(subtract(intersection.point, point_on_axis)); // Normal vector
 	}
 
-	return intersection;
+	return (intersection);
 }
+
+/* t_intersection	intersect_light(t_ray ray, t_obj *obj, t_intersection intersection)
+{
+	return (intersection);
+} */
 
 t_intersection	intersect(t_ray ray, t_obj *obj)
 {
@@ -125,14 +123,17 @@ t_intersection	intersect(t_ray ray, t_obj *obj)
 	intersection.distance = INFINITY;
 	intersection.point = vec(0, 0, 0);
 	intersection.norm = vec(0, 0, 0);
+	intersection.emittance = ret_color(0, 0, 0);
 
 	// Call the specific intersection test based on the object type
 	if (obj->type == SPHERE)
-		return (intersect_sphere(ray, obj));
+		return (intersect_sphere(ray, (t_sphere *)obj->data, intersection));
 	else if (obj->type == CYLINDER)
-		return (intersect_cylinder(ray, obj));
+		return (intersect_cylinder(ray, (t_cyl *)obj->data, intersection));
 	else if (obj->type == PLANE)
-		return (intersect_plane(ray, obj));
+		return (intersect_plane(ray, (t_plane *)obj->data, intersection));
+	/* else if (obj->type == LIGHT)
+		return (intersect_light(ray, obj, intersection)); */
 	else
 		printf("Error\nNo object type for intersection\n");
 	return (intersection);
@@ -144,13 +145,11 @@ t_intersection	find_path(t_ray ray, t_world *world)
 	t_intersection	intersection;
 	t_obj			*object;
 	double			closest_distance = INFINITY;
-	int	i;
 
 	closest_intersection.hit = 0;
-	i = 0;
-	while (i < world->object_num)
+	object = world->obj;
+	while (object)
 	{
-		object = &world->obj[i];
 		intersection = intersect(ray, object);
 		if (intersection.hit)
 		{
@@ -160,7 +159,7 @@ t_intersection	find_path(t_ray ray, t_world *world)
 				closest_intersection = intersection;
 			}
 		}
-		i++;
+		object = object->next;
 	}
 
 	return (closest_intersection);

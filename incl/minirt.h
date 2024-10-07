@@ -28,6 +28,8 @@
 # define C 1013904223
 # define M 0xFFFFFFFF
 
+typedef struct s_obj t_obj;
+
 typedef enum e_object_type {
 	OBJECT_SPHERE,
 	OBJECT_PLANE,
@@ -102,17 +104,14 @@ typedef struct s_cylinder {
 
 typedef struct s_obj {
 	int	type;
-	t_vec	pos;
-	t_vec	norm;
-	double	diameter;
-	double	height;
-	t_mat	material;
+	void	*data;
+	t_obj	*next;
 }	t_obj;
 
 typedef struct s_intersection {
 	t_vec	norm;
 	t_vec	point;
-	t_obj	*obj;
+	t_rgb	emittance;
 	int		distance;
 	int		hit;
 }	t_intersection;
@@ -151,9 +150,9 @@ void	parse_world(t_main *main, char **argv);
 int		parse_amb(t_main *main, char *input, int index);
 int		parse_light(t_main *main, char *input, int index);
 int		parse_cam(t_main *main, char *input, int index);
-int		parse_cyl(t_obj *obj, char *input, int index);
-int		parse_plane(t_obj *obj, char *input, int index);
-int		parse_sphere(t_obj *obj, char *input, int index);
+int		parse_cyl(t_cyl *cyl, char *input, int index);
+int		parse_plane(t_plane *plane, char *input, int index);
+int		parse_sphere(t_sphere *sphere, char *input, int index);
 
 // Parsing utilities
 

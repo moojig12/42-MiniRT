@@ -28,23 +28,23 @@ int	input_par(char *input, t_main *main, int index, int type)
 		parse_cam(main, input, index);
 	else if (type == LIGHT)
 	{
-		main->world->obj[type - 3].type = type;
+		// main->world->obj[type - 3].type = type;
 		parse_light(main, input, index);
 	}
 	else if (type == SPHERE)
 	{
-		main->world->obj[type - 3].type = type;
-		parse_sphere(&main->world->obj[type - 3], input, index);
+		// main->world->obj[type - 3].type = type;
+		parse_sphere(main->world->sphere, input, index);
 	}
 	else if (type == PLANE)
 	{
-		main->world->obj[type - 3].type = type;
-		parse_plane(&main->world->obj[type - 3], input, index);
+		// main->world->obj[type - 3].type = type;
+		parse_plane(main->world->plane, input, index);
 	}
 	else if (type == CYLINDER)
 	{
-		main->world->obj[type - 3].type = type;
-		parse_cyl(&main->world->obj[type - 3], input, index);
+		// main->world->obj[type - 3].type = type;
+		parse_cyl(main->world->cyl, input, index);
 	}
 	else
 		printf("Error\ninvalid type");
@@ -80,18 +80,38 @@ int	check_par(t_main *main, char *input)
 	return (type);
 }
 
+void	append_node(t_world *base, t_obj *node)
+{
+	t_obj	*temp;
+
+	if (base->obj == NULL)
+		base->obj = node;
+	else
+	{
+		temp = base->obj;
+		while (temp->next)
+			temp = temp->next;
+		temp->next = node;
+	}
+}
+
 void	parse_world(t_main *main, char **argv)
 {
 	int	fd;
+	int	i;
 	char	*input;
+	t_obj	*object;
 
 	fd = open(argv[1], O_RDONLY);
 	input = get_next_line(fd);
-	main->world->obj = malloc(4 * sizeof(t_obj));
+	main->world->obj = NULL;
 	main->world->object_num = 4;
 	main->world->amb = malloc(sizeof(t_ambient));
 	main->world->light = malloc(sizeof(t_light));
 	main->world->cam = malloc(sizeof(t_camera));
+	main->world->sphere = malloc(sizeof(t_sphere));
+	main->world->cyl = malloc(sizeof(t_cyl));
+	main->world->plane = malloc(sizeof(t_plane));
 	while (input)
 	{
 		check_par(main, input);
@@ -100,4 +120,38 @@ void	parse_world(t_main *main, char **argv)
 	}
 	if (input)
 		free(input);
+	
+	i = 0;
+	while (i < 3)
+	{
+		object = malloc(sizeof(t_obj));
+		if (i == 0)
+		{
+			object->type = SPHERE;
+			object->data = (void *)main->world->sphere;
+		}
+		if (i == 1)
+		{
+			object->type = PLANE;
+			object->data = (void *)main->world->plane;
+		}
+		if (i == 2)
+		{
+			object->type = CYLINDER;
+			object->data = (void *)main->world->cyl;
+		}
+		object->next = NULL;
+		append_node(main->world, object);
+		printf("object type prase:%i\nobject pointer: %p\n", object->type, main->world->obj);
+		object = NULL;
+		i++;
+	}
+	t_obj	*test;
+
+	test = main->world->obj;
+	while (test)
+	{
+		printf("world node %i: %p\n", test->type, test->data);
+		test = test->next;
+	}
 }
