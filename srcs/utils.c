@@ -107,7 +107,10 @@ int	ft_range_f(double num, double min, double max)
 
 int pack_color(int r, int g, int b)
 {
-	return (r << 16) | (g << 8) | b;
+	int	t;
+
+	t = 255;
+	return (t << 24 | r << 16 | g << 8 | b);
 }
 
 // addition operation for two vectors

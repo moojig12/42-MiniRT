@@ -142,7 +142,7 @@ void	parse_world(t_main *main, char **argv)
 		}
 		object->next = NULL;
 		append_node(main->world, object);
-		printf("object type prase:%i\nobject pointer: %p\n", object->type, main->world->obj);
+		printf("object type prase:%i\n", object->type);
 		object = NULL;
 		i++;
 	}

@@ -9,9 +9,12 @@ int	close_window(t_main	*main)
 void	initialize_main(t_main *main)
 {
 	main->mlx = mlx_init();
-	if (main->width == 0)
-		mlx_get_screen_size(main->mlx, &main->width, &main->height);
-	main->win = mlx_new_window(main->mlx, 800, 600, "minirt");
+	if (main->mlx)
+	{
+		if (main->width == 0)
+			mlx_get_screen_size(main->mlx, &main->width, &main->height);
+		main->win = mlx_new_window(main->mlx, 800, 600, "minirt");
+	}
 	main->width = 800;
 	main->height = 600;
 	main->world->cam->width = 800;
