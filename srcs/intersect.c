@@ -12,9 +12,9 @@ t_intersection	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersection inte
 	t_vec	oc;
 
 	intersection.hit = 0;
-	oc = subtract(ray.origin, sphere->pos);
+	oc = subtract(sphere->pos, ray.origin);
 	a = dot(ray.dest, ray.dest);
-	b = 2.0 * dot(oc, ray.dest);
+	b = -2.0 * dot(oc, ray.dest);
 	c = dot(oc, oc) - (sphere->diameter / 2) * (sphere->diameter / 2);
 	disc = b * b - 4 * a * c;
 

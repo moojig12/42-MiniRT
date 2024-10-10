@@ -15,6 +15,11 @@ void	initialize_main(t_main *main)
 			mlx_get_screen_size(main->mlx, &main->width, &main->height);
 		main->win = mlx_new_window(main->mlx, 800, 600, "minirt");
 	}
+	else
+	{
+		printf("why isnt it working\n");
+		exit(0);
+	}
 	main->width = 800;
 	main->height = 600;
 	main->world->cam->width = 800;
@@ -31,7 +36,6 @@ int	main(int argc, char **argv)
 	main->world = malloc(sizeof(t_world));
 	parse_world(main, argv);
 	initialize_main(main);
-
 	main_pipeline(main);
 	return (0);
 }
