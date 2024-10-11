@@ -17,28 +17,20 @@ int	check_iden_type(char *input)
 	return (-1);
 }
 
-int	input_par(char *input, t_main *main, int index, int type)
+int	input_par(char **input, t_world *world, int index, int type)
 {
 	if (type == AMBIENCE)
-		parse_amb(main, input, index);
+		world->amb = parse_amb(main, input);
 	else if (type == CAMERA)
-		parse_cam(main, input, index);
+		world->cam = parse_cam(main, input);
 	else if (type == LIGHT)
-	{
-		parse_light(main, input, index);
-	}
+		world->light = parse_light(&world, input);
 	else if (type == SPHERE)
-	{
-		parse_sphere(&main->world->obj[type - 3], input, index);
-	}
+		world->sphere = parse_sphere(&world, input);
 	else if (type == PLANE)
-	{
-		parse_plane(&main->world->obj[type - 3], input, index);
-	}
+		world->plane = parse_plane(&world, input);
 	else if (type == CYLINDER)
-	{
-		parse_cyl(&main->world->obj[type - 3], input, index);
-	}
+		world->cyl = parse_cyl(&world, input);
 	else
 		printf("Error\ninvalid type");
 	return (0);
@@ -52,15 +44,9 @@ int	check_identifier(t_main *main, char **input)
 	if (!input)
 		return (0);
 	i = 0;
-	type = 0;
-	while (input[i] && type != -1)
-	{
-		if (i == 0)
-			type = check_iden_type(input[i]);
-		else
-			input_par(input[i], main, i, type);
-		i++;
-	}
+	type = check_iden_type(input[0])
+	if (type != -1 && input[1])
+		input_par(input, main->world, type);
 	return (type);
 }
 
@@ -71,7 +57,21 @@ int	check_par(t_main *main, char *input) // is this function necessary?
 	if (!input || !*input)
 		return (0);
 	type = check_identifier(main, ft_split(input, ' '));
+	// add to obj list here
+	main->world->objlist = ft_add_obj_lst(type, main->world);
 	return (type);
+}
+
+int	init_world(t_main *main)
+{
+	main->world = malloc(sizeof(t_world));
+	main->world->amb = NULL;
+	main->world->cam = NULL;
+	main->world->light = NULL;
+	main->world->objlist = NULL;
+	main->world->cyl = NULL;
+	main->world->plane = NULL;
+	main->world->sphere = NULL;
 }
 
 void	parse_world(t_main *main, char **argv)
@@ -83,9 +83,7 @@ void	parse_world(t_main *main, char **argv)
 	if (fd == -1)
 		return (exit_err("failed opening files\n", 1));
 	input = get_next_line(fd);
-	main->world->amb = malloc(sizeof(t_ambient)); // do I need to do this here?
-	main->world->light = malloc(sizeof(t_light));// do I need to do this here?
-	main->world->cam = malloc(sizeof(t_camera)); // do I need to do this here?
+	init_world(main);
 	while (input)
 	{
 		if (check_par(main, input) == -1)

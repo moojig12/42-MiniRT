@@ -5,7 +5,6 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
-# include "mlx.h"
 # include "libft.h"
 # include "get_next_line.h"
 
@@ -106,7 +105,7 @@ typedef struct s_cylinder {
 
 typedef struct s_obj {
 	int	type;
-	void	*obj;
+	void	*data;
 	struct s_obj	*next;
 }	t_obj;
 
@@ -124,6 +123,7 @@ typedef struct s_world {
 	t_sphere	*sphere;
 	t_cyl		*cyl;
 	t_plane		*plane;
+	t_obj		*objlist;
 	int			object_num;
 }	t_world;
 
@@ -158,6 +158,8 @@ int		parse_sphere(t_obj *obj, char *input, int index);
 
 int		pop_color(t_rgb *rgb, char **input);
 int		pop_vec(t_vec *vec, char **input, double *range);
+t_cyl	*ft_lstlast_cyl_mrt(t_cyl *lst);
+void	ft_lstadd_back_cyl_mrt(t_cyl **lst, t_cyl *new);
 
 // Utilities
 

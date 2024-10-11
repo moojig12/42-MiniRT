@@ -9,8 +9,11 @@ LIBS	=	./incl/libft/libft.a ./incl/mlx/libmlx.a ./incl/get_next_line/gnl.a
 
 
 SRCS	=	main.c \
-			parse.c \
-			parse_amb.c parse_obj.c parse_utils.c \
+			parser/parse.c \
+			parser/parse_amb.c parser/parse_obj.c parser/parse_utils.c \
+			parser/checks.c \
+			parser/utils_p.c \
+			error.c \
 			utils.c \
 
 OBJS	=	$(addprefix srcs/, $(SRCS:.c=.o))

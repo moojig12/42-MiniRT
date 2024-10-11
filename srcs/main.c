@@ -22,12 +22,11 @@ int	main(int argc, char **argv)
 {
 	t_main	*main;
 
-	if (argc < 2 || check_file)
+	if (argc < 2)
 		printf("Meow");
 	main = malloc(sizeof(t_main));
-	main->world = malloc(sizeof(t_world));
 	parse_world(main, argv);
-	initialize_main(main);
+	//initialize_main(main);
 
 	main_pipeline(main);
 	return (0);
