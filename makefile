@@ -11,10 +11,12 @@ LIBS	=	./incl/libft/libft.a ./incl/mlx/libmlx.a ./incl/get_next_line/gnl.a
 SRCS	=	main.c \
 			parse.c \
 			parse_amb.c parse_obj.c parse_utils.c \
-			utils.c \
 			random_gen.c \
 			render.c \
-			intersect.c
+			intersect.c \
+			utils.c \
+			utils_color.c \
+			utils_vec.c
 
 OBJS	=	$(addprefix srcs/, $(SRCS:.c=.o))
 

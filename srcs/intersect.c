@@ -12,10 +12,10 @@ t_intersection	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersection inte
 	t_vec	oc;
 
 	intersection.hit = 0;
-	oc = subtract(sphere->pos, ray.origin);
-	a = dot(ray.dest, ray.dest);
-	b = -2.0 * dot(oc, ray.dest);
-	c = dot(oc, oc) - (sphere->diameter / 2) * (sphere->diameter / 2);
+	oc = vec_sub(sphere->pos, ray.origin);
+	a = vec_dot(ray.dest, ray.dest);
+	b = -2.0 * vec_dot(oc, ray.dest);
+	c = vec_dot(oc, oc) - (sphere->diameter / 2) * (sphere->diameter / 2);
 	disc = b * b - 4 * a * c;
 
 	if (disc < 0)
@@ -34,42 +34,47 @@ t_intersection	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersection inte
 		{
 			intersection.hit = 1;
 			intersection.distance = t;
-			intersection.point = add(ray.origin, vec_scalar(ray.dest, t));
-			intersection.norm = normalize(subtract(intersection.point, sphere->pos));
+			intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t));
+			intersection.norm = vec_normalize(vec_sub(intersection.point, sphere->pos));
 		}
 	}
+
+	if (intersection.hit == 1)
+		printf("SPHERE!\n");
 	return (intersection);
 }
 
 t_intersection	intersect_plane(t_ray ray, t_plane *plane, t_intersection intersection)
 {
-	double denominator = dot(ray.dest, plane->norm);
+	double denominator = vec_dot(ray.dest, plane->norm);
 	if (fabs(denominator) < 1e-6)
 		return intersection; // Ray is parallel to the plane
 
-	double t = dot(subtract(plane->pos, ray.origin), plane->norm) / denominator;
+	double t = vec_dot(vec_sub(plane->pos, ray.origin), plane->norm) / denominator;
 	if (t >= 0)
 	{
 		intersection.hit = 1;
 		intersection.distance = t;
-		intersection.point = add(ray.origin, vec_scalar(ray.dest, t)); // O + tD
+		intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t)); // O + tD
 		intersection.norm = plane->norm; // Normal is constant
 	}
 
+	if (intersection.hit == 1)
+		printf("PLANE!\n");
 	return intersection;
 }
 
 t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersection)
 {
 	// Define necessary vectors
-	t_vec oc = subtract(ray.origin, cyl->pos); // O - P (P is the base position of the obj)
-	t_vec axis = normalize(cyl->norm); // Normalize the obj axis
+	t_vec oc = vec_sub(ray.origin, cyl->pos); // O - P (P is the base position of the obj)
+	t_vec axis = vec_normalize(cyl->norm); // Normalize the obj axis
 	double radius_squared = (cyl->diameter / 2) * (cyl->diameter / 2);
 		
 	// Compute coefficients for the quadratic equation
-	double a = dot(ray.dest, ray.dest) - dot(ray.dest, axis) * dot(ray.dest, axis);
-	double b = 2.0 * (dot(oc, ray.dest) - dot(ray.dest, axis) * dot(oc, axis));
-	double c = dot(oc, oc) - dot(oc, axis) * dot(oc, axis) - radius_squared;
+	double a = vec_dot(ray.dest, ray.dest) - vec_dot(ray.dest, axis) * vec_dot(ray.dest, axis);
+	double b = 2.0 * (vec_dot(oc, ray.dest) - vec_dot(ray.dest, axis) * vec_dot(oc, axis));
+	double c = vec_dot(oc, oc) - vec_dot(oc, axis) * vec_dot(oc, axis) - radius_squared;
 
 	double discriminant = b * b - 4 * a * c;
 
@@ -93,20 +98,22 @@ t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersec
 	if (t < INFINITY) {
 		intersection.hit = 1;
 		intersection.distance = t;
-		intersection.point = add(ray.origin, vec_scalar(ray.dest, t)); // Intersection point
+		intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t)); // Intersection point
 		
 		// Check if the intersection point is within the height of the obj
-		t_vec point_on_axis = add(cyl->pos, vec_scalar(axis, dot(subtract(intersection.point, cyl->pos), axis)));
-		double height_check = dot(subtract(intersection.point, point_on_axis), axis);
+		t_vec point_on_axis = vec_add(cyl->pos, vec_scalar(axis, vec_dot(vec_sub(intersection.point, cyl->pos), axis)));
+		double height_check = vec_dot(vec_sub(intersection.point, point_on_axis), axis);
 
 		if (height_check < 0 || height_check > cyl->height) {
 			intersection.hit = 0; // Outside the obj's caps
 			return intersection;
 		}
 
-		intersection.norm = normalize(subtract(intersection.point, point_on_axis)); // Normal vector
+		intersection.norm = vec_normalize(vec_sub(intersection.point, point_on_axis)); // Normal vector
 	}
 
+	if (intersection.hit == 1)
+		printf("CYLINDER!\n");
 	return (intersection);
 }
 
@@ -124,7 +131,6 @@ t_intersection	intersect(t_ray ray, t_obj *obj)
 	intersection.point = vec(0, 0, 0);
 	intersection.norm = vec(0, 0, 0);
 	intersection.emittance = ret_color(0, 0, 0);
-
 	// Call the specific intersection test based on the object type
 	if (obj->type == SPHERE)
 		return (intersect_sphere(ray, (t_sphere *)obj->data, intersection));

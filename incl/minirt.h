@@ -10,7 +10,7 @@
 # include "get_next_line.h"
 
 // Constants
-# define PI 3.14159
+# define PI 3.14159265358979323846
 
 // Max depth of bounces for tracing
 # define MAXDEPTH 5
@@ -116,6 +116,14 @@ typedef struct s_intersection {
 	int		hit;
 }	t_intersection;
 
+typedef struct s_screen {
+	double	width;
+	double	height;
+	double	aspect_ratio;
+	t_vec	up;
+	t_vec	right;
+}	t_screen;
+
 typedef struct s_world {
 	t_ambient	*amb;
 	t_camera	*cam;
@@ -144,6 +152,10 @@ typedef struct s_main {
 
 int	main_pipeline(t_main *main);
 
+// Render
+
+t_intersection	find_path(t_ray ray, t_world *world);
+
 // Parsing
 
 void	parse_world(t_main *main, char **argv);
@@ -166,20 +178,23 @@ double	*alloc_float(double a, double b);
 int		ft_range(int num, int min, int max);
 int		ft_range_f(double num, double min, double max);
 double	ft_atof(char *str);
+int		close_window(t_main	*main);
+
+// Vector operations
 t_vec	vec(double x, double y, double z);
-t_vec	add(t_vec a, t_vec b);
-t_vec	subtract(t_vec a, t_vec b);
+t_vec	vec_add(t_vec a, t_vec b);
+t_vec	vec_sub(t_vec a, t_vec b);
 t_vec	vec_scalar(t_vec a, double b);
-t_vec	normalize(t_vec v);
-double	dot(t_vec a, t_vec b);
-t_rgb	ret_color(int r, int g, int b);
+t_vec	vec_cross(t_vec a, t_vec b);
+t_vec	vec_normalize(t_vec v);
+
+// Color operations
 int		pack_color(int r, int g, int b);
 t_rgb	color_add(t_rgb a, t_rgb b);
 t_rgb	color_scalar(t_rgb color, double scalar);
 t_rgb	color_multiply(t_rgb a, t_rgb b);
-t_rgb	BRDF_lambertan(t_rgb albedo);
-t_intersection	find_path(t_ray ray, t_world *world);
-int		close_window(t_main	*main);
+double	vec_dot(t_vec a, t_vec b);
+t_rgb	ret_color(int r, int g, int b);
 
 // Randomness
 
