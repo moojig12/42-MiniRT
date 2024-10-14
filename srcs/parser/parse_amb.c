@@ -6,7 +6,7 @@ t_ambient	*parse_amb(t_world *world, char **input)
 	t_ambient *new;
 
 	range = alloc_float(0.0, 1.0);
-	new = malloc(sizeof(t_ambient)); // do I need this?
+	new = malloc(sizeof(t_ambient));
 	// if (index > 2 || index < 1)
 	// 	printf("Error\ninvalid input for ambience %i\n", index);
 	if (input[1])
@@ -14,14 +14,14 @@ t_ambient	*parse_amb(t_world *world, char **input)
 		if (ft_range_f(ft_atof(input[1]), range[0], range[1]))
 			new->ratio = ft_atof(input[1]);
 		else
-			printf("Error\nWrong ambience light ratio\n");
+			exit_err_init("Error\nWrong ambience light ratio\n", 1, world);
 	}
 	if (input[2])
 		pop_color(&new->color, ft_split(input[2], ','));
 	else
-		printf("Error\ninvalid input for ambience %i\n", index);
+		exit_err_init("Error\ninvalid input for ambience\n", 1, world);
 	if (world->amb != NULL)
-		printf("Error\nToo many args for amb\n"); //return and exit CHANGE!!
+		exit_err_init("Error\nToo many args for amb\n", 1, world);
 	return (new);
 }
 

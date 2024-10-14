@@ -20,9 +20,9 @@ int	check_iden_type(char *input)
 int	input_par(char **input, t_world *world, int index, int type)
 {
 	if (type == AMBIENCE)
-		world->amb = parse_amb(main, input);
+		world->amb = parse_amb(world, input);
 	else if (type == CAMERA)
-		world->cam = parse_cam(main, input);
+		world->cam = parse_cam(world, input);
 	else if (type == LIGHT)
 		world->light = parse_light(&world, input);
 	else if (type == SPHERE)
@@ -44,7 +44,7 @@ int	check_identifier(t_main *main, char **input)
 	if (!input)
 		return (0);
 	i = 0;
-	type = check_iden_type(input[0])
+	type = check_iden_type(input[0]);
 	if (type != -1 && input[1])
 		input_par(input, main->world, type);
 	return (type);
@@ -81,13 +81,13 @@ void	parse_world(t_main *main, char **argv)
 
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
-		return (exit_err("failed opening files\n", 1));
+		return (exit_err("failed opening files\n", 1, ));
 	input = get_next_line(fd);
 	init_world(main);
 	while (input)
 	{
 		if (check_par(main, input) == -1)
-			return (exit_err("wrong type\n", 1));
+			return (exit_err("wrong type\n", 1, main));
 		free(input);
 		input = get_next_line(fd);
 	}

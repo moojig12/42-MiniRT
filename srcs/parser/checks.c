@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 15:54:20 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/07 15:55:49 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/10/14 16:03:40 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,10 @@
 
 int	check_file(char *file)
 {
-	
+	while (*file && *file != '.')
+		*file++;
+	if (ft_strcmp(*file, ".rt") == 0)
+		return (0);
+	else
+		return (-1);
 }

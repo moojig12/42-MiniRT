@@ -14,6 +14,7 @@ SRCS	=	main.c \
 			parser/checks.c \
 			parser/utils_p.c \
 			error.c \
+			free.c \
 			utils.c \
 
 OBJS	=	$(addprefix srcs/, $(SRCS:.c=.o))

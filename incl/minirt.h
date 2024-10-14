@@ -147,7 +147,7 @@ int	main_pipeline(t_main *main);
 // Parsing
 
 void	parse_world(t_main *main, char **argv);
-int		parse_amb(t_main *main, char *input, int index);
+t_ambient	*parse_amb(t_world *world, char **input);
 int		parse_light(t_main *main, char *input, int index);
 int		parse_cam(t_main *main, char *input, int index);
 int		parse_cyl(t_obj *obj, char *input, int index);
@@ -160,6 +160,15 @@ int		pop_color(t_rgb *rgb, char **input);
 int		pop_vec(t_vec *vec, char **input, double *range);
 t_cyl	*ft_lstlast_cyl_mrt(t_cyl *lst);
 void	ft_lstadd_back_cyl_mrt(t_cyl **lst, t_cyl *new);
+int		ft_strcmp(const char *s1, const char *s2);
+int		check_file(char *file);
+
+// error
+void	exit_err(char *message, int code, t_main *main);
+void	exit_err_init(char *msg, int code, t_world *world);
+void	free_world(t_world *world);
+void	free_main(t_main *main);
+
 
 // Utilities
 

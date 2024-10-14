@@ -22,12 +22,12 @@ int	main(int argc, char **argv)
 {
 	t_main	*main;
 
-	if (argc < 2)
-		printf("Meow");
-	main = malloc(sizeof(t_main));
+	if (argc < 2 || check_file(argv[1]))
+		return (printf("Meow"));
+	main = malloc(sizeof(t_main));// change, initialize after world and just pass world done for the next func
 	parse_world(main, argv);
 	//initialize_main(main);
 
-	main_pipeline(main);
+	//main_pipeline(main);
 	return (0);
 }
