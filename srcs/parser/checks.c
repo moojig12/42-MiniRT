@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 15:54:20 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/14 16:03:40 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/10/14 19:30:13 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,16 @@ int	check_file(char *file)
 		return (0);
 	else
 		return (-1);
+}
+
+int	check_size_matrix(char **matrix)
+{
+	int	i;
+
+	i = 0;
+	if (!matrix)
+		return (-1);
+	while(matrix[i])
+		i++;
+	return(i);
 }

@@ -65,3 +65,12 @@ int	pop_vec(t_vec *pos, char **input, double *range)
 	free(range);
 	return (0);
 }
+int	pop_fov(int *fov, char *input, int *range)
+{
+	if (!input)
+		return (0);
+	if (ft_range(ft_atoi(input), range[0], range[1]))
+		*fov = ft_atoi(input);
+	free(range);
+	return (0);
+}

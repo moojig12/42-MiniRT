@@ -146,10 +146,7 @@ int	main_pipeline(t_main *main);
 
 // Parsing
 
-void	parse_world(t_main *main, char **argv);
-t_ambient	*parse_amb(t_world *world, char **input);
-int		parse_light(t_main *main, char *input, int index);
-int		parse_cam(t_main *main, char *input, int index);
+t_world		*parse_world(t_world *world, char **argv);
 int		parse_cyl(t_obj *obj, char *input, int index);
 int		parse_plane(t_obj *obj, char *input, int index);
 int		parse_sphere(t_obj *obj, char *input, int index);
@@ -162,6 +159,18 @@ t_cyl	*ft_lstlast_cyl_mrt(t_cyl *lst);
 void	ft_lstadd_back_cyl_mrt(t_cyl **lst, t_cyl *new);
 int		ft_strcmp(const char *s1, const char *s2);
 int		check_file(char *file);
+int		check_size_matrix(char **matrix);
+
+// Parsing amb
+t_ambient	*parse_amb(t_world *world, char **input);
+
+// Parsing cam
+t_camera	*parse_cam(t_world *world, char **input);
+
+// Parsing light
+t_light	*ft_lstlast_lig_mrt(t_light *lst);
+void	ft_lstadd_back_lig_mrt(t_light **lst, t_light *new);
+t_light	*parse_light(t_world *world, t_light *light, char **input);
 
 // error
 void	exit_err(char *message, int code, t_main *main);

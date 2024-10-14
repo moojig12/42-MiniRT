@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/14 21:13:43 by fjoestin          #+#    #+#             */
+/*   Updated: 2024/10/14 22:08:31 by fjoestin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 int	check_iden_type(char *input)
@@ -17,80 +29,73 @@ int	check_iden_type(char *input)
 	return (-1);
 }
 
-int	input_par(char **input, t_world *world, int index, int type)
+int	input_par(char **input, t_world *world, int type)
 {
 	if (type == AMBIENCE)
 		world->amb = parse_amb(world, input);
 	else if (type == CAMERA)
 		world->cam = parse_cam(world, input);
 	else if (type == LIGHT)
-		world->light = parse_light(&world, input);
+		parse_light(world, world->light, input);
 	else if (type == SPHERE)
-		world->sphere = parse_sphere(&world, input);
+		parse_sphere(&world, input);
 	else if (type == PLANE)
-		world->plane = parse_plane(&world, input);
+		parse_plane(&world, input);
 	else if (type == CYLINDER)
-		world->cyl = parse_cyl(&world, input);
+		parse_cyl(&world, input);
 	else
 		printf("Error\ninvalid type");
 	return (0);
 }
 
-int	check_identifier(t_main *main, char **input)
+int	check_par(t_world *world, char *input) 
 {
 	int	type;
-	int	i;
-
-	if (!input)
-		return (0);
-	i = 0;
-	type = check_iden_type(input[0]);
-	if (type != -1 && input[1])
-		input_par(input, main->world, type);
-	return (type);
-}
-
-int	check_par(t_main *main, char *input) // is this function necessary?
-{
-	int	type;
+	char	**input_matrix;
 
 	if (!input || !*input)
 		return (0);
-	type = check_identifier(main, ft_split(input, ' '));
-	// add to obj list here
-	main->world->objlist = ft_add_obj_lst(type, main->world);
+	input_matrix = ft_split(input, ' ');
+	type = check_iden_type(input_matrix[0]);
+	if (type != -1 && input_matrix[1])
+	{
+		input_par(input_matrix, world, type);
+		world->objlist = ft_add_obj_lst(type, world);
+	}
 	return (type);
 }
 
-int	init_world(t_main *main)
+int	init_world(t_world *world)
 {
-	main->world = malloc(sizeof(t_world));
-	main->world->amb = NULL;
-	main->world->cam = NULL;
-	main->world->light = NULL;
-	main->world->objlist = NULL;
-	main->world->cyl = NULL;
-	main->world->plane = NULL;
-	main->world->sphere = NULL;
+	world = malloc(sizeof(t_world));
+	world->amb = NULL;
+	world->cam = NULL;
+	world->light = NULL;
+	world->objlist = NULL;
+	world->cyl = NULL;
+	world->plane = NULL;
+	world->sphere = NULL;
 }
 
-void	parse_world(t_main *main, char **argv)
+t_world	*parse_world(t_world *world, char **argv)
 {
 	int	fd;
 	char	*input;
+	;
 
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
-		return (exit_err("failed opening files\n", 1, ));
+		exit_err_init("failed opening files\n", 1, NULL);
 	input = get_next_line(fd);
-	init_world(main);
+	init_world(world);
 	while (input)
 	{
-		if (check_par(main, input) == -1)
-			return (exit_err("wrong type\n", 1, main));
+		if (check_par(world, input) == -1)
+			exit_err_init("wrong type\n", 1, world);
 		free(input);
 		input = get_next_line(fd);
 	}
 	if (input)
 		free(input);
+	return (world);
 }
