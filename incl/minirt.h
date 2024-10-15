@@ -109,6 +109,7 @@ typedef struct s_obj {
 }	t_obj;
 
 typedef struct s_intersection {
+	t_vec	origin;
 	t_vec	norm;
 	t_vec	point;
 	t_rgb	emittance;

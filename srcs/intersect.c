@@ -36,6 +36,7 @@ t_intersection	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersection inte
 			intersection.distance = t;
 			intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t));
 			intersection.norm = vec_normalize(vec_sub(intersection.point, sphere->pos));
+			intersection.emittance = sphere->color;
 		}
 	}
 
@@ -57,6 +58,7 @@ t_intersection	intersect_plane(t_ray ray, t_plane *plane, t_intersection interse
 		intersection.distance = t;
 		intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t)); // O + tD
 		intersection.norm = plane->norm; // Normal is constant
+		intersection.emittance = plane->color;
 	}
 
 	if (intersection.hit == 1)
@@ -108,7 +110,7 @@ t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersec
 			intersection.hit = 0; // Outside the obj's caps
 			return intersection;
 		}
-
+		intersection.emittance = cyl->color;
 		intersection.norm = vec_normalize(vec_sub(intersection.point, point_on_axis)); // Normal vector
 	}
 
@@ -167,6 +169,5 @@ t_intersection	find_path(t_ray ray, t_world *world)
 		}
 		object = object->next;
 	}
-
 	return (closest_intersection);
 }
