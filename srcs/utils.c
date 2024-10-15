@@ -94,3 +94,12 @@ int	ft_range_f(double num, double min, double max)
 	else
 		return (0);
 }
+
+int	print_vec(char *string, t_vec vec)
+{
+	if (string)
+		printf("\n---\n%s\nx: %f\ny: %f\nz: %f\n", string, vec.x, vec.y, vec.z);
+	else
+		printf("---\nx: %f\ny: %f\nz: %f\n", vec.x, vec.y, vec.z);
+	return (0);
+}

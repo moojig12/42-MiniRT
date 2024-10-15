@@ -179,6 +179,7 @@ double	*alloc_float(double a, double b);
 int		ft_range(int num, int min, int max);
 int		ft_range_f(double num, double min, double max);
 double	ft_atof(char *str);
+int		print_vec(char *string,t_vec vec);
 int		close_window(t_main	*main);
 
 // Vector operations
