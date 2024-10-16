@@ -60,6 +60,7 @@ typedef struct s_ray {
 typedef struct s_camera {
 	t_vec	pos;
 	t_vec	norm;
+	t_vec	direction;
 	int		width;
 	int		height;
 	int		fov;

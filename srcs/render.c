@@ -9,9 +9,14 @@ void	loop(t_main *main)
 t_ray	gen_ray(t_camera *cam, int x, int y)
 {
 	t_ray ray;
+	double	aspect_ratio;
+
+	aspect_ratio = cam->width / cam->height;
+	
 
 	ray.origin = vec(cam->pos.x + x, cam->pos.y + y, cam->pos.z);
-	ray.dest = vec_add(ray.origin, vec_cross(cam->norm, vec(0, 0, 1)));
+	
+	ray.dest = vec_add(ray.origin, vec_cross(cam->norm, cam->direction));
 	return ray;
 }
 
@@ -46,6 +51,7 @@ int	render(t_main *main, t_world *world)
 
 	x = 0;
 	y = 0;
+	world->cam->direction = vec(0, 0, 1);
 	while (1)
 	{
 		while (y < main->height)
