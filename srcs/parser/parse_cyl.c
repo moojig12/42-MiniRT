@@ -40,22 +40,28 @@ t_cyl	*ft_lstlast_cyl_mrt(t_cyl *lst)
 	return (temp);
 }
 
-t_cyl	*parse_cyl(t_world *world, char **input)
+int	parse_cyl(t_world *world, char **input)
 {
 	t_cyl *new;
+	int	size;
+
+	size = check_size_matrix(input);
+	if (size > 6 || size < 2)
+		exit_err_init("Error\nToo many args for cylinder\n", 1, world);
 	new = malloc(sizeof(t_cyl)); 
 	// if (index > 5 || index < 1)
 		// printf("Error\nInvalid input for cylinder\n");
 	if (input[1])
-		pop_vec(&obj->pos, ft_split(input, ','), NULL);
+		pop_vec(&new->pos, ft_split(input[1], ','), NULL);
 	if (input[2])
-		pop_vec(&obj->norm, ft_split(input, ','), alloc_float(-1.0, 1.0));
+		pop_vec(&new->norm, ft_split(input[2], ','), alloc_float(-1.0, 1.0));
 	if (input[3])
-		obj->diameter = ft_atof(input);
+		new->diameter = ft_atof(input[3]);
 	if (input[4])
-		obj->height = ft_atof(input);
+		new->height = ft_atof(input[4]);
 	if (input[5])
-		pop_color(&obj->color, ft_split(input, ','));
+		pop_color(&new->color, ft_split(input[5], ','));
+	new->next = NULL;
 	ft_lstadd_back_cyl_mrt(&world->cyl, new);
-	return (world->cyl);
+	return (0);
 }

@@ -50,10 +50,11 @@ int	parse_sphere(t_world *world, char **input)
 		exit_err_init("Error\nToo many args for sphere\n", 1, world);
 	new = malloc(sizeof(t_sphere));
 	if (input[1])
-		pop_vec(&new->pos, ft_split(input, ','), NULL);
+		pop_vec(&new->pos, ft_split(input[1], ','), NULL);
 	if (input[2])
-		new->diameter = ft_atof(input);
+		new->diameter = ft_atof(input[2]);
 	if (input[3])
-		pop_color(&new->color, ft_split(input, ','));
+		pop_color(&new->color, ft_split(input[3], ','));
+	new->next = NULL;
 	return (0);
 }

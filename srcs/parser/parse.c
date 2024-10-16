@@ -14,17 +14,17 @@
 
 int	check_iden_type(char *input)
 {
-	if (ft_strcmp(input, "A"))
+	if (ft_strcmp(input, "A") == 0)
 		return (AMBIENCE);
-	if (ft_strcmp(input, "C"))
+	if (ft_strcmp(input, "C") == 0)
 		return (CAMERA);
-	if (ft_strcmp(input, "L"))
+	if (ft_strcmp(input, "L") == 0)
 		return (LIGHT);
-	if (ft_strcmp(input, "pl"))
+	if (ft_strcmp(input, "pl") == 0)
 		return (PLANE);
-	if (ft_strcmp(input, "sp"))
+	if (ft_strcmp(input, "sp") == 0)
 		return (SPHERE);
-	if (ft_strcmp(input, "cy"))
+	if (ft_strcmp(input, "cy") == 0)
 		return (CYLINDER);
 	return (-1);
 }
@@ -38,13 +38,14 @@ int	input_par(char **input, t_world *world, int type)
 	else if (type == LIGHT)
 		parse_light(world, world->light, input);
 	else if (type == SPHERE)
-		parse_sphere(&world, input);
+		parse_sphere(world, input);
 	else if (type == PLANE)
-		parse_plane(&world, input);
+		parse_plane(world, input);
 	else if (type == CYLINDER)
-		parse_cyl(&world, input);
+		parse_cyl(world, input);
 	else
 		printf("Error\ninvalid type");
+	printf("type: %i\n", type);
 	return (0);
 }
 
@@ -56,18 +57,19 @@ int	check_par(t_world *world, char *input)
 	if (!input || !*input)
 		return (0);
 	input_matrix = ft_split(input, ' ');
+	printf("input_matrix[0]: %s\n", input_matrix[0]);
 	type = check_iden_type(input_matrix[0]);
+	printf("type1: %i\n", type);
 	if (type != -1 && input_matrix[1])
 	{
 		input_par(input_matrix, world, type);
-		world->objlist = ft_add_obj_lst(type, world);
+		world->objlist = ft_add_obj_lst(type, world, &world->objlist);
 	}
 	return (type);
 }
 
-int	init_world(t_world *world)
+void	init_world(t_world *world)
 {
-	world = malloc(sizeof(t_world));
 	world->amb = NULL;
 	world->cam = NULL;
 	world->light = NULL;
@@ -81,7 +83,6 @@ t_world	*parse_world(t_world *world, char **argv)
 {
 	int	fd;
 	char	*input;
-	;
 
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)

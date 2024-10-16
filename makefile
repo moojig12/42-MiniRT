@@ -10,7 +10,14 @@ LIBS	=	./incl/libft/libft.a ./incl/mlx/libmlx.a ./incl/get_next_line/gnl.a
 
 SRCS	=	main.c \
 			parser/parse.c \
-			parser/parse_amb.c parser/parse_obj.c parser/parse_utils.c \
+			parser/parse_amb.c \
+			parser/parse_obj.c \
+			parser/parse_utils.c \
+			parser/parse_cam.c \
+			parser/parse_cyl.c \
+			parser/parse_lig.c \
+			parser/parse_plane.c \
+			parser/parse_sphere.c \
 			parser/checks.c \
 			parser/utils_p.c \
 			error.c \

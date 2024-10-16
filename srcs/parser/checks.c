@@ -14,9 +14,9 @@
 
 int	check_file(char *file)
 {
-	while (*file && *file != '.')
-		*file++;
-	if (ft_strcmp(*file, ".rt") == 0)
+	while (*file != '\0' && *file != '.')
+		file++;
+	if (ft_strcmp(file, ".rt") == 0)
 		return (0);
 	else
 		return (-1);
@@ -29,7 +29,9 @@ int	check_size_matrix(char **matrix)
 	i = 0;
 	if (!matrix)
 		return (-1);
-	while(matrix[i])
+	while(matrix[i]){
+		printf("line: %s\n", matrix[i]);
 		i++;
+	}
 	return(i);
 }

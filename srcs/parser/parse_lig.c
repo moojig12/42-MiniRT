@@ -49,13 +49,14 @@ int	parse_light(t_world *world, t_light *light, char **input)
 		exit_err_init("Error\nToo many args for light\n", 1, world);
 	new = malloc(sizeof(t_light));
 	if (input[1])
-		pop_vec(&new->pos, ft_split(input, ','), NULL);
+		pop_vec(&new->pos, ft_split(input[1], ','), NULL);
 	if (input[2] && ft_range(ft_atof(input[2]), 0.0, 1.0))
 		new->brightness = ft_atof(input[2]);
 	else
 		exit_err_init("Error\nInvalid input for light\n", 1, world);
 	if (input[3])
-		pop_color(&new->color, ft_split(input, ','));
+		pop_color(&new->color, ft_split(input[3], ','));
+	new->next = NULL;
 	ft_lstadd_back_lig_mrt(&light, new);
 	return (0);
 }

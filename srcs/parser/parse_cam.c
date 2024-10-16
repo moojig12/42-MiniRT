@@ -20,19 +20,14 @@ t_camera	*parse_cam(t_world *world, char **input)
 	// 	printf("Error\nInvalid input for camera %i\n", index);
 	ret = malloc(sizeof(t_camera));
 	size = check_size_matrix(input);
-	if (world->cam != NULL || size < 1 || size > 3)
+	printf("size of cam: %i\n", size);
+	if (world->cam != NULL || size < 2 || size > 4)
 		exit_err_init("Error\nToo many arg for cam\n", 1, world);
 	if (input[1])
-		pop_vec(&ret->pos ,ft_split(input, ','), NULL);
-	else
-		exit_err_init("Error\nInvalid input for camera\n", 1, world);
+		pop_vec(&ret->pos ,ft_split(input[1], ','), NULL);
 	if (input[2])
-		pop_vec(&ret->norm, ft_split(input, ','), alloc_float(-1.0, 1.0));
-	else
-		exit_err_init("Error\nInvalid input for camera\n", 1, world);
+		pop_vec(&ret->norm, ft_split(input[2], ','), alloc_float(-1.0, 1.0));
 	if (input[3])
-		pop_fov(&ret->fov, input, alloc_int(0, 180));
-	else
-		exit_err_init("Error\nInvalid input for camera\n", 1, world);
+		pop_fov(&ret->fov, input[3], alloc_int(0, 180));
 	return (ret);
 }

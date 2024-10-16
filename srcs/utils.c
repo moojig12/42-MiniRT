@@ -159,6 +159,16 @@ t_rgb	color_multiply(t_rgb a, t_rgb b)
 	return (result);
 }
 
+t_rgb	ret_color(int r, int g, int b)
+{
+	t_rgb	color;
+
+	color.r = r;
+	color.g = g;
+	color.b = b;
+	return (color);
+}
+
 t_rgb	color_scalar(t_rgb color, double scalar)
 {
 	int r;

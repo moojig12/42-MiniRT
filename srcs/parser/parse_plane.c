@@ -41,14 +41,18 @@ t_plane	*ft_lstlast_plane_mrt(t_plane *lst)
 int	parse_plane(t_world *world, char **input)
 {
 	t_plane	*new;
+	int		size;
+
 	new = malloc(sizeof(t_plane));
-	// if (index > 3 || index < 1)
-		// return (0);
+	size = check_size_matrix(input);
+	if (size > 4 || size < 2)
+		exit_err_init("Error\nToo many args for plane\n", 1, world);
 	if (input[1])
-		pop_vec(&new->pos, ft_split(input, ','), NULL);
+		pop_vec(&new->pos, ft_split(input[1], ','), NULL);
 	if (input[2])
-		pop_vec(&obj->norm, ft_split(input, ','), alloc_float(-1.0, 1.0));
+		pop_vec(&new->norm, ft_split(input[2], ','), alloc_float(-1.0, 1.0));
 	if (input[3])
-		pop_color(&obj->material.color, ft_split(input, ','));
+		pop_color(&new->color, ft_split(input[3], ','));
+	new->next = NULL;
 	return (0);
 }

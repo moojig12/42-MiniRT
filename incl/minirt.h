@@ -145,18 +145,20 @@ typedef struct s_main {
 int	main_pipeline(t_main *main);
 
 // Parsing
-
 t_world		*parse_world(t_world *world, char **argv);
-int		parse_cyl(t_obj *obj, char *input, int index);
-int		parse_plane(t_obj *obj, char *input, int index);
-int		parse_sphere(t_obj *obj, char *input, int index);
+void	init_world(t_world *world);
+
+// Parsing obj
+t_obj	*ft_add_obj_lst(int type, t_world *world, t_obj **objlist);
+t_obj	*ft_lstlast_mrt(t_obj *lst);
+void	ft_lstadd_back_mrt(t_obj **lst, t_obj *new);
+t_obj	*add_light(t_light *lightlist);
+t_obj	*add_sobj(int type, void *list);
 
 // Parsing utilities
-
 int		pop_color(t_rgb *rgb, char **input);
 int		pop_vec(t_vec *vec, char **input, double *range);
-t_cyl	*ft_lstlast_cyl_mrt(t_cyl *lst);
-void	ft_lstadd_back_cyl_mrt(t_cyl **lst, t_cyl *new);
+int		pop_fov(int *fov, char *input, int *range);
 int		ft_strcmp(const char *s1, const char *s2);
 int		check_file(char *file);
 int		check_size_matrix(char **matrix);
@@ -170,7 +172,22 @@ t_camera	*parse_cam(t_world *world, char **input);
 // Parsing light
 t_light	*ft_lstlast_lig_mrt(t_light *lst);
 void	ft_lstadd_back_lig_mrt(t_light **lst, t_light *new);
-t_light	*parse_light(t_world *world, t_light *light, char **input);
+int		parse_light(t_world *world, t_light *light, char **input);
+
+//Parsing cyl
+int		parse_cyl(t_world *world, char **input);
+t_cyl	*ft_lstlast_cyl_mrt(t_cyl *lst);
+void	ft_lstadd_back_cyl_mrt(t_cyl **lst, t_cyl *new);
+
+//Parsing sphere
+int	parse_sphere(t_world *world, char **input);
+t_sphere	*ft_lstlast_sphere_mrt(t_sphere *lst);
+void	ft_lstadd_back_sphere_mrt(t_sphere **lst, t_sphere *new);
+
+// Parsing plane
+int	parse_plane(t_world *world, char **input);
+t_plane	*ft_lstlast_plane_mrt(t_plane *lst);
+void	ft_lstadd_back_plane_mrt(t_plane **lst, t_plane *new);
 
 // error
 void	exit_err(char *message, int code, t_main *main);
@@ -178,6 +195,9 @@ void	exit_err_init(char *msg, int code, t_world *world);
 void	free_world(t_world *world);
 void	free_main(t_main *main);
 
+// Checks
+int	check_size_matrix(char **matrix);
+int	check_file(char *file);
 
 // Utilities
 
