@@ -104,13 +104,15 @@ t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersec
 		
 		// Check if the intersection point is within the height of the obj
 		t_vec point_on_axis = vec_add(cyl->pos, vec_scalar(axis, vec_dot(vec_sub(intersection.point, cyl->pos), axis)));
-		double height_check = vec_dot(vec_sub(intersection.point, point_on_axis), axis);
+		double projection = vec_dot(vec_sub(intersection.point, cyl->pos), axis);
 
-		if (height_check < 0 || height_check > cyl->height) {
-			intersection.hit = 0; // Outside the obj's caps
+		if (projection < 0 || projection > cyl->height)
+		{
+			intersection.hit = 0; // Outside the height bounds
 			return intersection;
 		}
 		intersection.emittance = cyl->color;
+	
 		intersection.norm = vec_normalize(vec_sub(intersection.point, point_on_axis)); // Normal vector
 	}
 

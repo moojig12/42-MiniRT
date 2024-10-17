@@ -35,7 +35,7 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 
 	intersection = find_path(ray, world);
 	if (intersection.hit == 0)
-		return (ret_color(0, 0, 0));
+		return (ret_color(184, 205, 255));
 	/* else
 		return (ret_color(20, 20, 100)); */
 	// printf("Distance:%f\n", intersection.distance);
