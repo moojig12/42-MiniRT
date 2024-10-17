@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:13:43 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/14 22:08:31 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/10/17 15:44:27 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	input_par(char **input, t_world *world, int type)
 	else if (type == CAMERA)
 		world->cam = parse_cam(world, input);
 	else if (type == LIGHT)
-		parse_light(world, world->light, input);
+		parse_light(world, input);
 	else if (type == SPHERE)
 		parse_sphere(world, input);
 	else if (type == PLANE)

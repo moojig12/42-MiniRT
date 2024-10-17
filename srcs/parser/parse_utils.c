@@ -13,7 +13,7 @@ int	pop_color(t_rgb *rgb, char **input)
 			printf("Error\nInvalid range for color");
 		i++;
 	}
-	if (i != 2)
+	if (i != 3)
 		return (1);
 	else
 	{

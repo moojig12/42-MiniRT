@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:48 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/14 22:01:58 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/10/17 15:04:45 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ t_ambient	*parse_amb(t_world *world, char **input)
 	range = alloc_float(0.0, 1.0);
 	new = malloc(sizeof(t_ambient));
 	size = check_size_matrix(input);
-	printf("size of amb: %i\n", size);
 	if (world->amb != NULL || size != 3)
 		exit_err_init("Error\nToo many args for amb\n", 1, world);
 	if (input[1] && ft_range_f(ft_atof(input[1]), range[0], range[1]))

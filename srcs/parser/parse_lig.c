@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:07:43 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/14 22:20:56 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/10/17 15:40:59 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,13 @@ t_light	*ft_lstlast_lig_mrt(t_light *lst)
 }
 
 
-int	parse_light(t_world *world, t_light *light, char **input)
+int	parse_light(t_world *world, char **input)
 {
 	t_light	*new;
 	int		size;
 
 	size = check_size_matrix(input);
-	if (size > 4 || size < 2)
+	if (size != 4)
 		exit_err_init("Error\nToo many args for light\n", 1, world);
 	new = malloc(sizeof(t_light));
 	if (input[1])
@@ -57,6 +57,13 @@ int	parse_light(t_world *world, t_light *light, char **input)
 	if (input[3])
 		pop_color(&new->color, ft_split(input[3], ','));
 	new->next = NULL;
-	ft_lstadd_back_lig_mrt(&light, new);
+	ft_lstadd_back_lig_mrt(&world->light, new);
 	return (0);
+}
+
+void	print_light(t_light *ptr)
+{
+	print_vec("light vec:", ptr->pos);
+	printf("brightness: %d\n", ptr->brightness);
+	print_color("light color:", ptr->color);
 }

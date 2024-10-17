@@ -155,7 +155,7 @@ t_intersection	find_path(t_ray ray, t_world *world)
 	double			closest_distance = INFINITY;
 
 	closest_intersection.hit = 0;
-	object = world->obj;
+	object = world->objlist;
 	while (object)
 	{
 		intersection = intersect(ray, object);

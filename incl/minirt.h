@@ -7,6 +7,7 @@
 # include <math.h>
 # include "libft.h"
 # include "get_next_line.h"
+# include "mlx.h"
 
 // Constants
 # define PI 3.14159265358979323846
@@ -34,11 +35,6 @@ typedef enum e_object_type {
 	OBJECT_PLANE,
 	OBJECT_CYLINDER
 }	t_object_type;
-
-/* typedef struct s_object {
-	t_object_type	type;
-	void			*data;
-}	t_obj; */
 
 typedef struct s_vector {
 	double	x;
@@ -189,7 +185,8 @@ t_camera	*parse_cam(t_world *world, char **input);
 // Parsing light
 t_light	*ft_lstlast_lig_mrt(t_light *lst);
 void	ft_lstadd_back_lig_mrt(t_light **lst, t_light *new);
-int		parse_light(t_world *world, t_light *light, char **input);
+int		parse_light(t_world *world, char **input);
+void	print_light(t_light *ptr);
 
 //Parsing cyl
 int		parse_cyl(t_world *world, char **input);
@@ -225,6 +222,7 @@ int		ft_range_f(double num, double min, double max);
 double	ft_atof(char *str);
 int		print_vec(char *string,t_vec vec);
 int		close_window(t_main	*main);
+int		print_color(char *string, t_rgb color);
 
 // Vector operations
 t_vec	vec(double x, double y, double z);

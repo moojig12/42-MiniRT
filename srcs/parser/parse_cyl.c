@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:01 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/14 21:49:42 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/10/17 15:03:34 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,9 @@ int	parse_cyl(t_world *world, char **input)
 	int	size;
 
 	size = check_size_matrix(input);
-	if (size > 6 || size < 2)
+	if (size != 6)
 		exit_err_init("Error\nToo many args for cylinder\n", 1, world);
 	new = malloc(sizeof(t_cyl)); 
-	// if (index > 5 || index < 1)
-		// printf("Error\nInvalid input for cylinder\n");
 	if (input[1])
 		pop_vec(&new->pos, ft_split(input[1], ','), NULL);
 	if (input[2])

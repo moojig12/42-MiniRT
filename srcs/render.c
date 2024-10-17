@@ -32,7 +32,7 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	intersection = find_path(ray, world);
 	if (intersection.hit == 0)
 		return (ret_color(0, 0, 0));
-	printf("Distance:%f\n", intersection.distance);
+	//printf("Distance:%f\n", intersection.distance);
 	incoming = intersection.emittance;
 	new_ray.origin = intersection.point;
 	new_ray.dest = vec_cross(new_ray.origin, intersection.norm);
@@ -59,8 +59,8 @@ int	render(t_main *main, t_world *world)
 			while (x < main->width)
 			{
 				ray = gen_ray(main->world->cam, x, y);
-				print_vec("initial ray", ray.origin);
-				print_vec(NULL, ray.dest);
+				//print_vec("initial ray", ray.origin);
+				//print_vec(NULL, ray.dest);
 				/* printf("ray direction and origin\ndir: %f %f %f\norigin: %f %f %f\n", \
 				ray.dest.x, ray.dest.y, ray.dest.z, ray.origin.x, ray.origin.y, ray.origin.z); */
 				output = trace_path(world, ray, 1);
@@ -77,7 +77,7 @@ int	render(t_main *main, t_world *world)
 
 int	main_pipeline(t_main *main)
 {
-	render(main, &main->world);
+	render(main, main->world);
 
 	loop(main);
 	return (0);
