@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:07:43 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/17 15:40:59 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/10/17 16:03:57 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ int	parse_light(t_world *world, char **input)
 	return (0);
 }
 
-void	print_light(t_light *ptr)
+/* void	print_light(t_light *ptr)
 {
 	print_vec("light vec:", ptr->pos);
 	printf("brightness: %d\n", ptr->brightness);
 	print_color("light color:", ptr->color);
-}
+} */

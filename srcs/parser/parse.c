@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:13:43 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/17 15:44:27 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/10/17 16:27:39 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,21 @@ int	check_par(t_world *world, char *input)
 	int	type;
 	char	**input_matrix;
 
-	if (!input || !*input)
+	if (input == NULL || *input == '\n')
 		return (0);
 	input_matrix = ft_split(input, ' ');
+	if (**input_matrix == '\n')
+		return (0);
 	printf("input_matrix[0]: %s\n", input_matrix[0]);
 	type = check_iden_type(input_matrix[0]);
 	printf("type1: %i\n", type);
 	if (type != -1 && input_matrix[1])
 	{
 		input_par(input_matrix, world, type);
-		world->objlist = ft_add_obj_lst(type, world, &world->objlist);
+		if (type == SPHERE || type == CYLINDER || type == PLANE)
+		{
+			world->objlist = ft_add_obj_lst(type, world, &world->objlist);
+		}
 	}
 	return (type);
 }

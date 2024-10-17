@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:40:56 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/17 15:05:39 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/10/17 16:32:27 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,17 @@ t_obj	*ft_add_obj_lst(int type, t_world *world, t_obj **objlist)
 	}
 	else if (type == SPHERE)
 	{
-		last = ft_lstlast_sphere_mrt(world->sphere);
+		last = (void *)ft_lstlast_sphere_mrt(world->sphere);
 		new = add_sobj(type, last);
 	}
 	else if (type == PLANE)
 	{
-		last = ft_lstlast_plane_mrt(world->plane);
+		last = (void *)ft_lstlast_plane_mrt(world->plane);
 		new = add_sobj(type, last);
 	}
 	else if (type == CYLINDER)
 	{
-		last = ft_lstlast_cyl_mrt(world->cyl);
+		last = (void *)ft_lstlast_cyl_mrt(world->cyl);
 		new = add_sobj(type, last);
 	}
 	ft_lstadd_back_mrt(objlist, new);

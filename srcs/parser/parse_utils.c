@@ -18,7 +18,6 @@ int	pop_color(t_rgb *rgb, char **input)
 	}
 	if (i != 3)
 		return (1);
-	}
 	else
 	{
 		rgb->r = ft_atoi(input[0]);
