@@ -195,6 +195,7 @@ t_vec	vec_normalize(t_vec v);
 int		pack_color(int r, int g, int b);
 t_rgb	color_add(t_rgb a, t_rgb b);
 t_rgb	color_scalar(t_rgb color, double scalar);
+t_rgb	color_scalar_div(t_rgb a, double scalar);
 t_rgb	color_multiply(t_rgb a, t_rgb b);
 double	vec_dot(t_vec a, t_vec b);
 t_rgb	ret_color(int r, int g, int b);
