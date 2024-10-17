@@ -6,8 +6,9 @@ int	close_window(t_main	*main)
 	exit (0);
 }
 
-/* void	initialize_main(t_main *main)
+void	initialize_main(t_main *main, t_world *world)
 {
+	main->world = world;
 	main->mlx = mlx_init();
 	if (main->width == 0)
 		mlx_get_screen_size(main->mlx, &main->width, &main->height);
@@ -16,20 +17,20 @@ int	close_window(t_main	*main)
 	main->height = 600;
 	main->world->cam->width = 800;
 	main->world->cam->height = 600;
-} */
+}
 
 int	main(int argc, char **argv)
 {
-	//t_main	*main;
+	t_main	*main;
 	t_world	*world;
 
 	if (argc < 2 || check_file(argv[1]))
 		return (printf("Meow"));
-	//main = malloc(sizeof(t_main));// change, initialize after world and just pass world done for the next func
 	world = malloc(sizeof(t_world));
 	world = parse_world(world, argv);
-	//initialize_main(main);
+	main = malloc(sizeof(t_main));// change, initialize after world and just pass world done for the next func
+	initialize_main(main, world);
 
-	//main_pipeline(main);
+	main_pipeline(main);
 	return (0);
 }

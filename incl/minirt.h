@@ -128,10 +128,10 @@ typedef struct s_world {
 }	t_world;
 
 typedef struct s_main {
-	// void	*mlx;
-	// void	*win;
-	// int		width;
-	// int		height;
+	void	*mlx;
+	void	*win;
+	int		width;
+	int		height;
 	t_world	*world;
 }	t_main;
 
