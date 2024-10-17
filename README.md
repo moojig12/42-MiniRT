@@ -5,11 +5,9 @@ With the use of minilibx, we're to develop a program that renders a set scene by
 Each scene can have a Camera, Objects and Lighting with each varying aspects of their own.
 
 # TO-DO
-*	REMOVE TERNARY OPERATOR!!!
-*	Convert every object struct into a single struct and add indentifiers
+
 *	Implement the camera and light ray generation.
-	*	Make a cone projection calculator thingy?
-	*	Shoot rays using cone angles from each pixel
-	*	Make find_path() function for finding intersections for the passed in ray
-	*	Finish respective intersections for each object
+	*	Fix new_ray.origin to be set from point of impact on last iteration
+	*	Adjust return values
+*	Check and fix any issues with intersection functions
 *	Check the Parser for any issues.
