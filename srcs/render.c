@@ -60,10 +60,10 @@ int	render(t_main *main, t_world *world)
 	x = 0;
 	y = 0;
 	world->cam->direction = vec(0, 0, 1);
-	output = (t_rgb **)malloc(world->cam->height + 1 * sizeof(t_rgb *));
+	output = (t_rgb **)calloc(world->cam->height + 1, sizeof(t_rgb *));
 	while (y < world->cam->height)
 	{
-		output[y] = (t_rgb *)calloc(world->cam->width, sizeof(t_rgb));
+		output[y] = (t_rgb *)calloc(world->cam->width + 1, sizeof(t_rgb));
 		y++;
 	}
 	pass = 1;

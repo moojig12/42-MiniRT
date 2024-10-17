@@ -44,14 +44,12 @@ $(NAME): $(OBJS)
 			$(CC) $(HEADER) $(SAN) $(CFLAGS) $(OBJS) $(LIBS) \
 			-o $(NAME) $(MFLAGS)
 
-no_san:	$(NAME)
-
-$(NAME): $(OBJS)
+no_san:	CFLAGS := $(filter-out $(SAN), $(CFLAGS))
+no_san: $(OBJS)
 			make -C ./incl/get_next_line
 			make -C ./incl/libft
 			make -C ./incl/mlx
-			$(CC) $(HEADER) $(CFLAGS) $(OBJS) $(LIBS) \
-			-o $(NAME) $(MFLAGS)
+			$(CC) $(HEADER) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME) $(MFLAGS)
 
 clean:
 			make clean -C ./incl/libft
