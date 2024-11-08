@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_obj.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:40:56 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/17 16:32:27 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/08 11:07:50 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	ft_lstadd_back_mrt(t_obj **lst, t_obj *new)
 	else
 		last->next = new;
 }
+
 t_obj	*ft_lstlast_mrt(t_obj *lst)
 {
 	t_obj	*temp;

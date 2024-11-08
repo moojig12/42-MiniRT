@@ -19,9 +19,9 @@ t_ray	gen_ray(t_camera *cam, int x, int y)
 	pixel_y = (1 - 2 * ((y + 0.5) / cam->height)) * tan(cam->fov / 2 * PI / 180);
 	ray.origin = cam->pos;
 	ray.dest = vec(pixel_x, pixel_y, 1);
+	ray.norm = cam->norm;
 
-	// ray.dest = vec_add(ray.origin, vec_cross(cam->norm, cam->direction));
-	return ray;
+	return (ray);
 }
 
 t_rgb	trace_path(t_world *world, t_ray ray, int depth)
@@ -36,16 +36,15 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	intersection = find_path(ray, world);
 	if (intersection.hit == 0)
 		return (ret_color(184, 205, 255));
-	/* else
-		return (ret_color(20, 20, 100)); */
-	// printf("Distance:%f\n", intersection.distance);
-	incoming = intersection.emittance;
 	new_ray.origin = intersection.point;
 	new_ray.dest = vec_sub(ray.dest, vec_scalar(intersection.norm, 2 * vec_dot(ray.dest, intersection.norm)));
-
+	new_ray.norm = intersection.norm;
+	double	cos_theta = vec_dot(new_ray.dest, ray.norm);
+  	double	BRDF = (1.0 / PI);
 
 	incoming = trace_path(world, new_ray, depth + 1);
-	return (color_scalar(color_add(intersection.emittance, incoming), (depth * 0.1)));
+	// double cos_theta = fmax(0.0, vec_dot(intersection.norm, vec_normalize(new_ray.dest)));
+	return (color_add(intersection.emittance, color_scalar(color_scalar(incoming, cos_theta), BRDF)));
 }
 
 int	render(t_main *main, t_world *world)
@@ -68,7 +67,7 @@ int	render(t_main *main, t_world *world)
 	}
 	pass = 1;
 	y = 0;
-	while (1)
+	while (pass < 5)
 	{
 		while (y < main->height)
 		{
@@ -86,6 +85,7 @@ int	render(t_main *main, t_world *world)
 			y++;
 		}
 		y = 0;
+		pass++;
 	}
 	return (0);
 }

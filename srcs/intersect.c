@@ -39,9 +39,9 @@ t_intersection	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersection inte
 			intersection.emittance = sphere->color;
 		}
 	}
-
+/* 
 	if (intersection.hit == 1)
-		printf("SPHERE!\n");
+		printf("SPHERE!\n"); */
 	return (intersection);
 }
 
@@ -60,9 +60,9 @@ t_intersection	intersect_plane(t_ray ray, t_plane *plane, t_intersection interse
 		intersection.norm = plane->norm; // Normal is constant
 		intersection.emittance = plane->color;
 	}
-
+/* 
 	if (intersection.hit == 1)
-		printf("PLANE!\n");
+		printf("PLANE!\n"); */
 	return intersection;
 }
 
@@ -70,7 +70,8 @@ t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersec
 {
 	// Define necessary vectors
 	t_vec oc = vec_sub(ray.origin, cyl->pos); // O - P (P is the base position of the obj)
-	t_vec axis = vec_normalize(cyl->norm); // Normalize the obj axis
+	// t_vec axis = vec_normalize(cyl->norm); // Normalize the obj axis
+	t_vec axis = cyl->norm; 
 	double radius_squared = (cyl->diameter / 2) * (cyl->diameter / 2);
 		
 	// Compute coefficients for the quadratic equation
@@ -115,9 +116,9 @@ t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersec
 	
 		intersection.norm = vec_normalize(vec_sub(intersection.point, point_on_axis)); // Normal vector
 	}
-
+/* 
 	if (intersection.hit == 1)
-		printf("CYLINDER!\n");
+		printf("CYLINDER!\n"); */
 	return (intersection);
 }
 

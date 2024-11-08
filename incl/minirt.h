@@ -51,6 +51,7 @@ typedef struct s_rgb {
 typedef struct s_ray {
 	t_vec	origin;
 	t_vec	dest;
+	t_vec	norm;
 }	t_ray;
 typedef struct s_camera {
 	t_vec	pos;

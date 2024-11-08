@@ -33,7 +33,7 @@ t_rgb	color_sub(t_rgb a, t_rgb b)
 	return (ret);
 }
 
-t_rgb	color_mul(t_rgb a, t_rgb b)
+t_rgb	color_multiply(t_rgb a, t_rgb b)
 {
 	t_rgb	ret;
 
