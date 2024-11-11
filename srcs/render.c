@@ -4,18 +4,15 @@ int	movement(int key_code, t_main *main)
 {
 	printf("Key pressed: %i\n", key_code);
 	printf("pointer: %p\n", main);
+	main->render_switch = 1;
+	printf("Key switched\n");
 	return (1);
 }
 
 int	key_handles(t_main *main)
 {
-	if (mlx_hook(main->mlx, 2, 1L << 0, movement, main))
-	{
-		main->render_switch = 1;
-		return (0);
-	}
+	mlx_hook(main->mlx, 2, 1L << 0, movement, main);
 	mlx_hook(main->win, 17, 0, close_window, main);
-		exit (0);
 	return (0);
 }
 
@@ -105,7 +102,7 @@ int	render(t_main *main, t_world *world)
 	while (1)
 	{
 		// Refresh screen here
-		if (main->render_switch)
+		if (main->render_switch == 1)
 		{
 			main->render_switch = 0;
 			while (y < main->height)
