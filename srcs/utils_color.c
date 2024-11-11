@@ -1,5 +1,16 @@
 #include "minirt.h"
 
+t_rgb	color_normalize(t_rgb color)
+{
+	t_rgb	ret;
+
+	ret.r = (int)fmin(color.r, 255);
+	ret.g = (int)fmin(color.g, 255);
+	ret.b = (int)fmin(color.b, 255);
+
+	return (ret);
+}
+
 t_rgb	ret_color(int r, int g, int b)
 {
 	t_rgb	ret;

@@ -6,17 +6,36 @@ void	loop(t_main *main)
 	mlx_loop(main->mlx);
 }
 
+/* t_vec	cone_pewpew(t_vec norm, double angle)
+{
+	t_vec dir;
+
+	double cone_angle_radians = angle * (PI / 180.0);
+
+	// Generate random angles
+	double random_phi = 2 * PI * ((double)ft_rand() / RAND_MAX);
+	double random_theta = cone_angle_radians * ((double)ft_rand() / RAND_MAX);
+
+	dir.x = sin(random_theta) * cos(random_phi);
+	dir.y = sin(random_theta) * sin(random_phi);
+	dir.z = cos(random_theta);
+
+	return vec_normalize(dir);
+} */
+
 t_ray	gen_ray(t_camera *cam, int x, int y)
 {
 	t_ray ray;
 	double	aspect_ratio;
 	double	pixel_x;
 	double	pixel_y;
+	double	jitter_x = random_double_range(-0.5, 0.5);
+	double	jitter_y = random_double_range(-0.5, 0.5);
 
 	aspect_ratio = cam->width / cam->height;
 	
-	pixel_x = (2 *((x + 0.5) / cam->width) - 1) * tan(cam->fov / 2 * PI / 180) * aspect_ratio;
-	pixel_y = (1 - 2 * ((y + 0.5) / cam->height)) * tan(cam->fov / 2 * PI / 180);
+	pixel_x = (2 *((x + 0.5 + jitter_x) / cam->width) - 1) * tan(cam->fov / 2 * PI / 180) * aspect_ratio;
+	pixel_y = (1 - 2 * ((y + 0.5 + jitter_y) / cam->height)) * tan(cam->fov / 2 * PI / 180);
 	ray.origin = cam->pos;
 	ray.dest = vec(pixel_x, pixel_y, 1);
 	ray.norm = cam->norm;
@@ -35,7 +54,7 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 
 	intersection = find_path(ray, world);
 	if (intersection.hit == 0)
-		return (ret_color(184, 205, 255));
+		return (world->amb->color);
 	new_ray.origin = intersection.point;
 	new_ray.dest = vec_sub(ray.dest, vec_scalar(intersection.norm, 2 * vec_dot(ray.dest, intersection.norm)));
 	new_ray.norm = intersection.norm;
@@ -44,7 +63,9 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 
 	incoming = trace_path(world, new_ray, depth + 1);
 	// double cos_theta = fmax(0.0, vec_dot(intersection.norm, vec_normalize(new_ray.dest)));
-	return (color_add(intersection.emittance, color_scalar(color_scalar(incoming, cos_theta), BRDF)));
+	t_rgb	return_color = color_add(intersection.emittance, color_scalar(color_scalar(incoming, cos_theta), BRDF));
+	return_color = color_add(return_color, color_scalar(world->amb->color, world->amb->ratio));
+	return (color_normalize(return_color));
 }
 
 int	render(t_main *main, t_world *world)
@@ -67,7 +88,7 @@ int	render(t_main *main, t_world *world)
 	}
 	pass = 1;
 	y = 0;
-	while (pass < 5)
+	while (pass < 4)
 	{
 		while (y < main->height)
 		{
