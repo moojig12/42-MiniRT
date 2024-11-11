@@ -1,9 +1,22 @@
 #include "minirt.h"
 
-void	loop(t_main *main)
+int	movement(int key_code, t_main *main)
 {
+	printf("Key pressed: %i\n", key_code);
+	printf("pointer: %p\n", main);
+	return (1);
+}
+
+int	key_handles(t_main *main)
+{
+	if (mlx_hook(main->mlx, 2, 1L << 0, movement, main))
+	{
+		main->render_switch = 1;
+		return (0);
+	}
 	mlx_hook(main->win, 17, 0, close_window, main);
-	mlx_loop(main->mlx);
+		exit (0);
+	return (0);
 }
 
 /* t_vec	cone_pewpew(t_vec norm, double angle)
@@ -88,25 +101,35 @@ int	render(t_main *main, t_world *world)
 	}
 	pass = 1;
 	y = 0;
-	while (pass < 4)
+	main->render_switch = 1;
+	while (1)
 	{
-		while (y < main->height)
+		// Refresh screen here
+		if (main->render_switch)
 		{
-			while (x < main->width)
+			main->render_switch = 0;
+			while (y < main->height)
 			{
-				ray = gen_ray(main->world->cam, x, y);
-				// print_vec("initial ray", ray.origin);
-				// print_vec(NULL, ray.dest);
-				output[y][x] = color_scalar_div(color_add(output[y][x], trace_path(world, ray, 1)), pass);
-				output_color = pack_color(output[y][x].r, output[y][x].g, output[y][x].b);
-				mlx_pixel_put(main->mlx, main->win, x, y, output_color);
-				x++;
+				while (x < main->width)
+				{
+					ray = gen_ray(main->world->cam, x, y);
+					// print_vec("initial ray", ray.origin);
+					// print_vec(NULL, ray.dest);
+					output[y][x] = color_scalar_div(color_add(output[y][x], trace_path(world, ray, 1)), pass);
+					output_color = pack_color(output[y][x].r, output[y][x].g, output[y][x].b);
+					mlx_pixel_put(main->mlx, main->win, x, y, output_color);
+					x++;
+				}
+				x = 0;
+				y++;
 			}
-			x = 0;
-			y++;
+			y = 0;
+			pass++;
 		}
-		y = 0;
-		pass++;
+		else
+		{
+			key_handles(main);
+		}
 	}
 	return (0);
 }
@@ -114,7 +137,6 @@ int	render(t_main *main, t_world *world)
 int	main_pipeline(t_main *main)
 {
 	render(main, main->world);
-
-	loop(main);
+	// key_handles(main);
 	return (0);
 }

@@ -142,6 +142,7 @@ typedef struct s_main {
 	void	*win;
 	int		width;
 	int		height;
+	int		render_switch;
 	t_world	*world;
 }	t_main;
 
