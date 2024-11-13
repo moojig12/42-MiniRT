@@ -3,7 +3,7 @@
 void	key_handles(t_main *main)
 {
 	mlx_key_hook(main->win, movement, main);
-	mlx_hook(main->win, 17, 0, close_window, main);
+	mlx_hook(main->win, 17, 1L<<17, close_window, main);
 }
 
 /* t_vec	cone_pewpew(t_vec norm, double angle)
