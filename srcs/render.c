@@ -1,19 +1,9 @@
 #include "minirt.h"
 
-int	movement(int key_code, t_main *main)
+void	key_handles(t_main *main)
 {
-	printf("Key pressed: %i\n", key_code);
-	printf("pointer: %p\n", main);
-	main->render_switch = 1;
-	printf("Key switched\n");
-	return (1);
-}
-
-int	key_handles(t_main *main)
-{
-	mlx_hook(main->mlx, 2, 1L << 0, movement, main);
+	mlx_key_hook(main->win, movement, main);
 	mlx_hook(main->win, 17, 0, close_window, main);
-	return (0);
 }
 
 /* t_vec	cone_pewpew(t_vec norm, double angle)
@@ -39,15 +29,26 @@ t_ray	gen_ray(t_camera *cam, int x, int y)
 	double	aspect_ratio;
 	double	pixel_x;
 	double	pixel_y;
-	double	jitter_x = random_double_range(-0.5, 0.5);
-	double	jitter_y = random_double_range(-0.5, 0.5);
+	double	jitter_x = random_double_range(-0.25, 0.25);
+	double	jitter_y = random_double_range(-0.25, 0.25);
 
 	aspect_ratio = cam->width / cam->height;
 	
 	pixel_x = (2 *((x + 0.5 + jitter_x) / cam->width) - 1) * tan(cam->fov / 2 * PI / 180) * aspect_ratio;
 	pixel_y = (1 - 2 * ((y + 0.5 + jitter_y) / cam->height)) * tan(cam->fov / 2 * PI / 180);
+
+	// Create the camera basis: right, up, and forward
+	t_vec forward = vec_normalize(cam->direction);
+	t_vec right = vec_normalize(vec_cross(cam->norm, forward));
+	t_vec up = vec_cross(forward, right);
+
+	/* ray.origin = cam->pos;
+	ray.dest = vec(pixel_x, pixel_y, 1); */
+
 	ray.origin = cam->pos;
-	ray.dest = vec(pixel_x, pixel_y, 1);
+	ray.dest = vec_add(vec_add(vec_scalar(right, pixel_x), vec_scalar(up, pixel_y)), vec_scalar(forward, 1));
+	ray.dest = vec_normalize(ray.dest);
+
 	ray.norm = cam->norm;
 
 	return (ray);
@@ -78,62 +79,40 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	return (color_normalize(return_color));
 }
 
-int	render(t_main *main, t_world *world)
+int	render(t_main *main)
 {
 	t_ray	ray;
 	t_rgb	**output;
+	t_world	*world;
 	int		output_color;
-	int	pass;
 	int	x;
 	int	y;
 
+	output = main->output;
+	world = main->world;
 	x = 0;
 	y = 0;
-	world->cam->direction = vec(0, 0, 1);
-	output = (t_rgb **)calloc(world->cam->height + 1, sizeof(t_rgb *));
-	while (y < world->cam->height)
+	while (y < main->height)
 	{
-		output[y] = (t_rgb *)calloc(world->cam->width + 1, sizeof(t_rgb));
+		while (x < main->width)
+		{
+			ray = gen_ray(main->world->cam, x, y);
+			output[y][x] = color_add(output[y][x], trace_path(world, ray, 1));
+			output_color = pack_color(output[y][x].r, output[y][x].g, output[y][x].b);
+			mlx_pixel_put(main->mlx, main->win, x, y, output_color);
+			output[y][x] = ret_color(0, 0, 0);
+			x++;
+		}
+		x = 0;
 		y++;
-	}
-	pass = 1;
-	y = 0;
-	main->render_switch = 1;
-	while (1)
-	{
-		// Refresh screen here
-		if (main->render_switch == 1)
-		{
-			main->render_switch = 0;
-			while (y < main->height)
-			{
-				while (x < main->width)
-				{
-					ray = gen_ray(main->world->cam, x, y);
-					// print_vec("initial ray", ray.origin);
-					// print_vec(NULL, ray.dest);
-					output[y][x] = color_scalar_div(color_add(output[y][x], trace_path(world, ray, 1)), pass);
-					output_color = pack_color(output[y][x].r, output[y][x].g, output[y][x].b);
-					mlx_pixel_put(main->mlx, main->win, x, y, output_color);
-					x++;
-				}
-				x = 0;
-				y++;
-			}
-			y = 0;
-			pass++;
-		}
-		else
-		{
-			key_handles(main);
-		}
 	}
 	return (0);
 }
 
 int	main_pipeline(t_main *main)
 {
-	render(main, main->world);
-	// key_handles(main);
+	mlx_loop_hook(main->mlx, render, main);
+	key_handles(main);
+	mlx_loop(main->mlx);
 	return (0);
 }

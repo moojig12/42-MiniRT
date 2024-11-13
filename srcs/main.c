@@ -8,6 +8,9 @@ int	close_window(t_main	*main)
 
 void	initialize_main(t_main *main, t_world *world)
 {
+	int	y;
+
+	y = 0;
 	main->world = world;
 	main->mlx = mlx_init();
 	if (main->mlx)
@@ -25,6 +28,13 @@ void	initialize_main(t_main *main, t_world *world)
 	main->height = 600;
 	main->world->cam->width = 800;
 	main->world->cam->height = 600;
+	main->output = (t_rgb **)calloc(world->cam->height + 1, sizeof(t_rgb *));
+	main->world->cam->direction = vec(0, 0, 1);
+	while (y < world->cam->height)
+	{
+		main->output[y] = (t_rgb *)calloc(world->cam->width + 1, sizeof(t_rgb));
+		y++;
+	}
 }
 
 int	main(int argc, char **argv)

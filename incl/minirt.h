@@ -30,6 +30,21 @@
 
 typedef struct s_obj t_obj;
 
+typedef enum e_movement_keys {
+	FORWARD = 119,
+	LEFT = 97,
+	BACK = 115,
+	RIGHT = 100,
+	UP = 32,
+	DOWN = 65507,
+	ROTATE_LEFT = 113,
+	ROTATE_RIGHT = 101
+}	t_movement_keys;
+
+typedef enum e_escape_key {
+	ESC_WIN = 65307
+}	t_escape_key;
+
 typedef enum e_object_type {
 	OBJECT_SPHERE,
 	OBJECT_PLANE,
@@ -143,6 +158,7 @@ typedef struct s_main {
 	int		width;
 	int		height;
 	int		render_switch;
+	t_rgb	**output;
 	t_world	*world;
 }	t_main;
 
@@ -156,8 +172,11 @@ typedef struct s_main {
 int	main_pipeline(t_main *main);
 
 // Render
-
+int	render(t_main *main);
 t_intersection	find_path(t_ray ray, t_world *world);
+
+// Movement
+int	movement(int key_code, t_main *main);
 
 // Parsing
 t_world		*parse_world(t_world *world, char **argv);
