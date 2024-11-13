@@ -38,13 +38,36 @@ int	move_down(t_main *main)
 
 int	rotate_left(t_main *main)
 {
-	main->world->cam->direction.x--;
+	t_vec	rotated_vec;
+	double	theta;
+
+	theta = -5 * (PI / 180);
+	double cos_theta = cos(theta);
+	double sin_theta = sin(theta);
+
+	rotated_vec.x = main->world->cam->direction.x * cos_theta + main->world->cam->direction.z * sin_theta;
+	rotated_vec.y = main->world->cam->direction.y;
+	rotated_vec.z = -main->world->cam->direction.x * sin_theta + main->world->cam->direction.z * cos_theta;
+	main->world->cam->direction = rotated_vec;
+
 	return (0);
 }
 
 int	rotate_right(t_main *main)
 {
-	main->world->cam->direction.x++;
+	t_vec	rotated_vec;
+	double	theta;
+
+	theta = 5 * (PI / 180);
+	double cos_theta = cos(theta);
+	double sin_theta = sin(theta);
+
+	rotated_vec.x = main->world->cam->direction.x * cos_theta + main->world->cam->direction.z * sin_theta;
+	rotated_vec.y = main->world->cam->direction.y;
+	rotated_vec.z = -main->world->cam->direction.x * sin_theta + main->world->cam->direction.z * cos_theta;
+
+	main->world->cam->direction = rotated_vec;
+
 	return (0);
 }
 

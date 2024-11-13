@@ -73,7 +73,6 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
   	double	BRDF = (1.0 / PI);
 
 	incoming = trace_path(world, new_ray, depth + 1);
-	// double cos_theta = fmax(0.0, vec_dot(intersection.norm, vec_normalize(new_ray.dest)));
 	t_rgb	return_color = color_add(intersection.emittance, color_scalar(color_scalar(incoming, cos_theta), BRDF));
 	return_color = color_add(return_color, color_scalar(world->amb->color, world->amb->ratio));
 	return (color_normalize(return_color));
