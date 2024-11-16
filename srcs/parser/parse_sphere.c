@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_sphere.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:34 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/17 15:08:08 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/16 11:40:25 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	parse_sphere(t_world *world, char **input)
 		exit_err_init("Error\nToo many args for sphere\n", 1, world);
 	new = malloc(sizeof(t_sphere));
 	if (input[1])
-		pop_vec(&new->pos, ft_split(input[1], ','), NULL);
+		pop_vec(&new->pos, ft_split(input[1], ','), NULL, 1);
 	if (input[2])
 		new->diameter = ft_atof(input[2]);
 	if (input[3])

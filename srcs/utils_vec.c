@@ -1,13 +1,13 @@
 #include "minirt.h"
 
-t_vec	vec(double x, double y, double z)
+t_vec	vec(double x, double y, double z, double w)
 {
 	t_vec	vec;
 
 	vec.x = x;
 	vec.y = y;
 	vec.z = z;
-
+	vec.w = w;
 	return (vec);
 }
 

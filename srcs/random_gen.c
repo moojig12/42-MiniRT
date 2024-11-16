@@ -18,14 +18,14 @@ double	random_double_range(double min, double max)
 	return (min + (max - min) * random_double());
 }
 
-t_vec	random_vec(void)
+t_vec	random_vec(double w)
 {
-	return (vec(random_double(), random_double(), random_double()));
+	return (vec(random_double(), random_double(), random_double(), w));
 }
 
-t_vec	random_vec_range(double min, double max)
+t_vec	random_vec_range(double min, double max, double w)
  {
 	return (vec(random_double_range(min, max), \
 			random_double_range(min, max), \
-			random_double_range(min, max)));
+			random_double_range(min, max), w));
 }

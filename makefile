@@ -26,6 +26,7 @@ SRCS	=	main.c \
 			random_gen.c \
 			render.c \
 			movement.c \
+			matrix_ops.c \
 			intersect.c \
 			utils.c \
 			utils_color.c \

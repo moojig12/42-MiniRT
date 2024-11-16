@@ -55,6 +55,7 @@ typedef struct s_vector {
 	double	x;
 	double	y;
 	double	z;
+	double	w;
 }	t_vec;
 
 typedef struct s_matrix {
@@ -195,7 +196,7 @@ t_obj	*add_sobj(int type, void *list);
 
 // Parsing utilities
 int		pop_color(t_rgb *rgb, char **input);
-int		pop_vec(t_vec *vec, char **input, double *range);
+int		pop_vec(t_vec *vec, char **input, double *range, double type);
 int		pop_fov(int *fov, char *input, int *range);
 int		ft_strcmp(const char *s1, const char *s2);
 int		check_file(char *file);
@@ -249,9 +250,10 @@ double	ft_atof(char *str);
 int		print_vec(char *string,t_vec vec);
 int		close_window(t_main	*main);
 int		print_color(char *string, t_rgb color);
+int		print_matrix(char *string, t_matrix mat);
 
 // Vector operations
-t_vec	vec(double x, double y, double z);
+t_vec	vec(double x, double y, double z, double w);
 t_vec	vec_add(t_vec a, t_vec b);
 t_vec	vec_sub(t_vec a, t_vec b);
 t_vec	vec_scalar(t_vec a, double b);
@@ -268,12 +270,16 @@ double	vec_dot(t_vec a, t_vec b);
 t_rgb	ret_color(int r, int g, int b);
 t_rgb	color_normalize(t_rgb color);
 
+// Matrix operations
+t_vec	matrix_translation(t_vec data, t_vec translate);
+t_vec	matrix_rotation(t_vec data, t_vec rotate);
+
 // Randomness
 
 unsigned int	ft_rand(void);
 double			random_double(void);
 double			random_double_range(double min, double max);
-t_vec			random_vec(void);
-t_vec			random_vec_range(double min, double max);
+t_vec			random_vec(double w);
+t_vec			random_vec_range(double min, double max, double w);
 
 #endif

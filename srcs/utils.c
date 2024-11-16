@@ -98,12 +98,33 @@ int	ft_range_f(double num, double min, double max)
 int	print_vec(char *string, t_vec vec)
 {
 	if (string)
-		printf("\n---\n%s\nx: %f\ny: %f\nz: %f\n", string, vec.x, vec.y, vec.z);
+		printf("\n---\n%s\nx: %f\ny: %f\nz: %f\nw: %f\n", string, vec.x, vec.y, vec.z, vec.w);
 	else
-		printf("---\nx: %f\ny: %f\nz: %f\n", vec.x, vec.y, vec.z);
+		printf("---\nx: %f\ny: %f\nz: %f\nz: %f\nw: %f\n", vec.x, vec.y, vec.z, vec.w);
 	return (0);
 }
 
+int	print_matrix(char *string, t_matrix mat)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	printf("%s\n", string);
+	while (i < 4)
+	{
+		j = 0;
+		while (j < 4)
+		{
+			printf("%f ", mat.matrix[i][j]);
+			j++;
+		}
+		printf("\n");
+		i++;
+	}
+	return (0);
+}
 /* int	print_color(char *string, t_rgb color)
 {
 	if (string)

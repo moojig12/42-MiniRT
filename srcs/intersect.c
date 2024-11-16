@@ -133,8 +133,8 @@ t_intersection	intersect(t_ray ray, t_obj *obj)
 
 	intersection.hit = 0;
 	intersection.distance = INFINITY;
-	intersection.point = vec(0, 0, 0);
-	intersection.norm = vec(0, 0, 0);
+	intersection.point = vec(0, 0, 0, 0);
+	intersection.norm = vec(0, 0, 0, 0);
 	intersection.emittance = ret_color(0, 0, 0);
 	// Call the specific intersection test based on the object type
 	if (obj->type == SPHERE)

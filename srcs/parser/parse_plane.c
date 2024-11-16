@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_plane.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:18 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/17 15:07:29 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/16 11:40:19 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ int	parse_plane(t_world *world, char **input)
 	if (size != 4)
 		exit_err_init("Error\nToo many args for plane\n", 1, world);
 	if (input[1])
-		pop_vec(&new->pos, ft_split(input[1], ','), NULL);
+		pop_vec(&new->pos, ft_split(input[1], ','), NULL, 1);
 	if (input[2])
-		pop_vec(&new->norm, ft_split(input[2], ','), alloc_float(-1.0, 1.0));
+		pop_vec(&new->norm, ft_split(input[2], ','), alloc_float(-1.0, 1.0), 0);
 	if (input[3])
 		pop_color(&new->color, ft_split(input[3], ','));
 	new->next = NULL;

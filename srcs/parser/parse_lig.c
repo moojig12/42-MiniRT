@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_lig.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:07:43 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/17 16:03:57 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/16 11:39:09 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	parse_light(t_world *world, char **input)
 		exit_err_init("Error\nToo many args for light\n", 1, world);
 	new = malloc(sizeof(t_light));
 	if (input[1])
-		pop_vec(&new->pos, ft_split(input[1], ','), NULL);
+		pop_vec(&new->pos, ft_split(input[1], ','), NULL, 1);
 	if (input[2] && ft_range(ft_atof(input[2]), 0.0, 1.0))
 		new->brightness = ft_atof(input[2]);
 	else

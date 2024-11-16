@@ -2,52 +2,47 @@
 
 int	move_forward(t_main *main)
 {
-	main->world->cam->pos.z++;
+	main->world->cam->pos = matrix_translation(main->world->cam->pos, vec(0, 0, 2, 1));
 	return (0);
 }
 
 int	move_left(t_main *main)
 {
-	main->world->cam->pos.x--;
+	print_vec("before:", main->world->cam->pos);
+	main->world->cam->pos = matrix_translation(main->world->cam->pos, vec(-2, 0, 0, 1));
+	print_vec("after:", main->world->cam->pos);
 	return (0);
 }
 
 int	move_back(t_main *main)
 {
-	main->world->cam->pos.z--;
+	main->world->cam->pos = matrix_translation(main->world->cam->pos, vec(0, 0, -2, 1));
 	return (0);
 }
 
 int	move_right(t_main *main)
 {
-	main->world->cam->pos.x++;
+	main->world->cam->pos = matrix_translation(main->world->cam->pos, vec(2, 0, 0, 1));
 	return (0);
 }
 
 int	move_up(t_main *main)
 {
-	main->world->cam->pos.y++;
+	main->world->cam->pos = matrix_translation(main->world->cam->pos, vec(0, 2, 0, 1));
 	return (0);
 }
 
 int	move_down(t_main *main)
 {
-	main->world->cam->pos.y--;
+	main->world->cam->pos = matrix_translation(main->world->cam->pos, vec(0, -2, 0, 1));
 	return (0);
 }
 
 int	rotate_left(t_main *main)
 {
 	t_vec	rotated_vec;
-	double	theta;
 
-	theta = -5 * (PI / 180);
-	double cos_theta = cos(theta);
-	double sin_theta = sin(theta);
-
-	rotated_vec.x = main->world->cam->direction.x * cos_theta + main->world->cam->direction.z * sin_theta;
-	rotated_vec.y = main->world->cam->direction.y;
-	rotated_vec.z = -main->world->cam->direction.x * sin_theta + main->world->cam->direction.z * cos_theta;
+	rotated_vec = matrix_rotation(main->world->cam->direction, vec(0, -0.2, 0, 0));
 	main->world->cam->direction = rotated_vec;
 
 	return (0);
@@ -56,17 +51,11 @@ int	rotate_left(t_main *main)
 int	rotate_right(t_main *main)
 {
 	t_vec	rotated_vec;
-	double	theta;
 
-	theta = 5 * (PI / 180);
-	double cos_theta = cos(theta);
-	double sin_theta = sin(theta);
-
-	rotated_vec.x = main->world->cam->direction.x * cos_theta + main->world->cam->direction.z * sin_theta;
-	rotated_vec.y = main->world->cam->direction.y;
-	rotated_vec.z = -main->world->cam->direction.x * sin_theta + main->world->cam->direction.z * cos_theta;
-
+	print_vec("before", main->world->cam->direction);
+	rotated_vec = matrix_rotation(main->world->cam->direction, vec(0, 0.2, 0, 0));
 	main->world->cam->direction = rotated_vec;
+	print_vec("after", main->world->cam->direction);
 
 	return (0);
 }

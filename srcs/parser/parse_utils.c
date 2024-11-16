@@ -37,7 +37,7 @@ int	pop_color(t_rgb *rgb, char **input)
 	return (0);
 }
 
-int	pop_vec(t_vec *pos, char **input, double *range)
+int	pop_vec(t_vec *pos, char **input, double *range, double type)
 {
 	int	i;
 
@@ -60,6 +60,7 @@ int	pop_vec(t_vec *pos, char **input, double *range)
 		pos->x = ft_atof(input[0]);
 		pos->y = ft_atof(input[1]);
 		pos->z = ft_atof(input[2]);
+		pos->w = type;
 	}
 	i = 0;
 	while (input[i])

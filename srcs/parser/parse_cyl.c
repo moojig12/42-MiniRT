@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cyl.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:01 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/17 15:03:34 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/16 11:38:57 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ int	parse_cyl(t_world *world, char **input)
 		exit_err_init("Error\nToo many args for cylinder\n", 1, world);
 	new = malloc(sizeof(t_cyl)); 
 	if (input[1])
-		pop_vec(&new->pos, ft_split(input[1], ','), NULL);
+		pop_vec(&new->pos, ft_split(input[1], ','), NULL, 1);
 	if (input[2])
-		pop_vec(&new->norm, ft_split(input[2], ','), alloc_float(-1.0, 1.0));
+		pop_vec(&new->norm, ft_split(input[2], ','), alloc_float(-1.0, 1.0), 0);
 	if (input[3])
 		new->diameter = ft_atof(input[3]);
 	if (input[4])
