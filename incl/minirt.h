@@ -117,6 +117,7 @@ typedef struct s_plane {
 typedef struct s_cylinder {
 	t_vec	pos;
 	t_vec	norm;
+	double	direction;
 	double	diameter;
 	double	height;
 	t_rgb	color;

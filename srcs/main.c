@@ -24,7 +24,7 @@ void	initialize_main(t_main *main, t_world *world)
 	}
 	else
 	{
-		printf("why isnt it working\n");
+		printf("MLX not initialized properly\n");
 		exit(0);
 	}
 	main->width = 800;

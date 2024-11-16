@@ -29,8 +29,8 @@ t_ray	gen_ray(t_camera *cam, int x, int y)
 	double	aspect_ratio;
 	double	pixel_x;
 	double	pixel_y;
-	double	jitter_x = random_double_range(-0.5, 0.5);
-	double	jitter_y = random_double_range(-0.5, 0.5);
+	double	jitter_x = random_double_range(-0.25, 0.25);
+	double	jitter_y = random_double_range(-0.25, 0.25);
 
 	aspect_ratio = cam->width / cam->height;
 	
@@ -42,14 +42,9 @@ t_ray	gen_ray(t_camera *cam, int x, int y)
 	t_vec right = vec_normalize(vec_cross(cam->norm, forward));
 	t_vec up = vec_cross(forward, right);
 
-	/* ray.origin = cam->pos;
-	ray.dest = vec(pixel_x, pixel_y, 1); */
-
 	ray.origin = cam->pos;
 	ray.dest = vec_add(vec_add(vec_scalar(right, pixel_x), vec_scalar(up, pixel_y)), vec_scalar(forward, 1));
 	ray.dest = vec_normalize(ray.dest);
-
-	// ray.norm = cam->norm;
 
 	return (ray);
 }

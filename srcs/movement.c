@@ -92,16 +92,16 @@ int	movement(int key_code, t_main *main)
 	if (key_code == ROTATE_RIGHT)
 		rotate_right(main);
 	if (key_code == 105)
-		rotate_cylinder(main->world->cyl, vec(0.2, 0, 0 ,0));
+		rotate_cylinder(main->world->cyl, vec(0.1, 0, 0 ,0));
 	if (key_code == 106)
-		rotate_cylinder(main->world->cyl, vec(0, -0.2, 0 ,0));
+		rotate_cylinder(main->world->cyl, vec(0, -0.1, 0 ,0));
 	if (key_code == 107)
-		rotate_cylinder(main->world->cyl, vec(-0.2, 0, 0 ,0));
+		rotate_cylinder(main->world->cyl, vec(-0.1, 0, 0 ,0));
 	if (key_code == 108)
-		rotate_cylinder(main->world->cyl, vec(0, 0.2, 0 ,0));
+		rotate_cylinder(main->world->cyl, vec(0, 0.1, 0 ,0));
 	if (key_code == 117)
-		rotate_cylinder(main->world->cyl, vec(0, 0, -0.2, 0));
+		rotate_cylinder(main->world->cyl, vec(0, 0, -0.1, 0));
 	if (key_code == 111)
-		rotate_cylinder(main->world->cyl, vec(0, 0, 0.2, 0));
+		rotate_cylinder(main->world->cyl, vec(0, 0, 0.1, 0));
 	return (1);
 }

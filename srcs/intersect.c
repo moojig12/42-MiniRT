@@ -68,6 +68,7 @@ t_intersection	intersect_plane(t_ray ray, t_plane *plane, t_intersection interse
 
 t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersection)
 {
+	ray.dest = vec_normalize(ray.dest);
 	t_vec oc = vec_sub(ray.origin, cyl->pos);
 	t_vec axis = vec_normalize(cyl->norm);
 	double radius_squared = (cyl->diameter / 2) * (cyl->diameter / 2);
@@ -78,47 +79,66 @@ t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersec
 	double c = vec_dot(oc, oc) - vec_dot(oc, axis) * vec_dot(oc, axis) - radius_squared;
 
 	double discriminant = b * b - 4 * a * c;
-
-	if (discriminant < 0)
-		return intersection;
-
 	// Calculate the two potential intersection distances
-	double t1 = (-b - sqrt(discriminant)) / (2.0 * a);
-	double t2 = (-b + sqrt(discriminant)) / (2.0 * a);
 		
-	double t;
-	if (t1 < t2 && t1 > 0)
-		t = t1;
-	else if (t2 > 0)
-		t = t2;
+	if (discriminant < 0)
+		return (intersection);
 	else
-		t = INFINITY;
+	{
+		double t;
+		double	t1 = (-b - sqrt(discriminant)) / (2.0 * a);
+		double	t2 = (-b + sqrt(discriminant)) / (2.0 * a);
+		if (t1 < t2 && t1 > 0)
+			t = t1;
+		else if (t2 > 0)
+			t = t2;
+		else
+			t = INFINITY;
 
-	if (t < INFINITY) {
+		if (t < INFINITY)
+		{
+			intersection.hit = 1;
+			intersection.distance = t;
+			intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t));
+
+			double projection = vec_dot(vec_sub(intersection.point, cyl->pos), axis);
+			t_vec point_on_axis = vec_add(cyl->pos, vec_scalar(axis, projection));
+			if (projection < 0.0001 || projection > cyl->height)
+			{
+				intersection.hit = 0; // Outside the height bounds
+				return intersection;
+			}
+
+			intersection.norm = vec_normalize(vec_sub(intersection.point, point_on_axis));
+			intersection.emittance = cyl->color;
+			if (vec_dot(ray.dest, intersection.norm) > 0)
+				intersection.norm = vec_scalar(intersection.norm, -1);
+		}
+	}
+	/* if (t < INFINITY) {
 		intersection.hit = 1;
 		intersection.distance = t;
 		intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t)); // Intersection point
 
-		// Check if the intersection point is within the height of the obj
-		t_vec point_on_axis = vec_add(cyl->pos, vec_scalar(axis, vec_dot(vec_sub(intersection.point, cyl->pos), axis)));
-
+		// Calculate projection length (scalar distance along the axis)
 		double projection = vec_dot(vec_sub(intersection.point, cyl->pos), axis);
 
-		if (projection < 0 || projection > cyl->height)
+		// Use the projection to calculate the point on the axis
+		t_vec point_on_axis = vec_add(cyl->pos, vec_scalar(axis, projection));
+
+		if (projection < 0.0001 || projection > cyl->height)
 		{
 			intersection.hit = 0; // Outside the height bounds
 			return intersection;
 		}
-		
+
 		intersection.emittance = cyl->color;
 		intersection.norm = vec_normalize(vec_sub(intersection.point, point_on_axis));
+
 		// Flip inside norms
 		if (vec_dot(ray.dest, intersection.norm) > 0)
 			intersection.norm = vec_scalar(intersection.norm, -1);
-	}
-/* 
-	if (intersection.hit == 1)
-		printf("CYLINDER!\n"); */
+	} */
 	return (intersection);
 }
 
