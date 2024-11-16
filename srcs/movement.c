@@ -60,8 +60,19 @@ int	rotate_right(t_main *main)
 	return (0);
 }
 
+int	rotate_cylinder(t_cyl *cyl, t_vec rotation)
+{
+	t_vec	rotated_vec;
+
+	rotated_vec = matrix_rotation(cyl->norm, rotation);
+	cyl->norm = rotated_vec;
+
+	return (0);
+}
+
 int	movement(int key_code, t_main *main)
 {
+	printf("keycode: %i\n", key_code);
 	if (key_code == ESC_WIN)
 		close_window(main);
 	if (key_code == FORWARD)
@@ -80,5 +91,17 @@ int	movement(int key_code, t_main *main)
 		rotate_left(main);
 	if (key_code == ROTATE_RIGHT)
 		rotate_right(main);
+	if (key_code == 105)
+		rotate_cylinder(main->world->cyl, vec(0.2, 0, 0 ,0));
+	if (key_code == 106)
+		rotate_cylinder(main->world->cyl, vec(0, -0.2, 0 ,0));
+	if (key_code == 107)
+		rotate_cylinder(main->world->cyl, vec(-0.2, 0, 0 ,0));
+	if (key_code == 108)
+		rotate_cylinder(main->world->cyl, vec(0, 0.2, 0 ,0));
+	if (key_code == 117)
+		rotate_cylinder(main->world->cyl, vec(0, 0, -0.2, 0));
+	if (key_code == 111)
+		rotate_cylinder(main->world->cyl, vec(0, 0, 0.2, 0));
 	return (1);
 }
