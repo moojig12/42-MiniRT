@@ -57,6 +57,10 @@ typedef struct s_vector {
 	double	z;
 }	t_vec;
 
+typedef struct s_matrix {
+	double matrix[4][4];
+}	t_matrix;
+
 typedef struct s_rgb {
 	int	r;
 	int	g;
@@ -66,7 +70,7 @@ typedef struct s_rgb {
 typedef struct s_ray {
 	t_vec	origin;
 	t_vec	dest;
-	t_vec	norm;
+	// t_vec	norm;
 }	t_ray;
 typedef struct s_camera {
 	t_vec	pos;

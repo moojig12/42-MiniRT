@@ -68,12 +68,10 @@ t_intersection	intersect_plane(t_ray ray, t_plane *plane, t_intersection interse
 
 t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersection)
 {
-	// Define necessary vectors
-	t_vec oc = vec_sub(ray.origin, cyl->pos); // O - P (P is the base position of the obj)
-	// t_vec axis = vec_normalize(cyl->norm); // Normalize the obj axis
-	t_vec axis = cyl->norm; 
+	t_vec oc = vec_sub(ray.origin, cyl->pos);
+	t_vec axis = vec_normalize(cyl->norm);
 	double radius_squared = (cyl->diameter / 2) * (cyl->diameter / 2);
-		
+
 	// Compute coefficients for the quadratic equation
 	double a = vec_dot(ray.dest, ray.dest) - vec_dot(ray.dest, axis) * vec_dot(ray.dest, axis);
 	double b = 2.0 * (vec_dot(oc, ray.dest) - vec_dot(ray.dest, axis) * vec_dot(oc, axis));
@@ -81,30 +79,29 @@ t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersec
 
 	double discriminant = b * b - 4 * a * c;
 
-	if (discriminant < 0) {
-		return intersection; // No intersection
-	}
+	if (discriminant < 0)
+		return intersection;
 
 	// Calculate the two potential intersection distances
 	double t1 = (-b - sqrt(discriminant)) / (2.0 * a);
 	double t2 = (-b + sqrt(discriminant)) / (2.0 * a);
 		
 	double t;
-	if (t1 < t2 && t1 > 0) {
+	if (t1 < t2 && t1 > 0)
 		t = t1;
-	} else if (t2 > 0) {
+	else if (t2 > 0)
 		t = t2;
-	} else {
-		t = INFINITY; // No valid intersection
-	}
+	else
+		t = INFINITY;
 
 	if (t < INFINITY) {
 		intersection.hit = 1;
 		intersection.distance = t;
 		intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t)); // Intersection point
-		
+
 		// Check if the intersection point is within the height of the obj
 		t_vec point_on_axis = vec_add(cyl->pos, vec_scalar(axis, vec_dot(vec_sub(intersection.point, cyl->pos), axis)));
+
 		double projection = vec_dot(vec_sub(intersection.point, cyl->pos), axis);
 
 		if (projection < 0 || projection > cyl->height)
@@ -112,9 +109,12 @@ t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersec
 			intersection.hit = 0; // Outside the height bounds
 			return intersection;
 		}
+		
 		intersection.emittance = cyl->color;
-	
-		intersection.norm = vec_normalize(vec_sub(intersection.point, point_on_axis)); // Normal vector
+		intersection.norm = vec_normalize(vec_sub(intersection.point, point_on_axis));
+		// Flip inside norms
+		if (vec_dot(ray.dest, intersection.norm) > 0)
+			intersection.norm = vec_scalar(intersection.norm, -1);
 	}
 /* 
 	if (intersection.hit == 1)

@@ -29,8 +29,8 @@ t_ray	gen_ray(t_camera *cam, int x, int y)
 	double	aspect_ratio;
 	double	pixel_x;
 	double	pixel_y;
-	double	jitter_x = random_double_range(-0.25, 0.25);
-	double	jitter_y = random_double_range(-0.25, 0.25);
+	double	jitter_x = random_double_range(-0.5, 0.5);
+	double	jitter_y = random_double_range(-0.5, 0.5);
 
 	aspect_ratio = cam->width / cam->height;
 	
@@ -49,7 +49,7 @@ t_ray	gen_ray(t_camera *cam, int x, int y)
 	ray.dest = vec_add(vec_add(vec_scalar(right, pixel_x), vec_scalar(up, pixel_y)), vec_scalar(forward, 1));
 	ray.dest = vec_normalize(ray.dest);
 
-	ray.norm = cam->norm;
+	// ray.norm = cam->norm;
 
 	return (ray);
 }
@@ -66,11 +66,13 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	intersection = find_path(ray, world);
 	if (intersection.hit == 0)
 		return (world->amb->color);
+
 	new_ray.origin = intersection.point;
 	new_ray.dest = vec_sub(ray.dest, vec_scalar(intersection.norm, 2 * vec_dot(ray.dest, intersection.norm)));
-	new_ray.norm = intersection.norm;
-	double	cos_theta = vec_dot(new_ray.dest, ray.norm);
-  	double	BRDF = (1.0 / PI);
+	// new_ray.norm = intersection.norm;
+
+	double	cos_theta = vec_dot(new_ray.dest, intersection.norm);
+	double	BRDF = (1.0 / PI);
 
 	incoming = trace_path(world, new_ray, depth + 1);
 	t_rgb	return_color = color_add(intersection.emittance, color_scalar(color_scalar(incoming, cos_theta), BRDF));
@@ -84,8 +86,8 @@ int	render(t_main *main)
 	t_rgb	**output;
 	t_world	*world;
 	int		output_color;
-	int	x;
-	int	y;
+	int		x;
+	int		y;
 
 	output = main->output;
 	world = main->world;
