@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:39:58 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/14 17:42:21 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/13 15:03:26 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	free_obj(t_obj *obj)
 	while (obj)
 	{
 		next = obj->next;
-		free(obj->data);
+		//free(obj->data);
 		free(obj);
 		obj = next;
 	}
@@ -103,4 +103,19 @@ static void	free_cyl(t_cyl *cyl)
 		free(cyl);
 		cyl = next;
 	}
+}
+
+void	free_tab(char **tab)
+{
+	int	i;
+
+	i = 0;
+	if (!tab)
+		return ;
+	while (tab[i] != NULL)
+	{
+		free(tab[i]);
+		i++;
+	}
+	free(tab);
 }

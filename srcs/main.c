@@ -2,7 +2,10 @@
 
 int	close_window(t_main	*main)
 {
-	free(main);
+	free_world(main->world);
+	mlx_clear_window(main->mlx, main->win);
+	mlx_destroy_window(main->mlx, main->win);
+	//free(main);
 	exit (0);
 }
 

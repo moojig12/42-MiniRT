@@ -233,6 +233,7 @@ void	exit_err(char *message, int code, t_main *main);
 void	exit_err_init(char *msg, int code, t_world *world);
 void	free_world(t_world *world);
 void	free_main(t_main *main);
+void	free_tab(char **tab);
 
 // Checks
 int	check_size_matrix(char **matrix);

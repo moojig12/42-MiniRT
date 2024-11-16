@@ -3,7 +3,7 @@ NAME	=	miniRT
 CC		=	cc
 HEADER	=	-I./incl -I./incl/mlx -I./incl/libft -I./incl/get_next_line
 SAN		=	-fsanitize=address
-CFLAGS	=	-O2 -Wall -Werror -Wextra -Ilibmlx -g $(HEADER)
+CFLAGS	=	-O2 -Ilibmlx -g $(HEADER)
 MFLAGS  =	-L /usr/X11R6/lib -lXext -lX11 -lm
 
 LIBS	=	./incl/libft/libft.a ./incl/mlx/libmlx.a ./incl/get_next_line/gnl.a
@@ -60,6 +60,7 @@ clean:
 			
 fclean:		clean
 			rm -rf $(NAME)
+			rm -rf $(LIBS)
 
 re:			fclean all
 
