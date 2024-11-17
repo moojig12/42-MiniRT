@@ -174,7 +174,7 @@ t_intersection	intersect(t_ray ray, t_obj *obj)
 	intersection.emittance = ret_color(0, 0, 0);
 	intersection.reflectance = 1;
 	intersection.diffuse = 0.0;
-	intersection.specular = 0.95;
+	intersection.specular = 0.94;
 
 	if (obj->type == SPHERE)
 		return (intersect_sphere(ray, (t_sphere *)obj->data, intersection));

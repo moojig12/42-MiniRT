@@ -263,10 +263,13 @@ t_vec	vec_sub(t_vec a, t_vec b);
 t_vec	vec_scalar(t_vec a, double b);
 t_vec	vec_cross(t_vec a, t_vec b);
 t_vec	vec_normalize(t_vec v);
+t_vec	vec_orthogonal(t_vec vec);
+double	vec_length(t_vec v);
 
 // Color operations
 int		pack_color(int r, int g, int b);
 t_rgb	color_add(t_rgb a, t_rgb b);
+t_rgb	color_sub(t_rgb a, t_rgb b);
 t_rgb	color_scalar(t_rgb color, double scalar);
 t_rgb	color_scalar_div(t_rgb a, double scalar);
 t_rgb	color_multiply(t_rgb a, t_rgb b);

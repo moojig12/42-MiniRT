@@ -74,13 +74,12 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 
 	intersection = find_path(ray, world);
 	if (intersection.hit == 0)
-		return (world->amb->color);
-		// return	(ret_color(0, 0, 0));
+		return	(ret_color(0, 0, 0));
+		// return (world->amb->color);
 
 	new_ray.origin = intersection.point;
-	// new_ray.dest = cone_pewpew(intersection.norm);
-	// new_ray.dest = random_cosine_direction(intersection.norm);
-	new_ray.dest = vec_sub(ray.dest, vec_scalar(intersection.norm, 2 * vec_dot(ray.dest, intersection.norm)));
+	// new_ray.dest = vec_sub(ray.dest, vec_scalar(intersection.norm, 2 * vec_dot(ray.dest, intersection.norm)));
+	new_ray.dest = cone_pewpew(intersection.norm);
 
 	double	p = 1 / (2 * PI);
 	double	cos_theta = fmax(0.0, vec_dot(new_ray.dest, intersection.norm));
@@ -89,7 +88,8 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	incoming = trace_path(world, new_ray, depth + 1);
 
 	return_color = color_add(intersection.emittance, color_scalar(color_scalar(color_scalar(incoming, cos_theta), BRDF), p));
-	return_color = color_add(return_color, color_scalar(world->amb->color, world->amb->ratio));
+	// return_color = color_add(return_color, color_scalar(world->amb->color, world->amb->ratio));
+
 	return (color_normalize(return_color));
 }
 
@@ -107,7 +107,7 @@ int	render(t_main *main)
 	x = 0;
 	y = 0;
 	int	pass = 1;
-	while (pass < 5)
+	while (pass < 2)
 	{
 		while (y < main->height)
 		{
@@ -117,15 +117,16 @@ int	render(t_main *main)
 				output[y][x] = color_scalar_div(color_add(output[y][x], trace_path(world, ray, 1)), pass);
 				output_color = pack_color(output[y][x].r, output[y][x].g, output[y][x].b);
 				mlx_pixel_put(main->mlx, main->win, x, y, output_color);
-				// output[y][x] = ret_color(0, 0, 0);
+				output[y][x] = ret_color(0, 0, 0);
 				x++;
 			}
 			x = 0;
 			y++;
 		}
+		y = 0;
 		pass++;
 	}
-	x = 0;
+	/* x = 0;
 	y = 0;
 	while (y < main->height)
 	{
@@ -136,7 +137,7 @@ int	render(t_main *main)
 		}
 		x = 0;
 		y++;
-	}
+	} */
 	return (0);
 }
 
