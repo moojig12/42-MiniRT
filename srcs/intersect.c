@@ -88,6 +88,7 @@ t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersec
 		double t;
 		double	t1 = (-b - sqrt(discriminant)) / (2.0 * a);
 		double	t2 = (-b + sqrt(discriminant)) / (2.0 * a);
+
 		if (t1 < t2 && t1 > 0)
 			t = t1;
 		else if (t2 > 0)
@@ -97,20 +98,39 @@ t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersec
 
 		if (t < INFINITY)
 		{
-			intersection.hit = 1;
 			intersection.distance = t;
 			intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t));
 
-			double projection = vec_dot(vec_sub(intersection.point, cyl->pos), axis);
-			t_vec point_on_axis = vec_add(cyl->pos, vec_scalar(axis, projection));
-			if (projection < 0.0001 || projection > cyl->height)
+			// Check t1 against height projection
+			double projection1 = vec_dot(vec_sub(vec_add(ray.origin, vec_scalar(ray.dest, t1)), cyl->pos), axis);
+			if (t1 > 0 && projection1 >= 0.0001 && projection1 <= cyl->height)
 			{
-				intersection.hit = 0; // Outside the height bounds
-				return intersection;
+				t = t1;
+				intersection.hit = 1;
 			}
 
+			// Check t2 only if t1 is invalid or farther
+			double projection2 = vec_dot(vec_sub(vec_add(ray.origin, vec_scalar(ray.dest, t2)), cyl->pos), axis);
+			if ((!intersection.hit || t2 < t) && t2 > 0 && projection2 >= 0.0001 && projection2 <= cyl->height)
+			{
+				t = t2;
+				intersection.hit = 1;
+			}
+
+			// If no valid intersection was found, return no-hit intersection
+			if (!intersection.hit)
+				return intersection;
+
+			// Calculate intersection details
+			intersection.distance = t;
+			intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t));
+
+			// Calculate point on cylinder axis
+			double projection = vec_dot(vec_sub(intersection.point, cyl->pos), axis);
+			t_vec point_on_axis = vec_add(cyl->pos, vec_scalar(axis, projection));
 			intersection.norm = vec_normalize(vec_sub(intersection.point, point_on_axis));
 			intersection.emittance = cyl->color;
+
 			if (vec_dot(ray.dest, intersection.norm) > 0)
 				intersection.norm = vec_scalar(intersection.norm, -1);
 		}
