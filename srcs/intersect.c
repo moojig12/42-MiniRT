@@ -39,9 +39,7 @@ t_intersection	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersection inte
 			intersection.emittance = sphere->color;
 		}
 	}
-/* 
-	if (intersection.hit == 1)
-		printf("SPHERE!\n"); */
+
 	return (intersection);
 }
 
@@ -60,9 +58,7 @@ t_intersection	intersect_plane(t_ray ray, t_plane *plane, t_intersection interse
 		intersection.norm = plane->norm; // Normal is constant
 		intersection.emittance = plane->color;
 	}
-/* 
-	if (intersection.hit == 1)
-		printf("PLANE!\n"); */
+
 	return intersection;
 }
 
@@ -176,15 +172,16 @@ t_intersection	intersect(t_ray ray, t_obj *obj)
 	intersection.point = vec(0, 0, 0, 0);
 	intersection.norm = vec(0, 0, 0, 0);
 	intersection.emittance = ret_color(0, 0, 0);
-	// Call the specific intersection test based on the object type
+	intersection.reflectance = 1;
+	intersection.diffuse = 0.0;
+	intersection.specular = 0.95;
+
 	if (obj->type == SPHERE)
 		return (intersect_sphere(ray, (t_sphere *)obj->data, intersection));
 	else if (obj->type == CYLINDER)
 		return (intersect_cylinder(ray, (t_cyl *)obj->data, intersection));
 	else if (obj->type == PLANE)
 		return (intersect_plane(ray, (t_plane *)obj->data, intersection));
-	/* else if (obj->type == LIGHT)
-		return (intersect_light(ray, obj, intersection)); */
 	else
 		printf("Error\nNo object type for intersection\n");
 	return (intersection);
