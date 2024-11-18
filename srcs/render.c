@@ -44,6 +44,7 @@ t_ray	gen_ray(t_camera *cam, int x, int y)
 	return (ray);
 }
 
+	// BRDF calculation for materials, not sure if it works 100% yet
 double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 {
 	double	fresnel;
@@ -62,6 +63,7 @@ double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 	return diffuse + specular;
 }
 
+	// The function for simulating and bouncing a ray off an object
 t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 {
 	t_intersection	intersection;
@@ -72,27 +74,35 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	if (depth >= MAXDEPTH)
 		return (ret_color(0, 0, 0));
 
+		// Iterate over each object in the world and find the closest intersection.
+			// Also fetches data relating to the object such as Material and Norm direction
 	intersection = find_path(ray, world);
 	if (intersection.hit == 0)
 		return	(ret_color(0, 0, 0));
 		// return (world->amb->color);
 
+		// initialize a new ray from the POINT of Intersection and random direction
 	new_ray.origin = intersection.point;
 	// new_ray.dest = vec_sub(ray.dest, vec_scalar(intersection.norm, 2 * vec_dot(ray.dest, intersection.norm)));
 	new_ray.dest = cone_pewpew(intersection.norm);
 
+		// Calculations i found off the internet for BRDF
 	double	p = 1 / (2 * PI);
 	double	cos_theta = fmax(0.0, vec_dot(new_ray.dest, intersection.norm));
 	double	BRDF = brdf_calculation(intersection, new_ray, intersection.norm);
 
+		// Shoot the next ray recursively
 	incoming = trace_path(world, new_ray, depth + 1);
 
+		// Adding the color return of the recursively shot ray and adding up the values then scaling with BRDF
 	return_color = color_add(intersection.emittance, color_scalar(color_scalar(color_scalar(incoming, cos_theta), BRDF), p));
 	// return_color = color_add(return_color, color_scalar(world->amb->color, world->amb->ratio));
 
 	return (color_normalize(return_color));
 }
 
+
+// Main function for rendering the screen for each frame called by mlx_loop_hook
 int	render(t_main *main)
 {
 	t_ray	ray;
@@ -113,10 +123,18 @@ int	render(t_main *main)
 		{
 			while (x < main->width)
 			{
+				// Initializes the position of the first ray from the camera to pass into trace_path later
 				ray = gen_ray(main->world->cam, x, y);
+
+				// Passes in trace_path function to shoot rays and get the result of the ray bounces back
 				output[y][x] = color_scalar_div(color_add(output[y][x], trace_path(world, ray, 1)), pass);
+
+				// Packs color into ARGB format for mlx_pixel_put
 				output_color = pack_color(output[y][x].r, output[y][x].g, output[y][x].b);
+
 				mlx_pixel_put(main->mlx, main->win, x, y, output_color);
+
+				// Refreshing to screen to black
 				output[y][x] = ret_color(0, 0, 0);
 				x++;
 			}
@@ -143,7 +161,10 @@ int	render(t_main *main)
 
 int	main_pipeline(t_main *main)
 {
+	// Call render() function each frame with mlx_loop while handling input
 	mlx_loop_hook(main->mlx, render, main);
+
+	// Take input
 	key_handles(main);
 	mlx_loop(main->mlx);
 	return (0);
