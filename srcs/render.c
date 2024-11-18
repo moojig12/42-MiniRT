@@ -95,6 +95,8 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	incoming = trace_path(world, new_ray, depth + 1);
 
 	return_color = ret_color(0, 0, 0);
+		// Ambience
+	return_color = color_add(return_color, color_scalar(world->amb->color, world->amb->ratio));
 
 	t_ray shadow_ray;
 
@@ -104,13 +106,11 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 		double light_dist = vec_length(vec_sub(world->light->pos, intersection.point));
 		double attenuation = 1.0 / (light_dist * light_dist); // Inverse square law
 		double cos_theta_s = fmax(0.0, vec_dot(intersection.norm, shadow_ray.dest));
-		t_rgb light_contribution = color_scalar(world->light->color, 250 * cos_theta_s * attenuation * world->light->brightness);
+		t_rgb light_contribution = color_scalar(world->light->color, cos_theta_s * attenuation * world->light->brightness);
 		return_color = color_add(return_color, light_contribution);
 		// print_color("color:", return_color);
 	}
 
-		// Ambience
-	return_color = color_add(return_color, color_scalar(world->amb->color, world->amb->ratio));
 		// Indirect lighting
 			// Adding the color return of the recursively shot ray and adding up the values then scaling with BRDF
 	return_color = color_scalar(color_add(intersection.emittance, return_color), BRDF * cos_theta / PI);

@@ -72,7 +72,7 @@ int	rotate_cylinder(t_cyl *cyl, t_vec rotation)
 
 int	movement(int key_code, t_main *main)
 {
-	printf("keycode: %i\n", key_code);
+	// printf("keycode: %i\n", key_code);
 	if (key_code == ESC_WIN)
 		close_window(main);
 	if (key_code == FORWARD)
