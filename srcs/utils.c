@@ -125,11 +125,12 @@ int	print_matrix(char *string, t_matrix mat)
 	}
 	return (0);
 }
-/* int	print_color(char *string, t_rgb color)
+
+int	print_color(char *string, t_rgb color)
 {
 	if (string)
 		printf("\n---\n%s\nr: %f\ng: %f\nb: %f\n", string, color.r, color.g, color.b);
 	else
 		printf("---\nr: %f\ng: %f\nb: %f\n", color.r, color.g, color.b);
 	return (0);
-} */
+}

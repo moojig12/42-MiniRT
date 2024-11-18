@@ -24,8 +24,8 @@ t_ray	gen_ray(t_camera *cam, int x, int y)
 	double	aspect_ratio;
 	double	pixel_x;
 	double	pixel_y;
-	double	jitter_x = random_double_range(-0.0, 0.0);
-	double	jitter_y = random_double_range(-0.0, 0.0);
+	double	jitter_x = random_double_range(-0.1, 0.1);
+	double	jitter_y = random_double_range(-0.1, 0.1);
 
 	aspect_ratio = cam->width / cam->height;
 	
@@ -51,6 +51,7 @@ double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 	double	diffuse;
 	double	specular;
 	double	dot_product = vec_dot(ray.dest, norm);
+
 	 // Fresnel reflectance (e.g., Schlick's approximation)
 	fresnel = intersection.reflectance + (1 - intersection.reflectance) * pow(1 - dot_product, 5);
 
@@ -60,7 +61,7 @@ double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 	// Specular component (e.g., Cook-Torrance model)
 	specular = fresnel * intersection.specular;
 
-	return diffuse + specular;
+	return (diffuse + specular);
 }
 
 	// The function for simulating and bouncing a ray off an object
@@ -87,16 +88,33 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	new_ray.dest = cone_pewpew(intersection.norm);
 
 		// Calculations i found off the internet for BRDF
-	double	p = 1 / (2 * PI);
-	double	cos_theta = fmax(0.0, vec_dot(new_ray.dest, intersection.norm));
+	double	cos_theta = vec_dot(new_ray.dest, intersection.norm);
 	double	BRDF = brdf_calculation(intersection, new_ray, intersection.norm);
 
 		// Shoot the next ray recursively
 	incoming = trace_path(world, new_ray, depth + 1);
 
-		// Adding the color return of the recursively shot ray and adding up the values then scaling with BRDF
-	return_color = color_add(intersection.emittance, color_scalar(color_scalar(color_scalar(incoming, cos_theta), BRDF), p));
-	// return_color = color_add(return_color, color_scalar(world->amb->color, world->amb->ratio));
+	return_color = ret_color(0, 0, 0);
+
+	t_ray shadow_ray;
+
+	shadow_ray.origin = intersection.point;
+	shadow_ray.dest = vec_normalize(vec_sub(world->light->pos, intersection.point));
+	if (!find_path(shadow_ray, world).hit) {
+		double light_dist = vec_length(vec_sub(world->light->pos, intersection.point));
+		double attenuation = 1.0 / (light_dist * light_dist); // Inverse square law
+		double cos_theta_s = fmax(0.0, vec_dot(intersection.norm, shadow_ray.dest));
+		t_rgb light_contribution = color_scalar(world->light->color, 250 * cos_theta_s * attenuation * world->light->brightness);
+		return_color = color_add(return_color, light_contribution);
+		// print_color("color:", return_color);
+	}
+
+		// Ambience
+	return_color = color_add(return_color, color_scalar(world->amb->color, world->amb->ratio));
+		// Indirect lighting
+			// Adding the color return of the recursively shot ray and adding up the values then scaling with BRDF
+	return_color = color_scalar(color_add(intersection.emittance, return_color), BRDF * cos_theta / PI);
+
 
 	return (color_normalize(return_color));
 }
