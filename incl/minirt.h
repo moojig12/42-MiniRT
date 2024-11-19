@@ -134,7 +134,7 @@ typedef struct s_intersection {
 	t_vec	origin;
 	t_vec	norm;
 	t_vec	point;
-	t_rgb	emittance;
+	t_rgb	color;
 	double	reflectance;
 	double	diffuse;
 	double	specular;

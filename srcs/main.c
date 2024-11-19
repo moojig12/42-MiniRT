@@ -29,8 +29,8 @@ void	initialize_main(t_main *main, t_world *world)
 	}
 	main->width = 800;
 	main->height = 600;
-	main->world->cam->width = 800;
-	main->world->cam->height = 600;
+	main->world->cam->width = main->width;
+	main->world->cam->height = main->height;
 	main->output = (t_rgb **)calloc(world->cam->height + 1, sizeof(t_rgb *));
 	main->world->cam->direction = vec(0, 0, 1, 0);
 	while (y < world->cam->height)

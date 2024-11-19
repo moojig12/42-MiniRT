@@ -37,7 +37,7 @@ t_intersection	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersection inte
 			intersection.distance = t;
 			intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t));
 			intersection.norm = vec_normalize(vec_sub(intersection.point, sphere->pos));
-			intersection.emittance = sphere->color;
+			intersection.color = sphere->color;
 		}
 	}
 
@@ -57,7 +57,7 @@ t_intersection	intersect_plane(t_ray ray, t_plane *plane, t_intersection interse
 		intersection.distance = t;
 		intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t)); // O + tD
 		intersection.norm = plane->norm; // Normal is constant
-		intersection.emittance = plane->color;
+		intersection.color = plane->color;
 	}
 
 	return intersection;
@@ -127,7 +127,7 @@ t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersec
 			t_vec point_on_axis = vec_add(cyl->pos, vec_scalar(axis, projection));
 
 			intersection.norm = vec_normalize(vec_sub(intersection.point, point_on_axis));
-			intersection.emittance = cyl->color;
+			intersection.color = cyl->color;
 
 			// If point of impact is inside cylinder invert the normal
 			if (vec_dot(ray.dest, intersection.norm) > 0)
@@ -150,7 +150,8 @@ t_intersection	intersect(t_ray ray, t_obj *obj)
 	intersection.distance = INFINITY;
 	intersection.point = vec(0, 0, 0, 0);
 	intersection.norm = vec(0, 0, 0, 0);
-	intersection.emittance = ret_color(0, 0, 0);
+	intersection.color = ret_color(0, 0, 0);
+
 	intersection.reflectance = 1;
 	intersection.diffuse = 0.1;
 	intersection.specular = 0.94;

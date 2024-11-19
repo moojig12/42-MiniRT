@@ -24,8 +24,8 @@ t_ray	gen_ray(t_camera *cam, int x, int y)
 	double	aspect_ratio;
 	double	pixel_x;
 	double	pixel_y;
-	double	jitter_x = random_double_range(-0.1, 0.1);
-	double	jitter_y = random_double_range(-0.1, 0.1);
+	double	jitter_x = random_double_range(-0.0, 0.0);
+	double	jitter_y = random_double_range(-0.0, 0.0);
 
 	aspect_ratio = cam->width / cam->height;
 	
@@ -72,19 +72,20 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	t_rgb	incoming;
 	t_ray	new_ray;
 
+	return_color = ret_color(0, 0, 0);
 	if (depth >= MAXDEPTH)
-		return (ret_color(0, 0, 0));
+		return (return_color);
 
 		// Iterate over each object in the world and find the closest intersection.
 			// Also fetches data relating to the object such as Material and Norm direction
 	intersection = find_path(ray, world);
-	if (intersection.hit == 0)
-		return	(ret_color(0, 0, 0));
-		// return (world->amb->color);
+	if (!intersection.hit)
+		return	(return_color);
 
 		// initialize a new ray from the POINT of Intersection and random direction
 	new_ray.origin = intersection.point;
 	// new_ray.dest = vec_sub(ray.dest, vec_scalar(intersection.norm, 2 * vec_dot(ray.dest, intersection.norm)));
+		// Shoots random rays in possible direction
 	new_ray.dest = cone_pewpew(intersection.norm);
 
 		// Calculations i found off the internet for BRDF
@@ -94,26 +95,25 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 		// Shoot the next ray recursively
 	incoming = trace_path(world, new_ray, depth + 1);
 
-	return_color = ret_color(0, 0, 0);
 		// Ambience
-	return_color = color_add(return_color, color_scalar(world->amb->color, world->amb->ratio));
+	return_color = color_add(intersection.color, color_scalar(world->amb->color, world->amb->ratio));
 
-	t_ray shadow_ray;
+		// Calculate light position and shadow
+		t_ray shadow_ray;
 
-	shadow_ray.origin = intersection.point;
-	shadow_ray.dest = vec_normalize(vec_sub(world->light->pos, intersection.point));
-	if (!find_path(shadow_ray, world).hit) {
-		double light_dist = vec_length(vec_sub(world->light->pos, intersection.point));
-		double attenuation = 1.0 / (light_dist * light_dist); // Inverse square law
-		double cos_theta_s = fmax(0.0, vec_dot(intersection.norm, shadow_ray.dest));
-		t_rgb light_contribution = color_scalar(world->light->color, cos_theta_s * attenuation * world->light->brightness);
-		return_color = color_add(return_color, light_contribution);
-		// print_color("color:", return_color);
-	}
+		shadow_ray.origin = intersection.point;
+		shadow_ray.dest = vec_normalize(vec_sub(world->light->pos, intersection.point));
+		if (!find_path(shadow_ray, world).hit) {
+			double light_dist = vec_length(vec_sub(world->light->pos, intersection.point));
+			double attenuation = 1.0 / (light_dist * light_dist); // Inverse square law
+			double cos_theta_s = fmax(0.0, vec_dot(intersection.norm, shadow_ray.dest));
+			t_rgb light_contribution = color_scalar(world->light->color, cos_theta_s * attenuation * world->light->brightness);
+			return_color = color_add(return_color, light_contribution);
+		}
 
 		// Indirect lighting
 			// Adding the color return of the recursively shot ray and adding up the values then scaling with BRDF
-	return_color = color_scalar(color_add(intersection.emittance, return_color), BRDF * cos_theta / PI);
+	return_color = color_scalar(color_add(incoming, return_color), BRDF * cos_theta / PI );
 
 
 	return (color_normalize(return_color));
@@ -123,6 +123,7 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 // Main function for rendering the screen for each frame called by mlx_loop_hook
 int	render(t_main *main)
 {
+	// static int	static_sample = 1;
 	t_ray	ray;
 	t_rgb	**output;
 	t_world	*world;
@@ -134,18 +135,18 @@ int	render(t_main *main)
 	world = main->world;
 	x = 0;
 	y = 0;
-	int	pass = 1;
-	while (pass < 2)
+	int	static_sample = 1;
+	while (static_sample < 2)
 	{
 		while (y < main->height)
 		{
 			while (x < main->width)
 			{
-				// Initializes the position of the first ray from the camera to pass into trace_path later
+				// Initializes the position of the first ray from the camera to static_sample into trace_path later
 				ray = gen_ray(main->world->cam, x, y);
 
-				// Passes in trace_path function to shoot rays and get the result of the ray bounces back
-				output[y][x] = color_scalar_div(color_add(output[y][x], trace_path(world, ray, 1)), pass);
+				// sampleses in trace_path function to shoot rays and get the result of the ray bounces back
+				output[y][x] = color_scalar_div(color_add(output[y][x], trace_path(world, ray, 1)), static_sample);
 
 				// Packs color into ARGB format for mlx_pixel_put
 				output_color = pack_color(output[y][x].r, output[y][x].g, output[y][x].b);
@@ -160,20 +161,9 @@ int	render(t_main *main)
 			y++;
 		}
 		y = 0;
-		pass++;
+		static_sample++;
+		printf("frame: %i\n", static_sample);
 	}
-	/* x = 0;
-	y = 0;
-	while (y < main->height)
-	{
-		while (x < main->width)
-		{
-			output[y][x] = ret_color(0, 0, 0);
-			x++;
-		}
-		x = 0;
-		y++;
-	} */
 	return (0);
 }
 
