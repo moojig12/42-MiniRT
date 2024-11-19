@@ -96,7 +96,7 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	incoming = trace_path(world, new_ray, depth + 1);
 
 		// Ambience
-	return_color = color_add(intersection.color, color_scalar(world->amb->color, world->amb->ratio));
+	return_color = color_add(incoming, color_scalar(world->amb->color, world->amb->ratio));
 
 		// Calculate light position and shadow
 		t_ray shadow_ray;
@@ -113,7 +113,7 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 
 		// Indirect lighting
 			// Adding the color return of the recursively shot ray and adding up the values then scaling with BRDF
-	return_color = color_scalar(color_add(incoming, return_color), BRDF * cos_theta / PI );
+	return_color = color_scalar(color_add(return_color, return_color), BRDF * cos_theta / PI );
 
 
 	return (color_normalize(return_color));
@@ -123,7 +123,7 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 // Main function for rendering the screen for each frame called by mlx_loop_hook
 int	render(t_main *main)
 {
-	// static int	static_sample = 1;
+	static int	static_sample = 2;
 	t_ray	ray;
 	t_rgb	**output;
 	t_world	*world;
@@ -135,9 +135,7 @@ int	render(t_main *main)
 	world = main->world;
 	x = 0;
 	y = 0;
-	int	static_sample = 1;
-	while (static_sample < 2)
-	{
+	// int	static_sample = 1;
 		while (y < main->height)
 		{
 			while (x < main->width)
@@ -154,16 +152,15 @@ int	render(t_main *main)
 				mlx_pixel_put(main->mlx, main->win, x, y, output_color);
 
 				// Refreshing to screen to black
-				output[y][x] = ret_color(0, 0, 0);
+				// output[y][x] = ret_color(0, 0, 0);
 				x++;
 			}
 			x = 0;
 			y++;
 		}
 		y = 0;
-		static_sample++;
+		// static_sample++;
 		printf("frame: %i\n", static_sample);
-	}
 	return (0);
 }
 
