@@ -8,10 +8,11 @@
 # include "libft.h"
 # include "get_next_line.h"
 # include "mlx.h"
+# include <stdbool.h>
 
 // Constants
 # define PI 3.14159265358979323846
-
+# define EPSILON 1e-6
 // Max depth of bounces for tracing
 # define MAXDEPTH 5
 
@@ -265,6 +266,11 @@ t_vec	vec_cross(t_vec a, t_vec b);
 t_vec	vec_normalize(t_vec v);
 t_vec	vec_orthogonal(t_vec vec);
 double	vec_length(t_vec v);
+t_vec	position(t_ray ray, double t);
+t_ray	new_ray(t_vec origin, t_vec direction);
+t_vec	reflect(t_vec incoming, t_vec normal);
+t_vec	vec_neg(t_vec vec);
+t_ray	generate_ray(t_main *main, int px, int py);
 
 // Color operations
 int		pack_color(int r, int g, int b);
@@ -276,6 +282,9 @@ t_rgb	color_multiply(t_rgb a, t_rgb b);
 double	vec_dot(t_vec a, t_vec b);
 t_rgb	ret_color(int r, int g, int b);
 t_rgb	color_normalize(t_rgb color);
+int	convert_color(t_rgb col);
+int color_to_int(t_rgb color);
+t_rgb	lighting(t_intersection intersection,t_world *world, t_ray ray);
 
 // Matrix operations
 t_vec	matrix_translation(t_vec data, t_vec translate);

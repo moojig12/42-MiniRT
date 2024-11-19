@@ -45,7 +45,7 @@ t_ray	gen_ray(t_camera *cam, int x, int y)
 }
 
 	// BRDF calculation for materials, not sure if it works 100% yet
-double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
+/* double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 {
 	double	fresnel;
 	double	diffuse;
@@ -62,6 +62,62 @@ double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 	specular = fresnel * intersection.specular;
 
 	return (diffuse + specular);
+} */
+
+bool	in_shadow(t_world *world, t_intersection intersection)
+{
+	t_vec	shadow_origin;
+	t_vec	shadow_direction;
+	double	light_dis;
+	t_ray	shadow_ray;
+	t_intersection	new_intersection;
+
+	shadow_origin = vec_add(intersection.point, vec_scalar(intersection.norm, EPSILON));
+	shadow_direction = vec_normalize(vec_sub(world->light->pos, shadow_origin));
+	light_dis = vec_length(vec_sub(world->light->pos, shadow_origin));
+	shadow_ray = new_ray(shadow_origin, shadow_direction);
+	new_intersection = find_path(shadow_ray, world);
+	if(new_intersection.hit && new_intersection.distance > 0 && new_intersection.distance < light_dis)
+		return(true);
+	else
+		return (false);
+
+}
+t_rgb	lighting(t_intersection intersection,t_world *world, t_ray ray)
+{
+	t_rgb	effective_color;
+	t_rgb	ambient;
+	t_vec	light_vec;
+	double	light_dot_normal;
+	t_rgb	diffuse;
+	t_rgb	specular;
+	t_vec	reflect_vec;
+	double reflect_dot_eye;
+	t_vec	eye;
+	double	factor;
+
+	effective_color = color_multiply(intersection.color, world->amb->color);
+	ambient = color_scalar(effective_color, world->amb->ratio);
+	if(in_shadow)
+		return(ambient);
+	light_vec = vec_normalize(vec_sub(world->light->pos, intersection.point));
+	light_dot_normal = vec_dot(light_vec, intersection.norm);
+	diffuse = ret_color(0, 0, 0);
+	specular = ret_color(0, 0, 0);
+	eye = vec_neg(ray.dest);
+	if(light_dot_normal > 0)
+	{
+		diffuse = color_scalar(effective_color, (intersection.diffuse * light_dot_normal));
+		reflect_vec = reflect(vec_neg(light_vec), intersection.norm);
+		reflect_dot_eye = vec_dot(reflect_vec, eye);
+		if (reflect_dot_eye > 0)
+		{
+			factor = pow(reflect_dot_eye, intersection.reflectance);
+			specular = color_scalar(world->amb->color, (intersection.specular * factor));
+		}
+		return(color_add(color_add(diffuse, specular), ambient));
+	}
+
 }
 
 	// The function for simulating and bouncing a ray off an object
@@ -72,30 +128,34 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	t_rgb	incoming;
 	t_ray	new_ray;
 
-	return_color = ret_color(0, 0, 0);
-	if (depth >= MAXDEPTH)
+	return_color = world->amb->color;
+	while(depth <= MAXDEPTH){
+		intersection = find_path(ray, world);
+		if (intersection.hit)
+			return(return_color = lighting(intersection, world, ray));
+		depth++;
+	}
 		return (return_color);
 
 		// Iterate over each object in the world and find the closest intersection.
 			// Also fetches data relating to the object such as Material and Norm direction
-	intersection = find_path(ray, world);
-	if (!intersection.hit)
-		return	(return_color);
-
+	//	return	(return_color);
+	//else
 		// initialize a new ray from the POINT of Intersection and random direction
-	new_ray.origin = intersection.point;
+	//new_ray.origin = intersection.point;
 	// new_ray.dest = vec_sub(ray.dest, vec_scalar(intersection.norm, 2 * vec_dot(ray.dest, intersection.norm)));
 		// Shoots random rays in possible direction
-	new_ray.dest = cone_pewpew(intersection.norm);
+	//new_ray.dest = cone_pewpew(intersection.norm);
 
 		// Calculations i found off the internet for BRDF
-	double	cos_theta = vec_dot(new_ray.dest, intersection.norm);
-	double	BRDF = brdf_calculation(intersection, new_ray, intersection.norm);
+	//double	cos_theta = vec_dot(new_ray.dest, intersection.norm);
+	//double	BRDF = brdf_calculation(intersection, new_ray, intersection.norm);
 
 		// Shoot the next ray recursively
-	incoming = trace_path(world, new_ray, depth + 1);
+	//incoming = trace_path(world, new_ray, depth + 1);
 
-		// Ambience
+	//return_color = lighting(intersection, world);
+/* 		// Ambience
 	return_color = color_add(incoming, color_scalar(world->amb->color, world->amb->ratio));
 
 		// Calculate light position and shadow
@@ -115,15 +175,15 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 			// Adding the color return of the recursively shot ray and adding up the values then scaling with BRDF
 	return_color = color_scalar(color_add(return_color, return_color), BRDF * cos_theta / PI );
 
-
-	return (color_normalize(return_color));
+ */
+	//return (return_color);
 }
 
 
 // Main function for rendering the screen for each frame called by mlx_loop_hook
 int	render(t_main *main)
 {
-	static int	static_sample = 2;
+	static int	static_sample = 1;
 	t_ray	ray;
 	t_rgb	**output;
 	t_world	*world;
@@ -135,7 +195,9 @@ int	render(t_main *main)
 	world = main->world;
 	x = 0;
 	y = 0;
-	// int	static_sample = 1;
+	//int	static_sample = 1;
+	while(static_sample < 2)
+	{
 		while (y < main->height)
 		{
 			while (x < main->width)
@@ -144,13 +206,14 @@ int	render(t_main *main)
 				ray = gen_ray(main->world->cam, x, y);
 
 				// sampleses in trace_path function to shoot rays and get the result of the ray bounces back
-				output[y][x] = color_scalar_div(color_add(output[y][x], trace_path(world, ray, 1)), static_sample);
+				output[y][x] = trace_path(world, ray, 1);
+				//color_scalar_div(trace_path(world, ray, 1), static_sample);
+				//color_scalar_div(color_add(output[y][x], trace_path(world, ray, 1)), static_sample);
 
 				// Packs color into ARGB format for mlx_pixel_put
 				output_color = pack_color(output[y][x].r, output[y][x].g, output[y][x].b);
 
 				mlx_pixel_put(main->mlx, main->win, x, y, output_color);
-
 				// Refreshing to screen to black
 				// output[y][x] = ret_color(0, 0, 0);
 				x++;
@@ -159,8 +222,9 @@ int	render(t_main *main)
 			y++;
 		}
 		y = 0;
-		// static_sample++;
+		static_sample++;
 		printf("frame: %i\n", static_sample);
+	}
 	return (0);
 }
 
@@ -168,7 +232,7 @@ int	main_pipeline(t_main *main)
 {
 	// Call render() function each frame with mlx_loop while handling input
 	mlx_loop_hook(main->mlx, render, main);
-
+	//render(main);
 	// Take input
 	key_handles(main);
 	mlx_loop(main->mlx);

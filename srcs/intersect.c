@@ -35,7 +35,7 @@ t_intersection	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersection inte
 		{
 			intersection.hit = 1;
 			intersection.distance = t;
-			intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t));
+			intersection.point = position(ray, t); // is the position
 			intersection.norm = vec_normalize(vec_sub(intersection.point, sphere->pos));
 			intersection.color = sphere->color;
 		}
@@ -152,9 +152,9 @@ t_intersection	intersect(t_ray ray, t_obj *obj)
 	intersection.norm = vec(0, 0, 0, 0);
 	intersection.color = ret_color(0, 0, 0);
 
-	intersection.reflectance = 1;
-	intersection.diffuse = 0.1;
-	intersection.specular = 0.94;
+	intersection.reflectance = 1; //shininess
+	intersection.diffuse = 0.7;
+	intersection.specular = 0.2;
 
 	if (obj->type == SPHERE)
 		return (intersect_sphere(ray, (t_sphere *)obj->data, intersection));

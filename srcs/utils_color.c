@@ -84,3 +84,32 @@ int	pack_color(int r, int g, int b)
 	t = 255;
 	return (t << 24 | r << 16 | g << 8 | b);
 }
+
+int	convert_color(t_rgb col)
+{
+	int	r;
+	int	g;
+	int	b;
+
+	r = (int)(col.r * 255.999);
+	g = (int)(col.g * 255.999);
+	b = (int)(col.b * 255.999);
+	return ((r << 24) | (g << 16) | (b << 8) | 255);
+}
+
+int color_to_int(t_rgb color)
+{
+    if (color.r > 1)
+        color.r = 1;
+    if (color.g > 1)
+        color.g = 1;
+    if (color.b > 1)
+        color.b = 1;
+    if (color.r < 0)
+        color.r = 0;
+    if (color.g < 0)
+        color.g = 0;
+    if (color.b < 0)
+        color.b = 0;
+    return((int)(color.r * 255) << 24 | (int)(color.g * 255) << 16 | (int)(color.b * 255) << 8 | 0xFF);
+}
