@@ -39,6 +39,16 @@ double	vec_dot(t_vec a, t_vec b)
 	return (ret);
 }
 
+t_vec	vec_multiply(t_vec a, t_vec b)
+{
+	t_vec ret;
+
+	ret.x = a.x * b.x;
+	ret.y = a.y * b.y;
+	ret.z = a.z * b.z;
+	return (ret);
+}
+
 t_vec	vec_cross(t_vec a, t_vec b)
 {
 	t_vec	ret;

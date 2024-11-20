@@ -134,3 +134,53 @@ int	print_color(char *string, t_rgb color)
 		printf("---\nr: %f\ng: %f\nb: %f\n", color.r, color.g, color.b);
 	return (0);
 }
+
+t_selected	discern_object(t_obj *object)
+{
+	t_selected	selected;
+
+	selected.pos = NULL;
+	selected.norm = NULL;
+	if (object->type == SPHERE)
+	{
+		selected.pos = &((t_sphere *)object->data)->pos;
+		selected.norm = NULL;
+		selected.type = SPHERE;
+
+		return (selected);
+	}
+	if (object->type == CYLINDER)
+	{
+		selected.pos = &((t_cyl *)object->data)->pos;
+		selected.norm = &((t_cyl *)object->data)->norm;
+		selected.type = CYLINDER;
+
+		return (selected);
+	}
+	if (object->type == PLANE)
+	{
+		selected.pos = &((t_plane *)object->data)->pos;
+		selected.norm = &((t_plane *)object->data)->norm;
+		selected.type = PLANE;
+
+		return (selected);
+	}
+	if (object->type == CAMERA)
+	{
+		selected.pos = &((t_camera *)object->data)->pos;
+		// selected.norm = &((t_camera *)object->data)->direction;
+		selected.norm = &((t_camera *)object->data)->norm;
+		selected.dir = &((t_camera *)object->data)->direction;
+		selected.type = CAMERA;
+
+		return (selected);
+	}
+	if (object->type == LIGHT)
+	{
+		selected.pos = &((t_light *)object->data)->pos;
+		selected.norm = NULL;
+		selected.type = LIGHT;
+
+		return (selected);
+	}
+}

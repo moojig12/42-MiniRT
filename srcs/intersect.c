@@ -179,13 +179,16 @@ t_intersection	find_path(t_ray ray, t_world *world)
 		// iterate over all objects and get the closest one
 	while (object)
 	{
-		intersection = intersect(ray, object);
-		if (intersection.hit)
+		if (object->type > 3)
 		{
-			if (intersection.distance < closest_distance)
+			intersection = intersect(ray, object);
+			if (intersection.hit)
 			{
-				closest_distance = intersection.distance;
-				closest_intersection = intersection;
+				if (intersection.distance < closest_distance)
+				{
+					closest_distance = intersection.distance;
+					closest_intersection = intersection;
+				}
 			}
 		}
 		object = object->next;

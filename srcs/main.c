@@ -38,6 +38,7 @@ void	initialize_main(t_main *main, t_world *world)
 		main->output[y] = (t_rgb *)calloc(world->cam->width + 1, sizeof(t_rgb));
 		y++;
 	}
+	main->world->selected = NULL;
 }
 
 int	main(int argc, char **argv)

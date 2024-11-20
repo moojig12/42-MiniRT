@@ -110,6 +110,7 @@ t_matrix	rotate_x(t_matrix mat, double angle)
 	t_matrix	post;
 
 	post = identity_matrix();
+	angle = angle * (PI / 180);
 	post.matrix[1][1] = cos(angle);
 	post.matrix[1][2] = -sin(angle);
 	post.matrix[2][1] = sin(angle);
@@ -122,6 +123,7 @@ t_matrix	rotate_y(t_matrix mat, double angle)
 	t_matrix	post;
 
 	post = identity_matrix();
+	angle = angle * (PI / 180);
 	post.matrix[0][0] = cos(angle);
 	post.matrix[2][0] = -sin(angle);
 	post.matrix[0][2] = sin(angle);
@@ -134,6 +136,7 @@ t_matrix	rotate_z(t_matrix mat, double angle)
 	t_matrix	post;
 
 	post = identity_matrix();
+	angle = angle * (PI / 180);
 	post.matrix[0][0] = cos(angle);
 	post.matrix[0][1] = -sin(angle);
 	post.matrix[1][0] = sin(angle);
@@ -151,13 +154,18 @@ t_vec	matrix_rotation(t_vec data, t_vec rotate)
 
 	post = identity_matrix();
 
+	// print_matrix("identity:", post);
 	x_rotation = rotate_x(post, rotate.x);
 	y_rotation = rotate_y(post, rotate.y);
 	z_rotation = rotate_z(post, rotate.z);
 
+	// print_matrix("rotated x:", x_rotation);
+	// print_matrix("rotated y:", y_rotation);
+	// print_matrix("rotated z:", z_rotation);
 	result = matrix_dot(x_rotation, data);
 	result = matrix_dot(y_rotation, result);
 	result = matrix_dot(z_rotation, result);
+	// print_vec("result:", result);
 
 	return (result);
 }

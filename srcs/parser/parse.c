@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:13:43 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/13 15:05:22 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/20 12:41:51 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	check_par(t_world *world, char *input)
 	if (type != -1 && input_matrix[1])
 	{
 		input_par(input_matrix, world, type);
-		if (type == SPHERE || type == CYLINDER || type == PLANE)
+		if (type == SPHERE || type == CYLINDER || type == PLANE || type == LIGHT || type == CAMERA)
 		{
 			world->objlist = ft_add_obj_lst(type, world, &world->objlist);
 		}
