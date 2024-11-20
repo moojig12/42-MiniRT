@@ -270,7 +270,6 @@ t_vec	position(t_ray ray, double t);
 t_ray	new_ray(t_vec origin, t_vec direction);
 t_vec	reflect(t_vec incoming, t_vec normal);
 t_vec	vec_neg(t_vec vec);
-t_ray	generate_ray(t_main *main, int px, int py);
 
 // Color operations
 int		pack_color(int r, int g, int b);
