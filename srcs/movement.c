@@ -1,5 +1,10 @@
 #include "minirt.h"
 
+t_vec	get_angle(t_vec	movement)
+{
+	
+}
+
 int	move(t_obj *obj, t_vec	movement)
 {
 	t_vec	moved_vec;
@@ -14,6 +19,8 @@ int	move(t_obj *obj, t_vec	movement)
 	}
 	else
 	{
+		t_vec	angle = get_angle(movement);
+		moved_vec = matrix_rotation(movement, angle);
 		moved_vec = matrix_translation(*selected.pos, movement);
 		*selected.pos = moved_vec;
 		return (0);
