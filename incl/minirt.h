@@ -5,12 +5,13 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
-# include "mlx.h"
 # include "libft.h"
 # include "get_next_line.h"
+# include "mlx.h"
+# include <time.h>
 
 // Constants
-# define PI 3.14159
+# define PI 3.14159265358979323846
 
 // Max depth of bounces for tracing
 # define MAXDEPTH 5
@@ -30,22 +31,57 @@
 
 typedef struct s_obj t_obj;
 
+typedef enum e_rotation_index {
+	X_AXIS,
+	Y_AXIS,
+	Z_AXIS
+}	t_rotation_index;
+
+typedef enum e_objection_selection {
+	OBJ_CAM = 49,
+	OBJ_LIGHT = 50,
+	OBJ_SPHERE = 51,
+	OBJ_CYL = 52,
+	OBJ_PLANE = 53,
+}	t_objection_selection;
+
+typedef enum e_movement_keys {
+	FORWARD = 119,
+	LEFT = 97,
+	BACK = 115,
+	RIGHT = 100,
+	UP = 32,
+	DOWN = 65507,
+	ROTATE_LEFT = 113,
+	ROTATE_RIGHT = 101,
+	KEY_I = 105,
+	KEY_J = 106,
+	KEY_K = 107,
+	KEY_L = 108,
+	KEY_U = 117,
+	KEY_O = 111
+}	t_movement_keys;
+
+typedef enum e_escape_key {
+	ESC_WIN = 65307
+}	t_escape_key;
+
 typedef enum e_object_type {
 	OBJECT_SPHERE,
 	OBJECT_PLANE,
 	OBJECT_CYLINDER
 }	t_object_type;
 
-/* typedef struct s_object {
-	t_object_type	type;
-	void			*data;
-}	t_obj; */
-
 typedef struct s_vector {
 	double	x;
 	double	y;
 	double	z;
+	double	w;
 }	t_vec;
+
+typedef struct s_matrix {
+	double matrix[4][4];
+}	t_matrix;
 
 typedef struct s_rgb {
 	int	r;
@@ -56,10 +92,12 @@ typedef struct s_rgb {
 typedef struct s_ray {
 	t_vec	origin;
 	t_vec	dest;
+	// t_vec	norm;
 }	t_ray;
 typedef struct s_camera {
 	t_vec	pos;
 	t_vec	norm;
+	t_vec	direction;
 	int		width;
 	int		height;
 	int		fov;
@@ -80,41 +118,65 @@ typedef struct s_light {
 	t_vec	pos;
 	double	brightness;
 	t_rgb	color;
+	struct s_light	*next;
 }	t_light;
 
 typedef struct s_sphere {
 	t_vec	pos;
 	double	diameter;
 	t_rgb	color;
+	struct s_sphere	*next;
 }	t_sphere;
 
 typedef struct s_plane {
 	t_vec	pos;
 	t_vec	norm;
 	t_rgb	color;
+	struct s_plane	*next;
 }	t_plane;
 
 typedef struct s_cylinder {
 	t_vec	pos;
 	t_vec	norm;
+	double	direction;
 	double	diameter;
 	double	height;
 	t_rgb	color;
+	struct s_cylinder	*next;
 }	t_cyl;
 
 typedef struct s_obj {
-	int	type;
+	int		type;
 	void	*data;
 	t_obj	*next;
 }	t_obj;
 
 typedef struct s_intersection {
+	t_vec	origin;
 	t_vec	norm;
 	t_vec	point;
-	t_rgb	emittance;
-	int		distance;
+	t_rgb	color;
+	double	reflectance;
+	double	diffuse;
+	double	specular;
+	double	distance;
 	int		hit;
 }	t_intersection;
+
+typedef struct s_screen {
+	double	width;
+	double	height;
+	double	aspect_ratio;
+	t_vec	up;
+	t_vec	right;
+}	t_screen;
+
+typedef struct s_selected {
+	int		type;
+	t_vec	*pos;
+	t_vec	*norm;
+	t_vec	*dir;
+}	t_selected;
 
 typedef struct s_world {
 	t_ambient	*amb;
@@ -123,7 +185,8 @@ typedef struct s_world {
 	t_sphere	*sphere;
 	t_cyl		*cyl;
 	t_plane		*plane;
-	t_obj		*obj;
+	t_obj		*objlist;
+	t_obj		**selected;
 	int			object_num;
 }	t_world;
 
@@ -132,6 +195,8 @@ typedef struct s_main {
 	void	*win;
 	int		width;
 	int		height;
+	int		render_switch;
+	t_rgb	**output;
 	t_world	*world;
 }	t_main;
 
@@ -144,20 +209,81 @@ typedef struct s_main {
 
 int	main_pipeline(t_main *main);
 
+// Render
+
+int	render(t_main *main);
+t_intersection	find_path(t_ray ray, t_world *world);
+
+// Movement
+
+int	movement(int key_code, t_main *main);
+
 // Parsing
 
-void	parse_world(t_main *main, char **argv);
-int		parse_amb(t_main *main, char *input, int index);
-int		parse_light(t_main *main, char *input, int index);
-int		parse_cam(t_main *main, char *input, int index);
-int		parse_cyl(t_cyl *cyl, char *input, int index);
-int		parse_plane(t_plane *plane, char *input, int index);
-int		parse_sphere(t_sphere *sphere, char *input, int index);
+t_world		*parse_world(t_world *world, char **argv);
+void	init_world(t_world *world);
+
+// Parsing obj
+
+t_obj	*ft_add_obj_lst(int type, t_world *world, t_obj **objlist);
+t_obj	*ft_lstlast_mrt(t_obj *lst);
+void	ft_lstadd_back_mrt(t_obj **lst, t_obj *new);
+t_obj	*add_light(t_light *lightlist);
+t_obj	*add_sobj(int type, void *list);
 
 // Parsing utilities
 
 int		pop_color(t_rgb *rgb, char **input);
-int		pop_vec(t_vec *vec, char **input, double *range);
+int		pop_vec(t_vec *vec, char **input, double *range, double type);
+int		pop_fov(int *fov, char *input, int *range);
+int		ft_strcmp(const char *s1, const char *s2);
+int		check_file(char *file);
+int		check_size_matrix(char **matrix);
+
+// Parsing amb
+
+t_ambient	*parse_amb(t_world *world, char **input);
+
+// Parsing cam
+
+t_camera	*parse_cam(t_world *world, char **input);
+
+// Parsing light
+
+t_light	*ft_lstlast_lig_mrt(t_light *lst);
+void	ft_lstadd_back_lig_mrt(t_light **lst, t_light *new);
+int		parse_light(t_world *world, char **input);
+void	print_light(t_light *ptr);
+
+//Parsing cyl
+
+int		parse_cyl(t_world *world, char **input);
+t_cyl	*ft_lstlast_cyl_mrt(t_cyl *lst);
+void	ft_lstadd_back_cyl_mrt(t_cyl **lst, t_cyl *new);
+
+//Parsing sphere
+
+int			parse_sphere(t_world *world, char **input);
+t_sphere	*ft_lstlast_sphere_mrt(t_sphere *lst);
+void		ft_lstadd_back_sphere_mrt(t_sphere **lst, t_sphere *new);
+
+// Parsing plane
+
+int		parse_plane(t_world *world, char **input);
+t_plane	*ft_lstlast_plane_mrt(t_plane *lst);
+void	ft_lstadd_back_plane_mrt(t_plane **lst, t_plane *new);
+
+// error
+void	exit_err(char *message, int code, t_main *main);
+void	exit_err_init(char *msg, int code, t_world *world);
+void	free_world(t_world *world);
+void	free_main(t_main *main);
+void	free_tab(char **tab);
+
+// Checks
+
+int		check_size_matrix(char **matrix);
+int		check_file(char *file);
 
 // Utilities
 
@@ -166,27 +292,48 @@ double	*alloc_float(double a, double b);
 int		ft_range(int num, int min, int max);
 int		ft_range_f(double num, double min, double max);
 double	ft_atof(char *str);
-t_vec	vec(double x, double y, double z);
-t_vec	add(t_vec a, t_vec b);
-t_vec	subtract(t_vec a, t_vec b);
+int		print_vec(char *string,t_vec vec);
+int		close_window(t_main	*main);
+int		print_color(char *string, t_rgb color);
+int		print_matrix(char *string, t_matrix mat);
+t_selected	discern_object(t_obj *obj);
+double	trace_time(int type);
+
+// Vector operations
+
+t_vec	vec(double x, double y, double z, double w);
+t_vec	vec_add(t_vec a, t_vec b);
+t_vec	vec_sub(t_vec a, t_vec b);
 t_vec	vec_scalar(t_vec a, double b);
-t_vec	normalize(t_vec v);
-double	dot(t_vec a, t_vec b);
-t_rgb	ret_color(int r, int g, int b);
+t_vec	vec_cross(t_vec a, t_vec b);
+t_vec	vec_multiply(t_vec a, t_vec b);
+t_vec	vec_normalize(t_vec v);
+t_vec	vec_orthogonal(t_vec vec);
+double	vec_length(t_vec v);
+
+// Color operations
+
 int		pack_color(int r, int g, int b);
 t_rgb	color_add(t_rgb a, t_rgb b);
+t_rgb	color_sub(t_rgb a, t_rgb b);
 t_rgb	color_scalar(t_rgb color, double scalar);
+t_rgb	color_scalar_div(t_rgb a, double scalar);
 t_rgb	color_multiply(t_rgb a, t_rgb b);
-t_rgb	BRDF_lambertan(t_rgb albedo);
-t_intersection	find_path(t_ray ray, t_world *world);
-int		close_window(t_main	*main);
+double	vec_dot(t_vec a, t_vec b);
+t_rgb	ret_color(int r, int g, int b);
+t_rgb	color_normalize(t_rgb color);
+
+// Matrix operations
+
+t_vec	matrix_translation(t_vec data, t_vec translate);
+t_vec	matrix_rotation(t_vec data, t_vec rotate);
 
 // Randomness
 
 unsigned int	ft_rand(void);
 double			random_double(void);
 double			random_double_range(double min, double max);
-t_vec			random_vec(void);
-t_vec			random_vec_range(double min, double max);
+t_vec			random_vec(double w);
+t_vec			random_vec_range(double min, double max, double w);
 
 #endif

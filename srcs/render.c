@@ -1,142 +1,179 @@
 #include "minirt.h"
 
-void	loop(t_main *main)
+void	key_handles(t_main *main)
 {
-	mlx_hook(main->win, 17, 0, close_window, main);
-	mlx_loop(main->mlx);
+	mlx_key_hook(main->win, movement, main);
+	mlx_hook(main->win, 17, 1L<<17, close_window, main);
 }
 
-t_rgb	ret_color(int r, int g, int b)
-{
-	t_rgb	color;
-
-	color.r = r;
-	color.g = g;
-	color.b = b;
-	return (color);
-}
-
-t_vec	cone_pewpew(t_vec norm, double angle)
+t_vec	cone_pewpew(t_vec norm)
 {
 	t_vec dir;
 
-	double cone_angle_radians = angle * (PI / 180.0);
+	dir = random_vec(0);
 
-	// Generate random angles
-	double random_phi = 2 * PI * ((double)ft_rand() / RAND_MAX);
-	double random_theta = cone_angle_radians * ((double)ft_rand() / RAND_MAX);
+	if (vec_dot(dir, norm) < 0)
+		dir = vec_scalar(dir, -1);
 
-	dir.x = sin(random_theta) * cos(random_phi);
-	dir.y = sin(random_theta) * sin(random_phi);
-	dir.z = cos(random_theta);
-	
-	if (norm.x >= 0)
-		printf("Don't forget to implement reflect function :)\n");
-	return normalize(dir);
+	return vec_normalize(dir);
 }
 
-void print_vals(t_rgb incoming, t_ray new_ray, t_rgb emission)
+t_ray	gen_ray(t_camera *cam, int x, int y)
 {
-	printf("emish:%i %i %i\n", emission.r, emission.g, emission.b);
-	printf("incoming:%i %i %i\n", incoming.r, incoming.g, incoming.b);
-	printf("new_ray.origin:%f %f %f\n", new_ray.origin.x, new_ray.origin.y, new_ray.origin.z);
-	printf("new_ray.dest:%f %f %f\n", new_ray.dest.x, new_ray.dest.y, new_ray.dest.z);
+	t_ray ray;
+	double	aspect_ratio;
+	double	pixel_x;
+	double	pixel_y;
+	double	jitter_x = random_double_range(-0.005, 0.005);
+	double	jitter_y = random_double_range(-0.005, 0.005);
+
+	aspect_ratio = (cam->width / cam->height);
+	
+	// Normalized Device Coordinates
+	double	ndc_x = (x + 0.5 ) / cam->width;
+	double	ndc_y = (y + 0.5 ) / cam->height;
+
+	pixel_x = (2 * ndc_x - 1 + jitter_x) * tan(cam->fov * 0.5 * PI / 180) * aspect_ratio;
+	pixel_y = (1 - 2 * ndc_y + jitter_y) * tan(cam->fov * 0.5 * PI / 180);
+
+	// Create the camera basis: right, up, and forward
+	t_vec forward = vec_normalize(cam->direction);
+	t_vec right = vec_normalize(vec_cross(cam->norm, forward));
+	t_vec up = vec_cross(forward, right);
+
+	ray.origin = cam->pos;
+	ray.dest = vec_add(vec_add(vec_scalar(right, pixel_x), vec_scalar(up, pixel_y)), vec_scalar(forward, 1));
+	ray.dest = vec_normalize(ray.dest);
+
+	return (ray);
 }
 
-t_rgb	trace(t_ray ray, int depth, t_world *world)
+	// BRDF calculation for materials, not sure if it works 100% yet
+double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
+{
+	double	fresnel;
+	double	diffuse;
+	double	specular;
+	double	cos_theta = vec_dot(ray.dest, norm);
+
+	 // Fresnel reflectance (e.g., Schlick's approximation)
+	fresnel = intersection.reflectance + (1 - intersection.reflectance) * pow(1 - cos_theta, 5);
+
+	// Diffuse component
+	diffuse = intersection.diffuse * fmax(0.0, cos_theta);
+
+	// Specular component (e.g., Cook-Torrance model)
+	specular = fresnel * intersection.specular;
+
+	return (diffuse + specular);
+}
+
+	// The function for simulating and bouncing a ray off an object
+t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 {
 	t_intersection	intersection;
-	t_ray	new_ray;
+	t_rgb	return_color;
 	t_rgb	incoming;
-	t_rgb	emission;
-	double	p;
+	t_ray	new_ray;
 
+	return_color = ret_color(0, 0, 0);
 	if (depth >= MAXDEPTH)
-		return (ret_color(0, 0, 0));
+		return (return_color);
+
+		// Iterate over each object in the world and find the closest intersection.
+			// Also fetches data relating to the object such as Material and Norm direction
 	intersection = find_path(ray, world);
-	printf("hit?: %i, distance: %i\n", intersection.hit, intersection.distance);
 	if (!intersection.hit)
-		return (ret_color(0, 0, 0));
-	// continue from newray and get direction
-	new_ray.origin = ray.dest;
-	new_ray.dest = cone_pewpew(intersection.norm, 90);
-	// incoming = ret_color(0, 0, 0);
-	p = 1 / (2 * PI);
-	// implement BRDF
+		return (return_color);
+		// return	(world->amb->color);
 
-	emission = intersection.emittance;
-	// Trace light source recursively
-	incoming = trace(new_ray, depth + 1, world);
+		// initialize a new ray from the POINT of Intersection and random direction
+	new_ray.origin = intersection.point;
+		// Shoots random rays in possible direction
+	new_ray.dest = cone_pewpew(intersection.norm);
+	// new_ray.dest = vec_sub(ray.dest, vec_scalar(intersection.norm, 2 * vec_dot(ray.dest, intersection.norm)));
 
-	print_vals(incoming, new_ray, emission);
-	return (incoming);
+		// Calculations i found off the internet for BRDF
+	// double	cos_theta = vec_dot(new_ray.dest, intersection.norm);
+	double	BRDF = brdf_calculation(intersection, new_ray, intersection.norm);
+	double	p = 1;
+		// Shoot the next ray recursively
+	incoming = trace_path(world, new_ray, depth + 1);
+
+		// Ambience
+	return_color = color_multiply(world->amb->color, intersection.color);
+	return_color = color_scalar(return_color, world->amb->ratio);
+
+		// Calculate light position and shadow
+		t_ray shadow_ray;
+
+		shadow_ray.origin = intersection.point;
+		shadow_ray.dest = vec_normalize(vec_sub(world->light->pos, intersection.point));
+		// shadow_ray.dest = cone_pewpew(intersection.norm);
+		if (!find_path(shadow_ray, world).hit) {
+			double light_d =  vec_length(vec_sub(world->light->pos, intersection.point));
+			double attenuation = 1.0 / (light_d * light_d); // Inverse square law
+			double cos_theta_s = fmax(0.0, vec_dot(intersection.norm, shadow_ray.dest));
+			t_rgb light_contribution = color_scalar(color_multiply(world->light->color, intersection.color), cos_theta_s * attenuation * world->light->brightness);
+			return_color = color_add(return_color, light_contribution);
+		}
+		// Indirect lighting
+			// Adding the color return of the recursively shot ray and adding up the values then scaling with BRDF
+	return_color = color_add(return_color, color_scalar(color_scalar(incoming, 1.5), BRDF * p));
+
+
+	return (color_normalize(return_color));
 }
 
-t_rgb	raytrace(t_world *world, int x, int y)
+
+// Main function for rendering the screen for each frame called by mlx_loop_hook
+int	render(t_main *main)
 {
+	static int	static_sample = 2;
 	t_ray	ray;
-	int		depth;
+	t_rgb	**output;
+	t_world	*world;
+	int		output_color;
+	int		x;
+	int		y;
 
-	// generate ray(cone restricted to fov!)
-	ray.origin = add(world->cam->pos, vec((double)x,(double)y, 0.0));
-	ray.dest = add(world->cam->norm, ray.origin);
-
-	depth = 0;
-	return (trace(ray, depth, world));
-}
-
-void	render(t_main *main, t_world *world)
-{
-	t_rgb	color;
-	t_rgb	**screen;
-	int	output;
-	int	pass;
-	int	x;
-	int	y;
-
-	pass = 0;
+	output = main->output;
+	world = main->world;
 	x = 0;
 	y = 0;
-	screen = (t_rgb **)malloc(main->height * (sizeof(t_rgb *)));
 	while (y < main->height)
 	{
-		screen[y] = (t_rgb *)malloc(main->width * (sizeof(t_rgb)));
+		while (x < main->width)
+		{
+			ray = gen_ray(main->world->cam, x, y);
+			// Initializes the position of the first ray from the camera to static_sample into trace_path later
+				// sampleses in trace_path function to shoot rays and get the result of the ray bounces back
+			for (int i = 0; i < static_sample; i++)
+				output[y][x] = color_add(output[y][x], trace_path(world, ray, 1));
+			output[y][x] = color_scalar_div(output[y][x], static_sample);
+
+
+			// Packs color into ARGB format for mlx_pixel_put
+			output_color = pack_color(output[y][x].r, output[y][x].g, output[y][x].b);
+			mlx_pixel_put(main->mlx, main->win, x, y, output_color);
+
+			// Refreshing to screen to black
+			// output[y][x] = ret_color(0, 0, 0);
+			x++;
+		}
+		x = 0;
 		y++;
 	}
-	y = 0;
-	printf("width and height: %i, %i\n", main->width, main->height);
-	// generate rays for each pixel and incrementally add to pixel
-	while (x < 3)
-	{
-		while (y < main->height)
-		{
-			while (x < main->width)
-			{
-				color = raytrace(world, y, x);
-				screen[y][x] = color_add(screen[y][x], color);
-
-				output = pack_color(screen[y][x].r, screen[y][x].g, screen[y][x].b);
-				printf("output: %i\n", output);
-				// if (pass > 0)
-				// 	output /= pass;
-				//	generate ray and save (to screen?)
-				//	for now adding flat values over pixels
-						// screen.color (use dot function) raytrace(world); // ???
-				mlx_pixel_put(main->mlx, main->win, y, x, output);
-				x++;
-			}
-			x = 0;
-			y++;
-		}
-		y = 0;
-		// pass++;
-	}
+	return (0);
 }
 
 int	main_pipeline(t_main *main)
 {
-	render(main, main->world);
+	// Call render() function each frame with mlx_loop while handling input
+	mlx_loop_hook(main->mlx, render, main);
 
-	loop(main);
+	// Take input
+	key_handles(main);
+	mlx_loop(main->mlx);
 	return (0);
 }

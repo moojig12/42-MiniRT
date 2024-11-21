@@ -86,16 +86,6 @@ int	ft_range(int num, int min, int max)
 		return (0);
 }
 
-t_vec	vec(double x, double y, double z)
-{
-	t_vec	output;
-
-	output.x = x;
-	output.y = y;
-	output.z = z;
-	return (output);
-}
-
 // returns 1 if within range. 0 if outside of range
 int	ft_range_f(double num, double min, double max)
 {
@@ -105,107 +95,110 @@ int	ft_range_f(double num, double min, double max)
 		return (0);
 }
 
-int pack_color(int r, int g, int b)
+int	print_vec(char *string, t_vec vec)
 {
-	return (r << 16) | (g << 8) | b;
+	if (string)
+		printf("\n---\n%s\nx: %f\ny: %f\nz: %f\nw: %f\n", string, vec.x, vec.y, vec.z, vec.w);
+	else
+		printf("---\nx: %f\ny: %f\nz: %f\nz: %f\nw: %f\n", vec.x, vec.y, vec.z, vec.w);
+	return (0);
 }
 
-// addition operation for two vectors
-t_vec add(t_vec a, t_vec b)
+int	print_matrix(char *string, t_matrix mat)
 {
-	t_vec ret;
+	int	i;
+	int	j;
 
-	ret.x = a.x + b.x;
-	ret.y = a.y + b.y;
-	ret.z = a.z + b.z;
-	return (ret);
-}
-
-t_vec	subtract(t_vec a, t_vec b)
-{
-	t_vec ret;
-
-	ret.x = a.x - b.x;
-	ret.y = a.y - b.y;
-	ret.z = a.z - b.z;
-	return (ret);
-}
-
-double	dot(t_vec a, t_vec b)
-{
-	double ret;
-
-	ret = (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
-	return (ret);
-}
-
-t_rgb	color_add(t_rgb a, t_rgb b)
-{
-	t_rgb	ret;
-
-	ret.r = (a.r + b.r > 255) ? 255 : a.r + b.r;
-	ret.g = (a.g + b.g > 255) ? 255 : a.g + b.g;
-	ret.b = (a.b + b.b > 255) ? 255 : a.b + b.b;
-	return (ret);
-}
-
-t_rgb	color_multiply(t_rgb a, t_rgb b)
-{
-	t_rgb result;
-
-	result.r = a.r * b.r;
-	result.g = a.g * b.g;
-	result.b = a.b * b.b;
-	return (result);
-}
-
-t_rgb	color_scalar(t_rgb color, double scalar)
-{
-	int r;
-	int g;
-	int b;
-
-	r = (int)((int)(color.r) * scalar);
-	g = (int)((int)(color.g) * scalar);
-	b = (int)((int)(color.b) * scalar);
-
-	r = (r > 255) ? 255 : r;
-	g = (g > 255) ? 255 : g;
-	b = (b > 255) ? 255 : b;
-	return (ret_color(r, g, b));
-}
-
-t_rgb	BRDF_lambertan(t_rgb albedo)
-{
-	t_rgb	ret;
-
-	ret.r = albedo.r / 255.0 / PI;
-	ret.g = albedo.g / 255.0 / PI;
-	ret.b = albedo.b / 255.0 / PI;
-	return (ret);
-}
-
-t_vec	vec_scalar(t_vec a, double b)
-{
-	t_vec ret;
-
-	ret.x = a.x * b;
-	ret.y = a.y * b;
-	ret.z = a.z * b;
-
-	return (ret);
-}
-
-t_vec	normalize(t_vec v)
-{
-	double magnitude = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-
-	// Check to avoid division by zero
-	if (magnitude == 0) {
-		// Return a zero vector or handle this case as needed
-		return (t_vec){0, 0, 0}; // or raise an error
+	i = 0;
+	j = 0;
+	printf("%s\n", string);
+	while (i < 4)
+	{
+		j = 0;
+		while (j < 4)
+		{
+			printf("%f ", mat.matrix[i][j]);
+			j++;
+		}
+		printf("\n");
+		i++;
 	}
+	return (0);
+}
 
-	// Divide each component by the magnitude to normalize
-	return (t_vec){v.x / magnitude, v.y / magnitude, v.z / magnitude};
+int	print_color(char *string, t_rgb color)
+{
+	if (string)
+		printf("\n---\n%s\nr: %f\ng: %f\nb: %f\n", string, color.r, color.g, color.b);
+	else
+		printf("---\nr: %f\ng: %f\nb: %f\n", color.r, color.g, color.b);
+	return (0);
+}
+
+t_selected	discern_object(t_obj *object)
+{
+	t_selected	selected;
+
+	selected.pos = NULL;
+	selected.norm = NULL;
+	if (object->type == SPHERE)
+	{
+		selected.pos = &((t_sphere *)object->data)->pos;
+		selected.norm = NULL;
+		selected.type = SPHERE;
+
+		return (selected);
+	}
+	if (object->type == CYLINDER)
+	{
+		selected.pos = &((t_cyl *)object->data)->pos;
+		selected.norm = &((t_cyl *)object->data)->norm;
+		selected.type = CYLINDER;
+
+		return (selected);
+	}
+	if (object->type == PLANE)
+	{
+		selected.pos = &((t_plane *)object->data)->pos;
+		selected.norm = &((t_plane *)object->data)->norm;
+		selected.type = PLANE;
+
+		return (selected);
+	}
+	if (object->type == CAMERA)
+	{
+		selected.pos = &((t_camera *)object->data)->pos;
+		// selected.norm = &((t_camera *)object->data)->direction;
+		selected.norm = &((t_camera *)object->data)->norm;
+		selected.dir = &((t_camera *)object->data)->direction;
+		selected.type = CAMERA;
+
+		return (selected);
+	}
+	if (object->type == LIGHT)
+	{
+		selected.pos = &((t_light *)object->data)->pos;
+		selected.norm = NULL;
+		selected.type = LIGHT;
+
+		return (selected);
+	}
+}
+
+double	trace(int type)
+{
+	static clock_t last_time = 0;
+	clock_t current_time = clock();
+		
+	double elapsed_time = 0.0;
+	if (last_time != 0) {
+		elapsed_time = (double)(current_time - last_time) / CLOCKS_PER_SEC;
+	}
+	last_time = current_time;
+
+	if (type == 1)
+		return (elapsed_time);
+	else
+		printf("Time elapsed: %f\n\n", elapsed_time);
+	return (elapsed_time);
 }
