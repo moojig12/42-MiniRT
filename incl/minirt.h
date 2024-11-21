@@ -8,6 +8,7 @@
 # include "libft.h"
 # include "get_next_line.h"
 # include "mlx.h"
+# include <time.h>
 
 // Constants
 # define PI 3.14159265358979323846
@@ -296,6 +297,7 @@ int		close_window(t_main	*main);
 int		print_color(char *string, t_rgb color);
 int		print_matrix(char *string, t_matrix mat);
 t_selected	discern_object(t_obj *obj);
+double	trace_time(int type);
 
 // Vector operations
 

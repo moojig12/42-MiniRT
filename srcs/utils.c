@@ -184,3 +184,21 @@ t_selected	discern_object(t_obj *object)
 		return (selected);
 	}
 }
+
+double	trace(int type)
+{
+	static clock_t last_time = 0;
+	clock_t current_time = clock();
+		
+	double elapsed_time = 0.0;
+	if (last_time != 0) {
+		elapsed_time = (double)(current_time - last_time) / CLOCKS_PER_SEC;
+	}
+	last_time = current_time;
+
+	if (type == 1)
+		return (elapsed_time);
+	else
+		printf("Time elapsed: %f\n\n", elapsed_time);
+	return (elapsed_time);
+}

@@ -111,15 +111,15 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 		shadow_ray.dest = vec_normalize(vec_sub(world->light->pos, intersection.point));
 		// shadow_ray.dest = cone_pewpew(intersection.norm);
 		if (!find_path(shadow_ray, world).hit) {
-			double light_dist =  vec_length(vec_sub(world->light->pos, intersection.point));
-			double attenuation = 1.0 / (light_dist * light_dist); // Inverse square law
+			double light_d =  vec_length(vec_sub(world->light->pos, intersection.point));
+			double attenuation = 1.0 / (light_d * light_d); // Inverse square law
 			double cos_theta_s = fmax(0.0, vec_dot(intersection.norm, shadow_ray.dest));
 			t_rgb light_contribution = color_scalar(color_multiply(world->light->color, intersection.color), cos_theta_s * attenuation * world->light->brightness);
 			return_color = color_add(return_color, light_contribution);
 		}
 		// Indirect lighting
 			// Adding the color return of the recursively shot ray and adding up the values then scaling with BRDF
-	return_color = color_add(return_color, color_scalar(color_multiply(color_scalar(incoming, 1.5), intersection.color), BRDF * p));
+	return_color = color_add(return_color, color_scalar(color_scalar(incoming, 1.5), BRDF * p));
 
 
 	return (color_normalize(return_color));
@@ -129,7 +129,7 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 // Main function for rendering the screen for each frame called by mlx_loop_hook
 int	render(t_main *main)
 {
-	static int	static_sample = 4;
+	static int	static_sample = 2;
 	t_ray	ray;
 	t_rgb	**output;
 	t_world	*world;
@@ -145,16 +145,16 @@ int	render(t_main *main)
 	{
 		while (x < main->width)
 		{
-			// Initializes the position of the first ray from the camera to static_sample into trace_path later
 			ray = gen_ray(main->world->cam, x, y);
+			// Initializes the position of the first ray from the camera to static_sample into trace_path later
 				// sampleses in trace_path function to shoot rays and get the result of the ray bounces back
 			for (int i = 0; i < static_sample; i++)
 				output[y][x] = color_add(output[y][x], trace_path(world, ray, 1));
 			output[y][x] = color_scalar_div(output[y][x], static_sample);
 
+
 			// Packs color into ARGB format for mlx_pixel_put
 			output_color = pack_color(output[y][x].r, output[y][x].g, output[y][x].b);
-
 			mlx_pixel_put(main->mlx, main->win, x, y, output_color);
 
 			// Refreshing to screen to black

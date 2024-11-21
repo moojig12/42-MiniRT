@@ -1,8 +1,11 @@
 #include "minirt.h"
 
-t_vec	get_angle(t_vec	movement)
+double	get_angle(t_vec	movement, t_vec norm)
 {
-	
+	double	cos_theta;
+
+	cos_theta = vec_dot(movement, norm);
+	return (acos(cos_theta));
 }
 
 int	move(t_obj *obj, t_vec	movement)
@@ -19,10 +22,23 @@ int	move(t_obj *obj, t_vec	movement)
 	}
 	else
 	{
-		t_vec	angle = get_angle(movement);
-		moved_vec = matrix_rotation(movement, angle);
-		moved_vec = matrix_translation(*selected.pos, movement);
-		*selected.pos = moved_vec;
+			// 1. Calculate the angle between the movement vector and the camera's normal
+		double angle = get_angle(movement, *selected.norm);
+
+		// 2. Determine the axis of rotation (cross product of movement and normal)
+		t_vec rotation_axis = vec_cross(movement, *selected.norm);
+		
+		// 3. Combine the axis and angle into a single vector (angle_vec)
+		t_vec angle_vec = vec_scalar(vec_normalize(rotation_axis), angle);
+		 // 4. Rotate the movement vector to align with the camera's orientation
+		t_vec aligned_movement = matrix_rotation(movement, angle_vec);
+
+		// 5. Translate the rotated vector in 3D space to update the object's position
+		t_vec updated_position = matrix_translation(*selected.pos, aligned_movement);
+
+		// moved_vec = matrix_rotation(movement, angle_vec);
+		// moved_vec = matrix_translation(*selected.pos, movement);
+		*selected.pos = updated_position;
 		return (0);
 	}
 
