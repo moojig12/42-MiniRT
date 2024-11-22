@@ -146,11 +146,11 @@ int	render(t_main *main)
 	world = main->world;
 	x = 0;
 	y = 0;
-	trace_time(1);
 	while (y < main->height)
 	{
 		while (x < main->width)
 		{
+			trace_time(1);
 			for (int sub_y = 0; sub_y < STATIC_SAMPLE; sub_y++)
 			{
 				for (int sub_x = 0; sub_x < STATIC_SAMPLE; sub_x++)
@@ -163,6 +163,7 @@ int	render(t_main *main)
 					output[y][x] = color_add(output[y][x], trace_path(world, ray, 1));
 				}
 			}
+			trace_time(2);
 			// Average the samples
 			output[y][x] = color_scalar_div(output[y][x], STATIC_SAMPLE * STATIC_SAMPLE);
 
@@ -177,7 +178,6 @@ int	render(t_main *main)
 		x = 0;
 		y++;
 	}
-	trace_time(2);
 	return (0);
 }
 
