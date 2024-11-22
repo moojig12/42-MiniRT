@@ -185,7 +185,7 @@ t_selected	discern_object(t_obj *object)
 	}
 }
 
-double	trace(int type)
+double	trace_time(int type)
 {
 	static clock_t last_time = 0;
 	clock_t current_time = clock();

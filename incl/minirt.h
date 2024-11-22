@@ -12,9 +12,11 @@
 
 // Constants
 # define PI 3.14159265358979323846
+# define EPSILON 0.0001
+# define STATIC_SAMPLE 4
 
 // Max depth of bounces for tracing
-# define MAXDEPTH 5
+# define MAXDEPTH 8
 
 // objects
 # define AMBIENCE 1
@@ -207,21 +209,22 @@ typedef struct s_main {
 
 // Main pipeline
 
-int	main_pipeline(t_main *main);
+int				main_pipeline(t_main *main);
 
 // Render
 
-int	render(t_main *main);
+int				render(t_main *main);
+int				is_occluded(t_ray shadow_ray, t_world *world, double light_distance);
 t_intersection	find_path(t_ray ray, t_world *world);
 
 // Movement
 
-int	movement(int key_code, t_main *main);
+int				movement(int key_code, t_main *main);
 
 // Parsing
 
-t_world		*parse_world(t_world *world, char **argv);
-void	init_world(t_world *world);
+t_world			*parse_world(t_world *world, char **argv);
+void			init_world(t_world *world);
 
 // Parsing obj
 

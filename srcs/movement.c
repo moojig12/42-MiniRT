@@ -145,7 +145,7 @@ int	movement_selected(int key_code, t_obj *selected)
 		move(selected, move_angle(Y_AXIS, -1));
 }
 
-void set_selection(t_obj **base_selection, t_main *main, int target)
+void	set_selection(t_obj **base_selection, t_main *main, int target)
 {
 	*base_selection = main->world->objlist;
 	while (base_selection && (*base_selection)->type != target)
@@ -159,12 +159,20 @@ void set_selection(t_obj **base_selection, t_main *main, int target)
 	printf("selection set to %i\n", (*main->world->selected)->type);
 }
 
+void	set_position(t_obj *selection)
+{
+	t_selected	position;
+
+	position = discern_object(selection);
+	print_vec("Position:", *position.pos);
+}
+
 int	movement(int key_code, t_main *main)
 {
 	t_obj	**base_selection;
 	int		type;
 
-	// printf("keycode: %i\n", key_code);
+	printf("keycode: %i\n", key_code);
 	if (!main->world->selected)
 	{
 		base_selection = malloc(sizeof(t_obj *));
@@ -217,6 +225,8 @@ int	movement(int key_code, t_main *main)
 		rotate_left(main);
 	if (key_code == ROTATE_RIGHT)
 		rotate_right(main);
+	if (key_code == 112)
+		set_position((t_obj *)(*main->world->selected));
 	
 	// print_vec("test:", ((t_camera *)((t_obj *)(*main->world->selected)->data))->direction);
 	movement_selected(key_code, (t_obj *)*(main->world->selected));

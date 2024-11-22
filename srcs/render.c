@@ -24,8 +24,6 @@ t_ray	gen_ray(t_camera *cam, int x, int y)
 	double	aspect_ratio;
 	double	pixel_x;
 	double	pixel_y;
-	double	jitter_x = random_double_range(-0.005, 0.005);
-	double	jitter_y = random_double_range(-0.005, 0.005);
 
 	aspect_ratio = (cam->width / cam->height);
 	
@@ -33,8 +31,8 @@ t_ray	gen_ray(t_camera *cam, int x, int y)
 	double	ndc_x = (x + 0.5 ) / cam->width;
 	double	ndc_y = (y + 0.5 ) / cam->height;
 
-	pixel_x = (2 * ndc_x - 1 + jitter_x) * tan(cam->fov * 0.5 * PI / 180) * aspect_ratio;
-	pixel_y = (1 - 2 * ndc_y + jitter_y) * tan(cam->fov * 0.5 * PI / 180);
+	pixel_x = (2 * ndc_x - 1) * tan(cam->fov * 0.5 * PI / 180) * aspect_ratio;
+	pixel_y = (1 - 2 * ndc_y) * tan(cam->fov * 0.5 * PI / 180);
 
 	// Create the camera basis: right, up, and forward
 	t_vec forward = vec_normalize(cam->direction);
@@ -68,6 +66,23 @@ double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 	return (diffuse + specular);
 }
 
+t_rgb	direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb return_color)
+{
+	t_ray shadow_ray;
+
+	shadow_ray.origin = vec_add(intersection.point, vec_scalar(intersection.norm, EPSILON));
+	shadow_ray.dest = vec_normalize(vec_sub(world->light->pos, shadow_ray.origin));
+	double light_d =  vec_length(vec_sub(world->light->pos, intersection.point));
+	// shadow_ray.dest = cone_pewpew(intersection.norm);
+	if (!is_occluded(shadow_ray, world, light_d)) {
+		double attenuation = 1.0 / (light_d * light_d); // Inverse square law
+		double cos_theta_s = vec_dot(intersection.norm, shadow_ray.dest);
+		t_rgb light_contribution = color_scalar(color_multiply(world->light->color, intersection.color), cos_theta_s * attenuation * world->light->brightness);
+		return_color = color_add(return_color, light_contribution);
+	}
+	return (return_color);
+}
+
 	// The function for simulating and bouncing a ray off an object
 t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 {
@@ -96,7 +111,7 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 		// Calculations i found off the internet for BRDF
 	// double	cos_theta = vec_dot(new_ray.dest, intersection.norm);
 	double	BRDF = brdf_calculation(intersection, new_ray, intersection.norm);
-	double	p = 1;
+	double	p = 1 / PI;
 		// Shoot the next ray recursively
 	incoming = trace_path(world, new_ray, depth + 1);
 
@@ -105,21 +120,10 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	return_color = color_scalar(return_color, world->amb->ratio);
 
 		// Calculate light position and shadow
-		t_ray shadow_ray;
-
-		shadow_ray.origin = intersection.point;
-		shadow_ray.dest = vec_normalize(vec_sub(world->light->pos, intersection.point));
-		// shadow_ray.dest = cone_pewpew(intersection.norm);
-		if (!find_path(shadow_ray, world).hit) {
-			double light_d =  vec_length(vec_sub(world->light->pos, intersection.point));
-			double attenuation = 1.0 / (light_d * light_d); // Inverse square law
-			double cos_theta_s = fmax(0.0, vec_dot(intersection.norm, shadow_ray.dest));
-			t_rgb light_contribution = color_scalar(color_multiply(world->light->color, intersection.color), cos_theta_s * attenuation * world->light->brightness);
-			return_color = color_add(return_color, light_contribution);
-		}
+	return_color = direct_light_occlusion(intersection, world, return_color);
 		// Indirect lighting
 			// Adding the color return of the recursively shot ray and adding up the values then scaling with BRDF
-	return_color = color_add(return_color, color_scalar(color_scalar(incoming, 1.5), BRDF * p));
+	return_color = color_add(return_color, color_scalar(color_scalar(incoming, 1), BRDF * p));
 
 
 	return (color_normalize(return_color));
@@ -129,10 +133,11 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 // Main function for rendering the screen for each frame called by mlx_loop_hook
 int	render(t_main *main)
 {
-	static int	static_sample = 2;
 	t_ray	ray;
 	t_rgb	**output;
 	t_world	*world;
+	double	offset_x;
+	double	offset_y;
 	int		output_color;
 	int		x;
 	int		y;
@@ -141,17 +146,25 @@ int	render(t_main *main)
 	world = main->world;
 	x = 0;
 	y = 0;
+	trace_time(1);
 	while (y < main->height)
 	{
 		while (x < main->width)
 		{
-			ray = gen_ray(main->world->cam, x, y);
-			// Initializes the position of the first ray from the camera to static_sample into trace_path later
-				// sampleses in trace_path function to shoot rays and get the result of the ray bounces back
-			for (int i = 0; i < static_sample; i++)
-				output[y][x] = color_add(output[y][x], trace_path(world, ray, 1));
-			output[y][x] = color_scalar_div(output[y][x], static_sample);
-
+			for (int sub_y = 0; sub_y < STATIC_SAMPLE; sub_y++)
+			{
+				for (int sub_x = 0; sub_x < STATIC_SAMPLE; sub_x++)
+				{
+						// Offset for each subpixel
+					offset_x = (sub_x + 0.5) / STATIC_SAMPLE;
+					offset_y = (sub_y + 0.5) / STATIC_SAMPLE;
+						// Initliaze individual sub_ray to pass into trace_path and average later on
+					ray = gen_ray(main->world->cam, x + offset_x, y + offset_y);
+					output[y][x] = color_add(output[y][x], trace_path(world, ray, 1));
+				}
+			}
+			// Average the samples
+			output[y][x] = color_scalar_div(output[y][x], STATIC_SAMPLE * STATIC_SAMPLE);
 
 			// Packs color into ARGB format for mlx_pixel_put
 			output_color = pack_color(output[y][x].r, output[y][x].g, output[y][x].b);
@@ -164,16 +177,16 @@ int	render(t_main *main)
 		x = 0;
 		y++;
 	}
+	trace_time(2);
 	return (0);
 }
 
 int	main_pipeline(t_main *main)
 {
-	// Call render() function each frame with mlx_loop while handling input
-	mlx_loop_hook(main->mlx, render, main);
-
 	// Take input
 	key_handles(main);
+	// Call render() function each frame with mlx_loop while handling input
+	mlx_loop_hook(main->mlx, render, main);
 	mlx_loop(main->mlx);
 	return (0);
 }
