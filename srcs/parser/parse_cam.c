@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:07:11 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/16 11:38:13 by root             ###   ########.fr       */
+/*   Updated: 2024/11/23 19:08:33 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_camera	*parse_cam(t_world *world, char **input)
 	if (input[1])
 		pop_vec(&ret->pos ,ft_split(input[1], ','), NULL, 1);
 	if (input[2])
-		pop_vec(&ret->norm, ft_split(input[2], ','), alloc_float(-1.0, 1.0), 0);
+		pop_vec(&ret->direction, ft_split(input[2], ','), alloc_float(-1.0, 1.0), 0);
 	if (input[3])
 		pop_fov(&ret->fov, input[3], alloc_int(0, 180));
 	return (ret);

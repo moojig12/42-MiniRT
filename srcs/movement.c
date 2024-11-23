@@ -167,6 +167,27 @@ void	set_position(t_obj *selection)
 	print_vec("Position:", *position.pos);
 }
 
+void	flush_screen(t_main *main, t_rgb **output)
+{
+	int	output_color;
+	int	x;
+	int	y;
+
+	x = 0;
+	y = 0;
+	while (y < main->world->cam->height)
+	{
+		while (x < main->world->cam->width)
+		{
+			output[y][x] = ret_color(0, 0, 0);
+			output_color = pack_color(output[y][x].r, output[y][x].g, output[y][x].b);
+			mlx_pixel_put(main->mlx, main->win, x, y, output_color);
+			x++;
+		}
+		y++;
+	}
+}
+
 int	movement(int key_code, t_main *main)
 {
 	t_obj	**base_selection;
@@ -218,6 +239,20 @@ int	movement(int key_code, t_main *main)
 				set_selection(main->world->selected, main, PLANE);
 		}
 	}
+	if (key_code == KEY_R)
+	{
+		if (main->render_switch == HIGH)
+		{
+			main->render_switch = LOW;
+			printf("Render mode is now set to: LOW\n");
+		}
+		else
+		{
+			printf("Render mode is now set to: HIGH\n");
+			main->render_switch = HIGH;
+		}
+		flush_screen(main, main->output);
+	}
 	// printf("keycode: %i\n", key_code);
 	if (key_code == ESC_WIN)
 		close_window(main);
@@ -225,7 +260,7 @@ int	movement(int key_code, t_main *main)
 		rotate_left(main);
 	if (key_code == ROTATE_RIGHT)
 		rotate_right(main);
-	if (key_code == 112)
+	if (key_code == KEY_P)
 		set_position((t_obj *)(*main->world->selected));
 	
 	// print_vec("test:", ((t_camera *)((t_obj *)(*main->world->selected)->data))->direction);

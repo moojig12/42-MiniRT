@@ -33,6 +33,11 @@
 
 typedef struct s_obj t_obj;
 
+typedef enum e_fidelity {
+	LOW,
+	HIGH
+}	t_fidelity;
+
 typedef enum e_rotation_index {
 	X_AXIS,
 	Y_AXIS,
@@ -61,7 +66,9 @@ typedef enum e_movement_keys {
 	KEY_K = 107,
 	KEY_L = 108,
 	KEY_U = 117,
-	KEY_O = 111
+	KEY_O = 111,
+	KEY_P = 112,
+	KEY_R = 114
 }	t_movement_keys;
 
 typedef enum e_escape_key {
