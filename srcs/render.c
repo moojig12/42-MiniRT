@@ -66,7 +66,7 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	t_rgb	incoming;
 	t_ray	new_ray;
 
-	return_color = ret_color(0, 0, 0);
+	return_color = ret_color(0.0, 0.0, 0.0);
 	if (depth >= MAXDEPTH)
 		return (return_color);
 
@@ -122,6 +122,7 @@ void	render_super(t_main *main, int x, int y, t_rgb **output)
 	}
 		// Average the samples
 	output[y][x] = color_scalar_div(output[y][x], STATIC_SAMPLE * STATIC_SAMPLE);
+	output[y][x] = color_normalize(output[y][x]);
 }
 
 void	render_low(t_main *main, int x, int y, t_rgb **output)
@@ -130,6 +131,7 @@ void	render_low(t_main *main, int x, int y, t_rgb **output)
 
 	ray = gen_ray_low(main->world->cam, x, y);
 	output[y][x] = color_add(output[y][x], trace_path(main->world, ray, 1));
+	output[y][x] = color_normalize(output[y][x]);
 }
 
 // Main function for rendering the screen for each frame called by mlx_loop_hook
@@ -155,7 +157,7 @@ int	render(t_main *main)
 			else
 				render_low(main, x, y, output);
 			// Packs color into ARGB format for mlx_pixel_put
-			output_color = pack_color(output[y][x].r, output[y][x].g, output[y][x].b);
+			output_color = pack_color(output[y][x]);
 			if (main->render_switch == LOW)
 				output[y][x] = ret_color(0, 0, 0);
 			mlx_pixel_put(main->mlx, main->win, x, y, output_color);

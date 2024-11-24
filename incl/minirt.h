@@ -93,9 +93,9 @@ typedef struct s_matrix {
 }	t_matrix;
 
 typedef struct s_rgb {
-	int	r;
-	int	g;
-	int	b;
+	double	r;
+	double	g;
+	double	b;
 }	t_rgb;
 
 typedef struct s_ray {
@@ -230,6 +230,9 @@ void			flush_screen(t_main *main, t_rgb **output);
 // Movement
 
 int				movement(int key_code, t_main *main);
+int				move(t_obj *obj, t_vec	movement, int movement_code);
+int				rotate_object(t_obj *object, t_vec rotation);
+t_vec			rotate_angle(int direction, double angle);
 void			check_selection(int key_code, t_main *main);
 t_vec			movement_rotation(t_vec movement, int movement_code);
 void			set_selection(t_obj **base_selection, t_main *main, int target);
@@ -333,14 +336,14 @@ double	vec_length(t_vec v);
 
 // Color operations
 
-int		pack_color(int r, int g, int b);
+int		pack_color(t_rgb color);
 t_rgb	color_add(t_rgb a, t_rgb b);
 t_rgb	color_sub(t_rgb a, t_rgb b);
 t_rgb	color_scalar(t_rgb color, double scalar);
 t_rgb	color_scalar_div(t_rgb a, double scalar);
 t_rgb	color_multiply(t_rgb a, t_rgb b);
 double	vec_dot(t_vec a, t_vec b);
-t_rgb	ret_color(int r, int g, int b);
+t_rgb	ret_color(double r, double g, double b);
 t_rgb	color_normalize(t_rgb color);
 
 // Matrix operations

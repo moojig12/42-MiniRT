@@ -65,7 +65,7 @@ void	flush_screen(t_main *main, t_rgb **output)
 		while (x < main->world->cam->width)
 		{
 			output[y][x] = ret_color(0, 0, 0);
-			output_color = pack_color(output[y][x].r, output[y][x].g, output[y][x].b);
+			output_color = pack_color(output[y][x]);
 			mlx_pixel_put(main->mlx, main->win, x, y, output_color);
 			x++;
 		}

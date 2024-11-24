@@ -2,7 +2,8 @@
 
 int	move(t_obj *obj, t_vec	movement, int movement_code)
 {
-	t_vec	moved_vec;
+	t_vec		movement_angle;
+	t_vec		moved_vec;
 	t_selected	selected;
 
 	selected = discern_object(obj);
@@ -14,11 +15,8 @@ int	move(t_obj *obj, t_vec	movement, int movement_code)
 	}
 	else
 	{
-		t_vec	directed;
-			// Translate movement into angle
-		directed = movement_rotation(movement, movement_code);
-			// Rotate cam->direction and save to moved_vec
-		moved_vec = matrix_rotation(*selected.dir, directed);
+		movement_angle = movement_rotation(movement, movement_code);
+		moved_vec = matrix_rotation(*selected.dir, movement_angle);
 		moved_vec = vec_normalize(moved_vec);
 		*selected.pos = vec_add(*selected.pos, moved_vec);
 		return (0);

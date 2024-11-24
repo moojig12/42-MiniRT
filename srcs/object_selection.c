@@ -19,17 +19,17 @@ int	rotation_selected(int key_code, t_obj *selected)
 int	movement_selected(int key_code, t_obj *selected)
 {
 	if (key_code == FORWARD)
-		move(selected, move_angle(Z_AXIS, 1), key_code);
+		move(selected, move_angle(Z_AXIS, 0.25), key_code);
 	if (key_code == LEFT)
-		move(selected, move_angle(X_AXIS, -1), key_code);
+		move(selected, move_angle(X_AXIS, -0.25), key_code);
 	if (key_code == BACK)
-		move(selected, move_angle(Z_AXIS, -1), key_code);
+		move(selected, move_angle(Z_AXIS, -0.25), key_code);
 	if (key_code == RIGHT)
-		move(selected, move_angle(X_AXIS, 1), key_code);
+		move(selected, move_angle(X_AXIS, 0.25), key_code);
 	if (key_code == UP)
-		move(selected, move_angle(Y_AXIS, 1), key_code);
+		move(selected, move_angle(Y_AXIS, 0.25), key_code);
 	if (key_code == DOWN)
-		move(selected, move_angle(Y_AXIS, -1), key_code);
+		move(selected, move_angle(Y_AXIS, -0.25), key_code);
 }
 
 void	check_selection(int key_code, t_main *main)

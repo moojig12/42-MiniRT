@@ -20,12 +20,9 @@ int	pop_color(t_rgb *rgb, char **input)
 		return (1);
 	else
 	{
-		rgb->r = ft_atoi(input[0]);
-		rgb->g = ft_atoi(input[1]);
-		rgb->b = ft_atoi(input[2]);
-		// printf("1:%s 2:%s 3:%s\n", input[0], input[1], input[2]);
-		// printf("1:%i 2:%i 3:%i\n", rgb->r, rgb->g, rgb->b);
-		// exit (0);
+		rgb->r = (double)ft_atoi(input[0]) / 255;
+		rgb->g = (double)ft_atoi(input[1]) / 255;
+		rgb->b = (double)ft_atoi(input[2]) / 255;
 	}
 	i = 0;
 	while (input[i])
