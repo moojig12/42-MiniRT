@@ -26,12 +26,14 @@ SRCS	=	main.c \
 			random_gen.c \
 			render.c \
 			movement.c \
+			movement_utils.c \
 			matrix_ops.c \
 			intersect.c \
 			utils.c \
 			utils_color.c \
 			utils_vec.c \
-			cam_ray.c
+			cam_ray.c \
+			object_selection.c
 
 OBJS	=	$(addprefix srcs/, $(SRCS:.c=.o))
 

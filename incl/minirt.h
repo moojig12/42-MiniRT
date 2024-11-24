@@ -225,10 +225,17 @@ t_ray			gen_ray(t_camera *cam, int x, int y);
 t_ray			gen_ray_low(t_camera *cam, int x, int y);
 int				is_occluded(t_ray shadow_ray, t_world *world, double light_distance);
 t_intersection	find_path(t_ray ray, t_world *world);
+void			flush_screen(t_main *main, t_rgb **output);
 
 // Movement
 
 int				movement(int key_code, t_main *main);
+void			check_selection(int key_code, t_main *main);
+t_vec			movement_rotation(t_vec movement, int movement_code);
+void			set_selection(t_obj **base_selection, t_main *main, int target);
+int				rotation_selected(int key_code, t_obj *selected);
+int				movement_selected(int key_code, t_obj *selected);
+t_vec			move_angle(int direction, double angle);
 
 // Parsing
 
@@ -310,6 +317,7 @@ int		print_color(char *string, t_rgb color);
 int		print_matrix(char *string, t_matrix mat);
 t_selected	discern_object(t_obj *obj);
 double	trace_time(int type);
+void	print_position(t_obj *selection);
 
 // Vector operations
 
