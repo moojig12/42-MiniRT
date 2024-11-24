@@ -56,7 +56,9 @@ t_intersection	intersect_plane(t_ray ray, t_plane *plane, t_intersection interse
 		intersection.hit = 1;
 		intersection.distance = t;
 		intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t)); // O + tD
-		intersection.norm = plane->norm; // Normal is constant
+		intersection.norm = vec_normalize(plane->norm);
+		if (vec_dot(ray.dest, intersection.norm) > 0)
+			intersection.norm = vec_scalar(intersection.norm, -1); // Flip normal
 		intersection.color = plane->color;
 	}
 
@@ -150,11 +152,10 @@ t_intersection	intersect(t_ray ray, t_obj *obj)
 	intersection.distance = INFINITY;
 	intersection.point = vec(0, 0, 0, 0);
 	intersection.norm = vec(0, 0, 0, 0);
-	intersection.color = ret_color(0, 0, 0);
 
-	intersection.reflectance = 1;
-	intersection.diffuse = 0.0;
-	intersection.specular = 0.5;
+	intersection.reflectance = 0.1;
+	intersection.diffuse = 0.5;
+	intersection.specular = 0.65;
 
 	if (obj->type == SPHERE)
 		return (intersect_sphere(ray, (t_sphere *)obj->data, intersection));
@@ -162,18 +163,34 @@ t_intersection	intersect(t_ray ray, t_obj *obj)
 		return (intersect_cylinder(ray, (t_cyl *)obj->data, intersection));
 	else if (obj->type == PLANE)
 		return (intersect_plane(ray, (t_plane *)obj->data, intersection));
-	else
-		printf("Error\nNo object type for intersection\n");
+	/* else
+		printf("Error\nNo object type for intersection\n"); */
 	return (intersection);
+}
+
+int	is_occluded(t_ray shadow_ray, t_world *world, double light_distance)
+{
+	t_obj *object = world->objlist;
+	t_intersection intersection;
+
+	while (object) {
+		intersection = intersect(shadow_ray, object);
+		if (intersection.hit && intersection.distance < light_distance) {
+			return (1); // Occlusion detected
+		}
+		object = object->next;
+	}
+	return (0); // No occlusion
 }
 
 t_intersection	find_path(t_ray ray, t_world *world)
 {
+	double			closest_distance;
 	t_intersection	closest_intersection;
 	t_intersection	intersection;
 	t_obj			*object;
-	double			closest_distance = INFINITY;
 
+	closest_distance = INFINITY;
 	closest_intersection.hit = 0;
 	object = world->objlist;
 		// iterate over all objects and get the closest one
@@ -182,13 +199,10 @@ t_intersection	find_path(t_ray ray, t_world *world)
 		if (object->type > 3)
 		{
 			intersection = intersect(ray, object);
-			if (intersection.hit)
+			if (intersection.hit && intersection.distance < closest_distance)
 			{
-				if (intersection.distance < closest_distance)
-				{
-					closest_distance = intersection.distance;
-					closest_intersection = intersection;
-				}
+				closest_distance = intersection.distance;
+				closest_intersection = intersection;
 			}
 		}
 		object = object->next;

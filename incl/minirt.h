@@ -12,9 +12,11 @@
 
 // Constants
 # define PI 3.14159265358979323846
+# define EPSILON 0.0001
+# define STATIC_SAMPLE 4
 
 // Max depth of bounces for tracing
-# define MAXDEPTH 5
+# define MAXDEPTH 8
 
 // objects
 # define AMBIENCE 1
@@ -30,6 +32,11 @@
 # define M 0xFFFFFFFF
 
 typedef struct s_obj t_obj;
+
+typedef enum e_fidelity {
+	LOW,
+	HIGH
+}	t_fidelity;
 
 typedef enum e_rotation_index {
 	X_AXIS,
@@ -59,7 +66,9 @@ typedef enum e_movement_keys {
 	KEY_K = 107,
 	KEY_L = 108,
 	KEY_U = 117,
-	KEY_O = 111
+	KEY_O = 111,
+	KEY_P = 112,
+	KEY_R = 114
 }	t_movement_keys;
 
 typedef enum e_escape_key {
@@ -207,21 +216,31 @@ typedef struct s_main {
 
 // Main pipeline
 
-int	main_pipeline(t_main *main);
+int				main_pipeline(t_main *main);
 
 // Render
 
-int	render(t_main *main);
+int				render(t_main *main);
+t_ray			gen_ray(t_camera *cam, int x, int y);
+t_ray			gen_ray_low(t_camera *cam, int x, int y);
+int				is_occluded(t_ray shadow_ray, t_world *world, double light_distance);
 t_intersection	find_path(t_ray ray, t_world *world);
+void			flush_screen(t_main *main, t_rgb **output);
 
 // Movement
 
-int	movement(int key_code, t_main *main);
+int				movement(int key_code, t_main *main);
+void			check_selection(int key_code, t_main *main);
+t_vec			movement_rotation(t_vec movement, int movement_code);
+void			set_selection(t_obj **base_selection, t_main *main, int target);
+int				rotation_selected(int key_code, t_obj *selected);
+int				movement_selected(int key_code, t_obj *selected);
+t_vec			move_angle(int direction, double angle);
 
 // Parsing
 
-t_world		*parse_world(t_world *world, char **argv);
-void	init_world(t_world *world);
+t_world			*parse_world(t_world *world, char **argv);
+void			init_world(t_world *world);
 
 // Parsing obj
 
@@ -298,6 +317,7 @@ int		print_color(char *string, t_rgb color);
 int		print_matrix(char *string, t_matrix mat);
 t_selected	discern_object(t_obj *obj);
 double	trace_time(int type);
+void	print_position(t_obj *selection);
 
 // Vector operations
 

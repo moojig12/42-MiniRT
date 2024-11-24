@@ -3,7 +3,7 @@ NAME	=	miniRT
 CC		=	cc
 HEADER	=	-I./incl -I./incl/mlx -I./incl/libft -I./incl/get_next_line
 SAN		=	-fsanitize=address
-CFLAGS	=	-O2 -Ilibmlx -g $(HEADER)
+CFLAGS	=	-O3 -Ilibmlx -g $(HEADER)
 MFLAGS  =	-L /usr/X11R6/lib -lXext -lX11 -lm
 
 LIBS	=	./incl/libft/libft.a ./incl/mlx/libmlx.a ./incl/get_next_line/gnl.a
@@ -26,11 +26,14 @@ SRCS	=	main.c \
 			random_gen.c \
 			render.c \
 			movement.c \
+			movement_utils.c \
 			matrix_ops.c \
 			intersect.c \
 			utils.c \
 			utils_color.c \
-			utils_vec.c
+			utils_vec.c \
+			cam_ray.c \
+			object_selection.c
 
 OBJS	=	$(addprefix srcs/, $(SRCS:.c=.o))
 
