@@ -12,69 +12,12 @@ t_vec	cone_pewpew(t_vec norm)
 
 	dir = random_vec(0);
 
-	dir = vec_normalize(vec_add(dir, vec_scalar(norm, 1)));
+	// dir = vec_normalize(vec_add(dir, vec_scalar(norm, 1)));
 	if (vec_dot(dir, norm) < 0)
 		dir = vec_scalar(dir, -1);
 
 	return vec_normalize(dir);
 }
-
-t_ray	gen_ray(t_camera *cam, int x, int y)
-{
-	t_ray ray;
-	double	aspect_ratio;
-	double	pixel_x;
-	double	pixel_y;
-
-	aspect_ratio = ((double)cam->width / (double)cam->height);
-	
-	// Normalized Device Coordinates
-	double	ndc_x = (x + 0.5 ) / cam->width;
-	double	ndc_y = (y + 0.5 ) / cam->height;
-
-	pixel_x = (2 * ndc_x - 1) * tan((double)cam->fov * 0.5 * PI / 180) * aspect_ratio;
-	pixel_y = (1 - 2 * ndc_y) * tan((double)cam->fov * 0.5 * PI / 180);
-
-	// Create the camera basis: right, up, and forward
-	t_vec forward = vec_normalize(cam->direction);
-	t_vec right = vec_normalize(vec_cross(cam->norm, forward));
-	t_vec up = vec_cross(forward, right);
-
-	ray.origin = cam->pos;
-	ray.dest = vec_add(vec_add(vec_scalar(right, pixel_x), vec_scalar(up, pixel_y)), vec_scalar(forward, 1));
-	ray.dest = vec_normalize(ray.dest);
-
-	return (ray);
-}
-
-t_ray	gen_ray_low(t_camera *cam, int x, int y)
-{
-	t_ray ray;
-	double	aspect_ratio;
-	double	pixel_x;
-	double	pixel_y;
-
-	aspect_ratio = ((double)cam->width / (double)cam->height);
-	
-	// Normalized Device Coordinates
-	double	ndc_x = (x + 0.5 ) / cam->width;
-	double	ndc_y = (y + 0.5 ) / cam->height;
-
-	pixel_x = (2 * ndc_x - 1) * tan((double)cam->fov * 0.5 * PI / 180) * aspect_ratio;
-	pixel_y = (1 - 2 * ndc_y) * tan((double)cam->fov * 0.5 * PI / 180);
-
-	// Create the camera basis: right, up, and forward
-	t_vec forward = vec_normalize(cam->direction);
-	t_vec right = vec_normalize(vec_cross(cam->norm, forward));
-	t_vec up = vec_cross(forward, right);
-
-	ray.origin = cam->pos;
-	ray.dest = vec_add(vec_add(vec_scalar(right, pixel_x), vec_scalar(up, pixel_y)), vec_scalar(forward, 1));
-	ray.dest = vec_normalize(ray.dest);
-
-	return (ray);
-}
-
 
 	// BRDF calculation for materials, not sure if it works 100% yet
 double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
@@ -99,18 +42,20 @@ double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 t_rgb	direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb return_color)
 {
 	t_ray shadow_ray;
+	double	attenuation;
+	double	light_distance;
+	double	cos_theta;
 
 	shadow_ray.origin = vec_add(intersection.point, vec_scalar(intersection.norm, EPSILON));
 	shadow_ray.dest = vec_normalize(vec_sub(world->light->pos, shadow_ray.origin));
-	double light_d =  vec_length(vec_sub(world->light->pos, intersection.point));
-	// shadow_ray.dest = cone_pewpew(intersection.norm);
-	if (!is_occluded(shadow_ray, world, light_d)) {
-		double attenuation = 1.0 / (light_d * light_d); // Inverse square law
-		double cos_theta_s = vec_dot(intersection.norm, shadow_ray.dest);
-		t_rgb light_contribution = color_scalar(color_multiply(world->light->color, intersection.color), cos_theta_s * attenuation * world->light->brightness);
+	light_distance =  vec_length(vec_sub(world->light->pos, intersection.point));
+	if (!is_occluded(shadow_ray, world, light_distance)) {
+		attenuation = 1.0 / (light_distance * light_distance);
+		cos_theta = vec_dot(intersection.norm, shadow_ray.dest);
+		t_rgb light_contribution = color_scalar(color_multiply(world->light->color, intersection.color), cos_theta * attenuation * world->light->brightness);
 		return_color = color_add(return_color, light_contribution);
 	}
-	return (return_color);
+	return (color_normalize(return_color));
 }
 
 	// The function for simulating and bouncing a ray off an object
@@ -141,7 +86,7 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 		// Calculations i found off the internet for BRDF
 	// double	cos_theta = vec_dot(new_ray.dest, intersection.norm);
 	double	BRDF = brdf_calculation(intersection, new_ray, intersection.norm);
-	double	p = 1 / PI;
+	double	p = 1.0 / (PI);
 		// Shoot the next ray recursively
 	incoming = trace_path(world, new_ray, depth + 1);
 		// Ambience

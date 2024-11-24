@@ -30,7 +30,8 @@ SRCS	=	main.c \
 			intersect.c \
 			utils.c \
 			utils_color.c \
-			utils_vec.c
+			utils_vec.c \
+			cam_ray.c
 
 OBJS	=	$(addprefix srcs/, $(SRCS:.c=.o))
 

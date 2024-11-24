@@ -221,6 +221,8 @@ int				main_pipeline(t_main *main);
 // Render
 
 int				render(t_main *main);
+t_ray			gen_ray(t_camera *cam, int x, int y);
+t_ray			gen_ray_low(t_camera *cam, int x, int y);
 int				is_occluded(t_ray shadow_ray, t_world *world, double light_distance);
 t_intersection	find_path(t_ray ray, t_world *world);
 
