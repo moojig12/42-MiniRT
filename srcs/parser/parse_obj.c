@@ -6,11 +6,11 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:40:56 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/26 18:13:24 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:43:59 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minirt.h"
+#include "minirt.h"
 
 t_obj	*add_sobj(int type, void *list)
 {

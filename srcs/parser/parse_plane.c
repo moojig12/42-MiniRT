@@ -6,11 +6,11 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:18 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/26 17:58:14 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:44:02 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minirt.h"
+#include "minirt.h"
 
 void	ft_lstadd_back_plane_mrt(t_plane **lst, t_plane *new)
 {

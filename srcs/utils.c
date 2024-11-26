@@ -1,4 +1,4 @@
-#include "../minirt.h"
+#include "minirt.h"
 
 // Function expects proper input! No '+' allowed
 double	ft_atof(char *str)

@@ -6,11 +6,11 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:48 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/26 17:57:49 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:43:38 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minirt.h"
+#include "minirt.h"
 
 t_ambient	*parse_amb(t_world *world, char **input)
 {

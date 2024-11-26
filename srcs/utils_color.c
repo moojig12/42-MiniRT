@@ -1,4 +1,4 @@
-#include "../minirt.h"
+#include "minirt.h"
 
 t_rgb	color_normalize(t_rgb color)
 {

@@ -1,4 +1,4 @@
-#include "../minirt.h"
+#include "minirt.h"
 
 unsigned int	ft_rand(void)
 {

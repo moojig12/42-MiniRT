@@ -1,4 +1,4 @@
-#include "../minirt.h"
+#include "minirt.h"
 
 t_vec	rotate_angle(int direction, double angle)
 {

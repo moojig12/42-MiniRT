@@ -5,9 +5,9 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
-# include "incl/libft/libft.h"
-# include "incl/get_next_line/get_next_line.h"
-# include "incl/mlx/mlx.h"
+# include "libft/libft.h"
+# include "get_next_line/get_next_line.h"
+# include "mlx/mlx.h"
 # include <time.h>
 
 // Constants

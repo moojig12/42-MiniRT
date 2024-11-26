@@ -1,4 +1,5 @@
-#include "../minirt.h"
+#include "minirt.h"
+
 t_vec	vec(double x, double y, double z, double w)
 {
 	t_vec	vec;

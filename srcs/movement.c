@@ -1,4 +1,4 @@
-#include "../minirt.h"
+#include "minirt.h"
 
 int	move(t_obj *obj, t_vec	movement, int movement_code)
 {

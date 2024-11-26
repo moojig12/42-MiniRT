@@ -1,4 +1,4 @@
-#include "../minirt.h"
+#include "minirt.h"
 
 t_intersection	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersection intersection)
 {

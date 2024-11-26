@@ -6,11 +6,11 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:34 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/26 17:58:18 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:44:05 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minirt.h"
+#include "minirt.h"
 
 void	ft_lstadd_back_sphere_mrt(t_sphere **lst, t_sphere *new)
 {

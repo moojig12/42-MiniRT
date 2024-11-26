@@ -1,4 +1,4 @@
-#include "../minirt.h"
+#include "minirt.h"
 
 t_matrix	empty_matrix(void)
 {

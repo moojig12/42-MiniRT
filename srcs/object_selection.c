@@ -1,4 +1,4 @@
-#include "../minirt.h"
+#include "minirt.h"
 
 int	rotation_selected(int key_code, t_obj *selected)
 {

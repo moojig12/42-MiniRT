@@ -1,4 +1,4 @@
-#include "../minirt.h"
+#include "minirt.h"
 
 void	key_handles(t_main *main)
 {
@@ -66,7 +66,7 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	t_rgb	incoming;
 	t_ray	new_ray;
 
-	return_color = ret_color(0.0, 0.0, 0.0);
+	return_color = ret_color(0, 0, 0);
 	if (depth >= MAXDEPTH)
 		return (return_color);
 

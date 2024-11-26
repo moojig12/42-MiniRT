@@ -6,11 +6,11 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:07:43 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/26 17:58:06 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:43:54 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minirt.h"
+#include "minirt.h"
 
 void	ft_lstadd_back_lig_mrt(t_light **lst, t_light *new)
 {

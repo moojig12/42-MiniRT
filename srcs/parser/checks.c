@@ -6,11 +6,11 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 15:54:20 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/26 17:57:40 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:41:54 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minirt.h"
+#include "minirt.h"
 
 int	check_file(char *file)
 {

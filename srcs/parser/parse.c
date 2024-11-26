@@ -6,11 +6,11 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:13:43 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/26 17:58:28 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/26 21:01:48 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minirt.h"
+#include "minirt.h"
 
 int	check_iden_type(char *input)
 {
@@ -54,7 +54,7 @@ int	check_par(t_world *world, char *input)
 	int	type;
 	char	**input_matrix;
 
-	if (input == NULL || *input == '\n')
+	if (input == NULL || *input == '\n' || *input == '#')
 		return (0);
 	input_matrix = ft_split(input, ' ');
 	if (**input_matrix == '\n'){

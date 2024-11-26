@@ -6,11 +6,11 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:39:58 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/26 17:58:51 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/26 19:44:36 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minirt.h"
+#include "minirt.h"
 
 static void	free_obj(t_obj *obj);
 static void	free_light(t_light *light);
