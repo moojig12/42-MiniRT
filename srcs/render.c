@@ -68,13 +68,13 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 
 	return_color = ret_color(0, 0, 0);
 	if (depth >= MAXDEPTH)
-		return (return_color);
+		return (color_scalar(world->amb->color, world->amb->ratio));
 
 		// Iterate over each object in the world and find the closest intersection.
 			// Also fetches data relating to the object such as Material and Norm direction
 	intersection = find_path(ray, world);
 	if (!intersection.hit)
-		return (return_color);
+		return (color_scalar(world->amb->color, world->amb->ratio));
 		// return	(world->amb->color);
 
 		// initialize a new ray from the POINT of Intersection and random direction
@@ -133,6 +133,17 @@ void	render_low(t_main *main, int x, int y, t_rgb **output)
 	output[y][x] = color_add(output[y][x], trace_path(main->world, ray, 1));
 	output[y][x] = color_normalize(output[y][x]);
 }
+void	put_pixel_to_img(int color, t_main main, int x, int y)
+{
+	char	*pxl;
+
+	if (x >= 0 && x < main.width && y >= 0 && y < main.height)
+	{
+		pxl = main.addr + (y * main.line_length + x *(main.bits_per_pixel / 8));
+		*(unsigned int*)pxl = color;
+	}
+	
+}
 
 // Main function for rendering the screen for each frame called by mlx_loop_hook
 int	render(t_main *main)
@@ -158,12 +169,15 @@ int	render(t_main *main)
 			output_color = pack_color(output[y][x]);
 			if (main->render_switch == LOW)
 				output[y][x] = ret_color(0, 0, 0);
-			mlx_pixel_put(main->mlx, main->win, x, y, output_color);
+			put_pixel_to_img(output_color, *main, x, y);
+			//mlx_pixel_put(main->mlx, main->win, x, y, output_color);
 			x++;
 		}
 		x = 0;
 		y++;
 	}
+	mlx_put_image_to_window(main->mlx, main->win, main->img, 0, 0);
+	//key_handles(main);
 	trace_time(2);
 	return (0);
 }
@@ -171,9 +185,11 @@ int	render(t_main *main)
 int	main_pipeline(t_main *main)
 {
 	// Take input
-	key_handles(main);
 	// Call render() function each frame with mlx_loop while handling input
 	mlx_loop_hook(main->mlx, render, main);
+	//render(main);
+	//mlx_put_image_to_window(main->mlx, main->win, main->img, 0, 0);
+	key_handles(main);
 	mlx_loop(main->mlx);
 	return (0);
 }
