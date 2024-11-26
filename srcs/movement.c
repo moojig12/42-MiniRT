@@ -1,4 +1,4 @@
-#include "minirt.h"
+#include "../minirt.h"
 
 int	move(t_obj *obj, t_vec	movement, int movement_code)
 {
@@ -69,7 +69,7 @@ int	rotate_object(t_obj *object, t_vec rotation)
 
 int	movement(int key_code, t_main *main)
 {
-	int		type;
+	//int		type;
 
 	printf("keycode: %i\n", key_code);
 	if (!main->world->selected)
@@ -78,7 +78,7 @@ int	movement(int key_code, t_main *main)
 		set_selection(main->world->selected, main, CAMERA);
 		printf("mallocated\n");
 	}
-	type = (*main->world->selected)->type;
+	//type = (*main->world->selected)->type;
 	check_selection(key_code, main);
 	if (key_code == KEY_R)
 	{

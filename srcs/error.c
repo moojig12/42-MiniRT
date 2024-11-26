@@ -6,15 +6,16 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 16:17:00 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/14 17:40:39 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/26 18:01:41 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../minirt.h"
 
 void	exit_err_init(char *msg, int code, t_world *world)
 {
-	write(2, msg, ft_strlen(msg));
+	if(msg)
+		perror(msg);
 	if (world)
 		free_world(world);
 	exit (code);
@@ -22,7 +23,8 @@ void	exit_err_init(char *msg, int code, t_world *world)
 
 void	exit_err(char *message, int code, t_main *main)
 {
-	write(2, message, ft_strlen(message));
+	if(message)
+		perror(message);
 	if(main)
 		free_main(main);
 	exit(code);

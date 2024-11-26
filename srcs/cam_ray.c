@@ -1,4 +1,4 @@
-#include "minirt.h"
+#include "../minirt.h"
 
 t_ray	gen_ray(t_camera *cam, int x, int y)
 {

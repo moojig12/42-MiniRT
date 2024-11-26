@@ -1,4 +1,4 @@
-#include "minirt.h"
+#include "../minirt.h"
 
 int	rotation_selected(int key_code, t_obj *selected)
 {
@@ -14,6 +14,7 @@ int	rotation_selected(int key_code, t_obj *selected)
 		rotate_object(selected, rotate_angle(Z_AXIS, 15));
 	if (key_code == KEY_O)
 		rotate_object(selected, rotate_angle(Z_AXIS, -15));
+	return (0);
 }
 
 int	movement_selected(int key_code, t_obj *selected)
@@ -30,6 +31,7 @@ int	movement_selected(int key_code, t_obj *selected)
 		move(selected, move_angle(Y_AXIS, 0.25), key_code);
 	if (key_code == DOWN)
 		move(selected, move_angle(Y_AXIS, -0.25), key_code);
+	return (0);
 }
 
 void	check_selection(int key_code, t_main *main)

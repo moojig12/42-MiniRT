@@ -1,4 +1,4 @@
-#include "minirt.h"
+#include "../../minirt.h"
 
 // check if this works!
 

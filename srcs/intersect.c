@@ -1,4 +1,4 @@
-#include "minirt.h"
+#include "../minirt.h"
 
 t_intersection	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersection intersection)
 {
@@ -37,6 +37,7 @@ t_intersection	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersection inte
 			intersection.distance = t;
 			intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t));
 			intersection.norm = vec_normalize(vec_sub(intersection.point, sphere->pos));
+			intersection.point = vec_add(intersection.point, vec_scalar(intersection.norm, EPSILON));
 			intersection.color = sphere->color;
 		}
 	}
@@ -59,6 +60,7 @@ t_intersection	intersect_plane(t_ray ray, t_plane *plane, t_intersection interse
 		intersection.norm = vec_normalize(plane->norm);
 		if (vec_dot(ray.dest, intersection.norm) > 0)
 			intersection.norm = vec_scalar(intersection.norm, -1); // Flip normal
+		intersection.point = vec_add(intersection.point, vec_scalar(intersection.norm, EPSILON));
 		intersection.color = plane->color;
 	}
 
@@ -134,6 +136,7 @@ t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersec
 			// If point of impact is inside cylinder invert the normal
 			if (vec_dot(ray.dest, intersection.norm) > 0)
 				intersection.norm = vec_scalar(intersection.norm, -1);
+			intersection.point = vec_add(intersection.point, vec_scalar(intersection.norm, EPSILON));
 		}
 	}
 	return (intersection);

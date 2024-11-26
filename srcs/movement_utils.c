@@ -1,4 +1,4 @@
-#include "minirt.h"
+#include "../minirt.h"
 
 t_vec	rotate_angle(int direction, double angle)
 {
@@ -27,6 +27,7 @@ t_vec	movement_rotation(t_vec movement, int movement_code)
 		return (rotate_angle(X_AXIS, -90));
 	if (movement_code == DOWN)
 		return (rotate_angle(X_AXIS, 90));
+	return (movement);
 }
 
 t_vec	move_angle(int direction, double angle)

@@ -1,4 +1,4 @@
-#include "minirt.h"
+#include "../minirt.h"
 
 int	close_window(t_main	*main)
 {
@@ -32,7 +32,7 @@ void	initialize_main(t_main *main, t_world *world)
 
 	main->world->cam->width = main->width;
 	main->world->cam->height = main->height;
-	main->render_switch = 0;
+	main->render_switch = 1;
 	main->world->cam->norm = vec(0, 1, 0, 0);
 	main->output = (t_rgb **)calloc(world->cam->height + 1, sizeof(t_rgb *));
 	while (y < world->cam->height)

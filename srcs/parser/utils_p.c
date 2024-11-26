@@ -6,11 +6,11 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 16:47:03 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/10/14 21:58:32 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:58:32 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../../minirt.h"
 
 int	ft_strcmp(const char *s1, const char *s2)
 {

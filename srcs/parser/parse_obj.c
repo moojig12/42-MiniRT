@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse_obj.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:40:56 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/20 12:39:47 by root             ###   ########.fr       */
+/*   Updated: 2024/11/26 18:13:24 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../../minirt.h"
 
 t_obj	*add_sobj(int type, void *list)
 {
@@ -21,21 +21,6 @@ t_obj	*add_sobj(int type, void *list)
 	new->next = NULL;
 	return (new);
 }
-
-// t_obj	*add_light(t_light *lightlist) // del
-// {
-// 	t_light	*temp;
-// 	t_obj	*new;
-
-// 	temp = lightlist;
-// 	while (temp->next)
-// 		temp = temp->next;
-// 	new = malloc(sizeof(t_obj));
-// 	new->type = LIGHT;
-// 	new->data = temp;
-// 	new->next = NULL;
-// 	return (new);
-// }
 
 t_obj	*ft_add_obj_lst(int type, t_world *world, t_obj **objlist)
 {

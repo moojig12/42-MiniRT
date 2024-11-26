@@ -1,4 +1,4 @@
-#include "minirt.h"
+#include "../minirt.h"
 
 // Function expects proper input! No '+' allowed
 double	ft_atof(char *str)
@@ -100,7 +100,7 @@ int	print_vec(char *string, t_vec vec)
 	if (string)
 		printf("\n---\n%s\nx: %f\ny: %f\nz: %f\nw: %f\n", string, vec.x, vec.y, vec.z, vec.w);
 	else
-		printf("---\nx: %f\ny: %f\nz: %f\nz: %f\nw: %f\n", vec.x, vec.y, vec.z, vec.w);
+		printf("---\nx: %f\ny: %f\nz: %f\nw: %f\n", vec.x, vec.y, vec.z, vec.w);
 	return (0);
 }
 
@@ -146,24 +146,18 @@ t_selected	discern_object(t_obj *object)
 		selected.pos = &((t_sphere *)object->data)->pos;
 		selected.norm = NULL;
 		selected.type = SPHERE;
-
-		return (selected);
 	}
 	if (object->type == CYLINDER)
 	{
 		selected.pos = &((t_cyl *)object->data)->pos;
 		selected.norm = &((t_cyl *)object->data)->norm;
 		selected.type = CYLINDER;
-
-		return (selected);
 	}
 	if (object->type == PLANE)
 	{
 		selected.pos = &((t_plane *)object->data)->pos;
 		selected.norm = &((t_plane *)object->data)->norm;
 		selected.type = PLANE;
-
-		return (selected);
 	}
 	if (object->type == CAMERA)
 	{
@@ -172,17 +166,14 @@ t_selected	discern_object(t_obj *object)
 		selected.norm = &((t_camera *)object->data)->norm;
 		selected.dir = &((t_camera *)object->data)->direction;
 		selected.type = CAMERA;
-
-		return (selected);
 	}
 	if (object->type == LIGHT)
 	{
 		selected.pos = &((t_light *)object->data)->pos;
 		selected.norm = NULL;
 		selected.type = LIGHT;
-
-		return (selected);
 	}
+	return (selected);
 }
 
 double	trace_time(int type)

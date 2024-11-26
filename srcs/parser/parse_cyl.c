@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cyl.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:01 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/16 11:38:57 by root             ###   ########.fr       */
+/*   Updated: 2024/11/26 17:58:02 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../../minirt.h"
 
 void	ft_lstadd_back_cyl_mrt(t_cyl **lst, t_cyl *new)
 {

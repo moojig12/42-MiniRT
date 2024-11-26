@@ -1,4 +1,4 @@
-#include "minirt.h"
+#include "../minirt.h"
 
 void	key_handles(t_main *main)
 {
@@ -138,13 +138,11 @@ void	render_low(t_main *main, int x, int y, t_rgb **output)
 int	render(t_main *main)
 {
 	t_rgb	**output;
-	t_world	*world;
 	int		output_color;
 	int		x;
 	int		y;
 
 	output = main->output;
-	world = main->world;
 	x = 0;
 	y = 0;
 	trace_time(1);

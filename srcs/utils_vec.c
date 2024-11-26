@@ -1,5 +1,4 @@
-#include "minirt.h"
-
+#include "../minirt.h"
 t_vec	vec(double x, double y, double z, double w)
 {
 	t_vec	vec;
@@ -83,9 +82,9 @@ t_vec	vec_normalize(t_vec v)
 	// Check to avoid division by zero
 	if (magnitude == 0) {
 		// Return a zero vector or handle this case as needed
-		return (t_vec){0, 0, 0};
+		return (t_vec){0, 0, 0, 0};
 	}
 
 	// Divide each component by the magnitude to normalize
-	return (t_vec){v.x / magnitude, v.y / magnitude, v.z / magnitude};
+	return (t_vec){v.x / magnitude, v.y / magnitude, v.z / magnitude, 1};
 }

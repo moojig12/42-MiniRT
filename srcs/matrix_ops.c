@@ -1,4 +1,4 @@
-#include "minirt.h"
+#include "../minirt.h"
 
 t_matrix	empty_matrix(void)
 {
@@ -71,7 +71,6 @@ t_vec	matrix_dot(t_matrix mat, t_vec vec)
 	t_vec		post;
 	double		temp[4];
 	int	i;
-	int	j;
 
 	i = 0;
 	while (i < 4)
@@ -109,6 +108,7 @@ t_matrix	rotate_x(t_matrix mat, double angle)
 {
 	t_matrix	post;
 
+	(void)mat;
 	post = identity_matrix();
 	angle = angle * (PI / 180);
 	post.matrix[1][1] = cos(angle);
@@ -122,6 +122,7 @@ t_matrix	rotate_y(t_matrix mat, double angle)
 {
 	t_matrix	post;
 
+	(void)mat;
 	post = identity_matrix();
 	angle = angle * (PI / 180);
 	post.matrix[0][0] = cos(angle);
@@ -135,6 +136,7 @@ t_matrix	rotate_z(t_matrix mat, double angle)
 {
 	t_matrix	post;
 
+	(void)mat;
 	post = identity_matrix();
 	angle = angle * (PI / 180);
 	post.matrix[0][0] = cos(angle);

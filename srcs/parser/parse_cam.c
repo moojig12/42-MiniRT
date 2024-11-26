@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cam.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:07:11 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/23 19:08:33 by root             ###   ########.fr       */
+/*   Updated: 2024/11/26 17:57:58 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../../minirt.h"
 
 t_camera	*parse_cam(t_world *world, char **input)
 {

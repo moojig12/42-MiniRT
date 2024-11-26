@@ -5,9 +5,9 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
-# include "libft.h"
-# include "get_next_line.h"
-# include "mlx.h"
+# include "incl/libft/libft.h"
+# include "incl/get_next_line/get_next_line.h"
+# include "incl/mlx/mlx.h"
 # include <time.h>
 
 // Constants
@@ -219,8 +219,8 @@ typedef struct s_main {
 int				main_pipeline(t_main *main);
 
 // Render
-
 int				render(t_main *main);
+t_rgb			trace(t_ray ray, int depth, t_world *world);
 t_ray			gen_ray(t_camera *cam, int x, int y);
 t_ray			gen_ray_low(t_camera *cam, int x, int y);
 int				is_occluded(t_ray shadow_ray, t_world *world, double light_distance);
