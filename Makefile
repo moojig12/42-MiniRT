@@ -5,7 +5,7 @@ MLX = ./incl/mlx/libmlx.a
 INC = -I ./incl
 OBJ_DIR = obj/
 CC = cc
-CFLAGS = -O3 -pthread -g $(INC) -Wall -Wextra -Werror 
+CFLAGS = -O3 -pthread -g $(INC) -Wall -Wextra -Werror
 MFLAG = -L /usr/X11R6/lib -lXext -lX11 -lm
 RM = rm -f
 

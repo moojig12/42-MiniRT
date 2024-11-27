@@ -133,6 +133,7 @@ void	render_low(t_main *main, int x, int y, t_rgb **output)
 	output[y][x] = color_add(output[y][x], trace_path(main->world, ray, 1));
 	output[y][x] = color_normalize(output[y][x]);
 }
+
 void	put_pixel_to_img(int color, t_main main, int x, int y)
 {
 	char	*pxl;
@@ -184,12 +185,8 @@ void	*render(void *arg)
 				output_color = pack_color(output[y][x]);
 				if (main->render_switch == LOW)
 					output[y][x] = ret_color(0, 0, 0);
-				/* if (pthread_mutex_trylock(thread->write_lock) != 0)
-				{ */
 				put_pixel_to_img(output_color, *main, x, y);
 				//mlx_pixel_put(main->mlx, main->win, x, y, output_color);
-				/* 	pthread_mutex_unlock(thread->write_lock);
-				} */
 				x++;
 			}
 			/* pthread_mutex_unlock(&render_lock[y]);
@@ -204,7 +201,6 @@ void	*render(void *arg)
 		mlx_put_image_to_window(main->mlx, main->win, main->img, 0, 0);
 		pthread_mutex_unlock(thread->write_lock);
 	}
-	//key_handles(main);
 	return (NULL);
 }
 
@@ -217,12 +213,6 @@ int	render_thread_wrapper(t_main *main)
 	threads = main->thread;
 	while (i < THREAD_COUNT)
 	{
-		threads[i].id = i + 1;
-		threads[i].main = main;
-		threads[i].world = main->world;
-		threads[i].image_ptr = main->img;
-		threads[i].render_lock = main->output_pixel;
-		threads[i].write_lock = &main->write_lock;
 		pthread_create(&threads[i].thread, NULL, &render, (void *)&threads[i]);
 		i++;
 	}
@@ -235,12 +225,18 @@ void	initiate_mutexes(t_main *main)
 {
 	int y = 0;
 
-	main->thread = malloc(THREAD_COUNT * sizeof(pthread_t));
+	main->thread = malloc(THREAD_COUNT * sizeof(t_render));
 	pthread_mutex_init(&main->write_lock, NULL);
 	main->output_pixel = (pthread_mutex_t *)malloc(main->height * sizeof(pthread_mutex_t));
 	while (y < THREAD_COUNT)
 	{
 		pthread_mutex_init(&main->output_pixel[y], NULL);
+		main->thread[y].id = y + 1;
+		main->thread[y].main = main;
+		main->thread[y].world = main->world;
+		main->thread[y].image_ptr = main->img;
+		main->thread[y].render_lock = main->output_pixel;
+		main->thread[y].write_lock = &main->write_lock;
 		y++;
 	}
 }

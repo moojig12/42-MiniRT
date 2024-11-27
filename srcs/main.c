@@ -54,6 +54,8 @@ int	main(int argc, char **argv)
 	world = malloc(sizeof(t_world));
 	world = parse_world(world, argv);
 	main = malloc(sizeof(t_main));// change, initialize after world and just pass world done for the next func
+	if (!main)
+		return (1);
 	initialize_main(main, world);
 
 	main_pipeline(main);
