@@ -16,6 +16,7 @@
 # define PI 3.14159265358979323846
 # define EPSILON 0.0001
 # define STATIC_SAMPLE 4
+# define THREAD_COUNT 20
 
 // Max depth of bounces for tracing
 # define MAXDEPTH 8
@@ -204,6 +205,7 @@ typedef struct s_world {
 
 typedef struct s_render {
 	pthread_t	thread;
+	int			id;
 	void		*mlx;
 	void		*win;
 	void		*image_ptr;
@@ -211,7 +213,7 @@ typedef struct s_render {
 	t_world		*world;
 	t_main		*main;
 	pthread_t	*next;
-	pthread_mutex_t	**render_lock;
+	pthread_mutex_t	*render_lock;
 	pthread_mutex_t	*object_lock;
 	pthread_mutex_t	*write_lock;
 }	t_render;
@@ -234,8 +236,8 @@ typedef struct s_main {
 	int		render_switch;
 	t_rgb	**output;
 	t_world	*world;
-	t_render	thread[4];
-	pthread_mutex_t	**output_pixel;
+	t_render	*thread;
+	pthread_mutex_t	*output_pixel;
 	pthread_mutex_t	write_lock;
 }	t_main;
 
