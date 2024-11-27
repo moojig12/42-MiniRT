@@ -9,6 +9,8 @@
 # include "get_next_line/get_next_line.h"
 # include "mlx/mlx.h"
 # include <time.h>
+# include <pthread.h>
+# include <X11/Xlib.h>
 
 // Constants
 # define PI 3.14159265358979323846
@@ -32,6 +34,7 @@
 # define M 0xFFFFFFFF
 
 typedef struct s_obj t_obj;
+typedef struct s_main t_main;
 
 typedef enum e_fidelity {
 	LOW,
@@ -199,6 +202,25 @@ typedef struct s_world {
 	int			object_num;
 }	t_world;
 
+typedef struct s_render {
+	pthread_t	thread;
+	void		*mlx;
+	void		*win;
+	void		*image_ptr;
+	int			*render_switch;
+	t_world		*world;
+	t_main		*main;
+	pthread_t	*next;
+	pthread_mutex_t	**render_lock;
+	pthread_mutex_t	*object_lock;
+	pthread_mutex_t	*write_lock;
+}	t_render;
+
+typedef struct s_move_thread {
+	pthread_t	thread;
+	void		*mlx;
+}	t_move_thread;
+
 typedef struct s_main {
 	void	*mlx;
 	void	*win;
@@ -212,6 +234,9 @@ typedef struct s_main {
 	int		render_switch;
 	t_rgb	**output;
 	t_world	*world;
+	t_render	thread[4];
+	pthread_mutex_t	**output_pixel;
+	pthread_mutex_t	write_lock;
 }	t_main;
 
 /* typedef struct s_ray
@@ -224,7 +249,7 @@ typedef struct s_main {
 int				main_pipeline(t_main *main);
 
 // Render
-int				render(t_main *main);
+void			*render(void *arg);
 t_rgb			trace(t_ray ray, int depth, t_world *world);
 t_ray			gen_ray(t_camera *cam, int x, int y);
 t_ray			gen_ray_low(t_camera *cam, int x, int y);

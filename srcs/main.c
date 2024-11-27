@@ -33,7 +33,7 @@ void	initialize_main(t_main *main, t_world *world)
 	main->addr = mlx_get_data_addr(main->img, &main->bits_per_pixel, &main->line_length, &main->endian);
 	main->world->cam->width = main->width;
 	main->world->cam->height = main->height;
-	main->render_switch = 1;
+	main->render_switch = LOW;
 	main->world->cam->norm = vec(0, 1, 0, 0);
 	main->output = (t_rgb **)calloc(world->cam->height + 1, sizeof(t_rgb *));
 	while (y < world->cam->height)

@@ -146,31 +146,44 @@ void	put_pixel_to_img(int color, t_main main, int x, int y)
 }
 
 // Main function for rendering the screen for each frame called by mlx_loop_hook
-int	render(t_main *main)
+void	*render(void *arg)
 {
+	t_render	*thread;
+	t_main	*main;
 	t_rgb	**output;
+	pthread_mutex_t	**render_lock;
 	int		output_color;
 	int		x;
 	int		y;
 
+	thread = (t_render *)arg;
+	render_lock = thread->render_lock;
+	main = thread->main;
 	output = main->output;
 	x = 0;
 	y = 0;
-	trace_time(1);
 	while (y < main->height)
 	{
 		while (x < main->width)
 		{
-			if (main->render_switch == HIGH)
-				render_super(main, x, y, output);
-			else
-				render_low(main, x, y, output);
-			// Packs color into ARGB format for mlx_pixel_put
-			output_color = pack_color(output[y][x]);
-			if (main->render_switch == LOW)
-				output[y][x] = ret_color(0, 0, 0);
-			put_pixel_to_img(output_color, *main, x, y);
+			if (pthread_mutex_trylock(&render_lock[y][x]) != 0)
+			{
+				if (main->render_switch == HIGH)
+					render_super(main, x, y, output);
+				else
+					render_low(main, x, y, output);
+				// Packs color into ARGB format for mlx_pixel_put
+				output_color = pack_color(output[y][x]);
+				if (main->render_switch == LOW)
+					output[y][x] = ret_color(0, 0, 0);
+				if (pthread_mutex_trylock(thread->write_lock) != 0)
+				{
+					put_pixel_to_img(output_color, *main, x, y);
 			//mlx_pixel_put(main->mlx, main->win, x, y, output_color);
+					pthread_mutex_unlock(thread->write_lock);
+				}
+				pthread_mutex_unlock(&render_lock[y][x]);
+			}
 			x++;
 		}
 		x = 0;
@@ -178,15 +191,63 @@ int	render(t_main *main)
 	}
 	mlx_put_image_to_window(main->mlx, main->win, main->img, 0, 0);
 	//key_handles(main);
-	trace_time(2);
+	return (NULL);
+}
+
+int	render_thread_wrapper(t_main *main)
+{
+	t_render	*threads;
+	int	i;
+
+	i = 0;
+	threads = main->thread;
+	while (i < 4)
+	{
+		threads[i].main = main;
+		threads[i].world = main->world;
+		threads[i].image_ptr = main->img;
+		threads[i].render_lock = main->output_pixel;
+		threads[i].write_lock = &main->write_lock;
+		pthread_create(&threads[i].thread, NULL, &render, (void *)&threads[i]);
+		i++;
+	}
+	for (int j = 0; j < 4; j++)
+	{
+		pthread_join(threads[j].thread, NULL);
+	}
 	return (0);
+}
+
+void	initiate_mutexes(t_main *main)
+{
+	int x = 0;
+	int y = 0;
+
+	pthread_mutex_init(&main->write_lock, NULL);
+	main->output_pixel = (pthread_mutex_t **)malloc(main->height * sizeof(pthread_mutex_t *));
+	while (y < main->height)
+	{
+		main->output_pixel[y] = (pthread_mutex_t *)malloc(main->width * sizeof(pthread_mutex_t));
+		while (x < main->width)
+		{
+			pthread_mutex_init(&main->output_pixel[y][x], NULL);
+			x++;
+		}
+		y++;
+	}
 }
 
 int	main_pipeline(t_main *main)
 {
+	if (!XInitThreads()) {
+		fprintf(stderr, "Failed to initialize Xlib threads\n");
+		return (EXIT_FAILURE);
+	}
+
+	initiate_mutexes(main);
 	// Take input
 	// Call render() function each frame with mlx_loop while handling input
-	mlx_loop_hook(main->mlx, render, main);
+	mlx_loop_hook(main->mlx, render_thread_wrapper, main);
 	//render(main);
 	//mlx_put_image_to_window(main->mlx, main->win, main->img, 0, 0);
 	key_handles(main);
