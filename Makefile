@@ -6,7 +6,7 @@ MLX = ./incl/mlx/libmlx.a
 INC = inc/
 OBJ_DIR = obj/
 CC = cc
-FLAGS = -O3 -Ilibmlx -g -Wall -Wextra -Werror -I 
+FLAGS = -O3 -pthread -Ilibmlx -g -Wall -Wextra -Werror -fsanitize=address -I 
 MFLAG = -L /usr/X11R6/lib -lXext -lX11 -lm
 RM = rm -f
 SRC =   srcs/parser/checks.c \
