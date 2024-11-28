@@ -156,9 +156,9 @@ t_intersection	intersect(t_ray ray, t_obj *obj)
 	intersection.point = vec(0, 0, 0, 0);
 	intersection.norm = vec(0, 0, 0, 0);
 
-	intersection.reflectance = 0.2;
-	intersection.diffuse = 0.0;
-	intersection.specular = 0.0;
+	intersection.reflectance = 0.31;
+	intersection.diffuse = 0.65;
+	intersection.specular = 0.25;
 
 	if (obj->type == SPHERE)
 		return (intersect_sphere(ray, (t_sphere *)obj->data, intersection));

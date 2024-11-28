@@ -25,7 +25,6 @@ t_vec	cone_pewpew(t_vec norm, double diffuse)
 	return vec_normalize(return_dir);
 }
 
-	// BRDF calculation for materials, not sure if it works 100% yet
 double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 {
 	double	fresnel;
@@ -34,7 +33,7 @@ double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 	double	cos_theta = vec_dot(ray.dest, norm);
 
 	 // Fresnel reflectance (e.g., Schlick's approximation)
-	fresnel = intersection.reflectance + (1 - intersection.reflectance) * pow(1 - cos_theta, 5);
+	fresnel = intersection.reflectance + (1 - intersection.reflectance) * pow(1.0 - cos_theta, 5.0);
 
 	// Diffuse component
 	diffuse = intersection.diffuse * cos_theta;
@@ -52,6 +51,7 @@ t_rgb	direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb 
 	double	attenuation;
 	double	light_distance;
 	double	cos_theta;
+	double	BRDF;
 
 	shadow_ray.origin = vec_add(intersection.point, vec_scalar(intersection.norm, EPSILON));
 	shadow_ray.dest = vec_normalize(vec_sub(world->light->pos, shadow_ray.origin));
@@ -60,7 +60,8 @@ t_rgb	direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb 
 		attenuation = 1.0 / (light_distance * light_distance);
 		cos_theta = vec_dot(intersection.norm, shadow_ray.dest);
 		cos_theta = fmax(0.0, cos_theta);
-		light_contribution = color_scalar(color_multiply(world->light->color, intersection.color), cos_theta * attenuation * world->light->brightness);
+		BRDF = brdf_calculation(intersection, shadow_ray, intersection.norm) / PI;
+		light_contribution = color_scalar(color_multiply(world->light->color, intersection.color), cos_theta * attenuation * world->light->brightness * BRDF);
 		return_color = color_add(return_color, light_contribution);
 	}
 	return (color_normalize(return_color));
@@ -73,6 +74,8 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	t_rgb	return_color;
 	t_rgb	incoming;
 	t_ray	new_ray;
+	double	p;
+	double	BRDF;
 
 	return_color = ret_color(0, 0, 0);
 	if (depth >= MAXDEPTH)
@@ -89,21 +92,12 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	new_ray.origin = intersection.point;
 		// Shoots random rays in possible direction
 	// new_ray.dest = cone_pewpew(intersection.norm);
-	// Calculate the reflected direction
-	t_vec reflected_dir = vec_sub(ray.dest, vec_scalar(intersection.norm, 2 * vec_dot(ray.dest, intersection.norm)));
 
-	// Generate a random direction (diffuse component)
-	t_vec random_dir = cone_pewpew(intersection.norm, intersection.diffuse);
-
-	// Interpolate between the reflected and random directions based on reflectance
-	new_ray.dest = vec_normalize(vec_add(
-		vec_scalar(reflected_dir, intersection.reflectance),
-		vec_scalar(random_dir, 1.0 - intersection.reflectance)
-	));
-		// Calculations i found off the internet for BRDF
-	// double	cos_theta = vec_dot(new_ray.dest, intersection.norm);
-	double	BRDF = brdf_calculation(intersection, new_ray, intersection.norm);
-	double	p = 1.0 / (PI);
+		// Generate a random direction (diffuse component)
+	new_ray.dest = cone_pewpew(intersection.norm, intersection.diffuse);
+		// BRDF
+	BRDF = brdf_calculation(intersection, new_ray, intersection.norm);
+	p = 1.0 / (PI);
 		// Shoot the next ray recursively
 	incoming = trace_path(world, new_ray, depth + 1);
 		// Ambience
@@ -112,7 +106,6 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 		// Direct lighting
 	return_color = direct_light_occlusion(intersection, world, return_color);
 		// Indirect lighting
-			// Adding the color return of the recursively shot ray and adding up the values then scaling with BRDF
 	return_color = color_add(return_color, color_scalar(incoming, BRDF * p));
 
 
@@ -187,7 +180,7 @@ void	*render(void *arg)
 		y = 0 + (main->height / thread->id);
 		y_limit = (y_limit * thread->id);
 	}
-	trace_time(1);
+	// trace_time(1);
 	while (y < y_limit)
 	{
 		/* if (pthread_mutex_trylock(&render_lock[y]) != 0)
@@ -211,8 +204,8 @@ void	*render(void *arg)
 		x = 0;
 		y++;
 	}
-	printf("thread id: %i\n", thread->id);
-	trace_time(2);
+	// printf("thread id: %i\n", thread->id);
+	// trace_time(2);
 	if (pthread_mutex_lock(thread->write_lock) == 0)
 	{
 		mlx_put_image_to_window(main->mlx, main->win, main->img, 0, 0);
