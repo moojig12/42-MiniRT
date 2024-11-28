@@ -6,9 +6,10 @@ void	key_handles(t_main *main)
 	mlx_hook(main->win, 17, 1L<<17, close_window, main);
 }
 
-t_vec	cone_pewpew(t_vec norm)
+t_vec	cone_pewpew(t_vec norm, double diffuse)
 {
-	t_vec dir;
+	t_vec	return_dir;
+	t_vec	dir;
 
 	dir = random_vec(0);
 
@@ -16,7 +17,12 @@ t_vec	cone_pewpew(t_vec norm)
 	if (vec_dot(dir, norm) < 0)
 		dir = vec_scalar(dir, -1);
 
-	return vec_normalize(dir);
+	// Interpolate between the normal and the random direction based on diffuse
+	return_dir = vec_add(
+		vec_scalar(norm, 1.0 - diffuse),      // Normal contribution (tighter cone for lower diffuse)
+		vec_scalar(dir, diffuse)      // Random contribution (wider cone for higher diffuse)
+	);
+	return vec_normalize(return_dir);
 }
 
 	// BRDF calculation for materials, not sure if it works 100% yet
@@ -42,6 +48,7 @@ double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 t_rgb	direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb return_color)
 {
 	t_ray shadow_ray;
+	t_rgb	light_contribution;
 	double	attenuation;
 	double	light_distance;
 	double	cos_theta;
@@ -52,7 +59,8 @@ t_rgb	direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb 
 	if (!is_occluded(shadow_ray, world, light_distance)) {
 		attenuation = 1.0 / (light_distance * light_distance);
 		cos_theta = vec_dot(intersection.norm, shadow_ray.dest);
-		t_rgb light_contribution = color_scalar(color_multiply(world->light->color, intersection.color), cos_theta * attenuation * world->light->brightness);
+		cos_theta = fmax(0.0, cos_theta);
+		light_contribution = color_scalar(color_multiply(world->light->color, intersection.color), cos_theta * attenuation * world->light->brightness);
 		return_color = color_add(return_color, light_contribution);
 	}
 	return (color_normalize(return_color));
@@ -80,9 +88,18 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 		// initialize a new ray from the POINT of Intersection and random direction
 	new_ray.origin = intersection.point;
 		// Shoots random rays in possible direction
-	new_ray.dest = cone_pewpew(intersection.norm);
-	// new_ray.dest = vec_sub(ray.dest, vec_scalar(intersection.norm, 2 * vec_dot(ray.dest, intersection.norm)));
+	// new_ray.dest = cone_pewpew(intersection.norm);
+	// Calculate the reflected direction
+	t_vec reflected_dir = vec_sub(ray.dest, vec_scalar(intersection.norm, 2 * vec_dot(ray.dest, intersection.norm)));
 
+	// Generate a random direction (diffuse component)
+	t_vec random_dir = cone_pewpew(intersection.norm, intersection.diffuse);
+
+	// Interpolate between the reflected and random directions based on reflectance
+	new_ray.dest = vec_normalize(vec_add(
+		vec_scalar(reflected_dir, intersection.reflectance),
+		vec_scalar(random_dir, 1.0 - intersection.reflectance)
+	));
 		// Calculations i found off the internet for BRDF
 	// double	cos_theta = vec_dot(new_ray.dest, intersection.norm);
 	double	BRDF = brdf_calculation(intersection, new_ray, intersection.norm);
@@ -92,11 +109,11 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 		// Ambience
 	return_color = color_multiply(world->amb->color, intersection.color);
 	return_color = color_scalar(return_color, world->amb->ratio);
-		// Calculate light position and shadow
+		// Direct lighting
 	return_color = direct_light_occlusion(intersection, world, return_color);
 		// Indirect lighting
 			// Adding the color return of the recursively shot ray and adding up the values then scaling with BRDF
-	return_color = color_add(return_color, color_scalar(color_scalar(incoming, 1), BRDF * p));
+	return_color = color_add(return_color, color_scalar(incoming, BRDF * p));
 
 
 	return (color_normalize(return_color));
