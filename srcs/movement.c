@@ -8,6 +8,7 @@ int	move(t_obj *obj, t_vec	movement, int movement_code)
 
 	selected = discern_object(obj);
 
+	printf("selected: %i\n", selected.type);
 	if (selected.type != CAMERA)
 	{
 		moved_vec = matrix_translation(*selected.pos, movement);
@@ -74,7 +75,7 @@ int	movement(int key_code, t_main *main)
 	printf("keycode: %i\n", key_code);
 	if (!main->world->selected)
 	{
-		main->world->selected = malloc(sizeof(t_obj *));
+		main->world->selected = malloc(sizeof(t_obj));
 		set_selection(main->world->selected, main, CAMERA);
 		printf("mallocated\n");
 	}
@@ -84,8 +85,8 @@ int	movement(int key_code, t_main *main)
 	{
 		if (main->render_switch == HIGH)
 		{
-			main->render_switch = LOW;
 			printf("Render mode is now set to: LOW\n");
+			main->render_switch = LOW;
 		}
 		else
 		{
@@ -101,9 +102,9 @@ int	movement(int key_code, t_main *main)
 	if (key_code == ROTATE_RIGHT)
 		rotate_right(main);
 	if (key_code == KEY_P)
-		print_position((t_obj *)(*main->world->selected));
+		print_position(main->world->selected);
 
-	movement_selected(key_code, (t_obj *)*(main->world->selected));
-	rotation_selected(key_code, (t_obj *)(*main->world->selected));
+	movement_selected(key_code, main->world->selected);
+	rotation_selected(key_code, main->world->selected);
 	return (1);
 }

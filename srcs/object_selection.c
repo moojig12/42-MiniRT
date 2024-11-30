@@ -34,65 +34,25 @@ int	movement_selected(int key_code, t_obj *selected)
 	return (0);
 }
 
-void	check_selection(int key_code, t_main *main)
+void	set_selection(t_obj *list, t_main *main, int target)
 {
-	if (key_code == OBJ_CAM)
+	list = main->world->objlist;
+	while (list && list->type != target)
 	{
-		if ((*main->world->selected)->type == CAMERA)
-			printf("Camera already selected\n");
-		else
-			set_selection(main->world->selected, main, CAMERA);
-	}
-	else if (key_code == OBJ_LIGHT)
-	{
-		if ((*main->world->selected)->type == LIGHT)
-			printf("Light already selected\n");
-		else
-			set_selection(main->world->selected, main, LIGHT);
-	}
-	else if (key_code == OBJ_CYL)
-	{
-		if ((*main->world->selected)->type == CYLINDER)
-			printf("Cylinder already selected\n");
-		else
-			set_selection(main->world->selected, main, CYLINDER);
-	}
-	else if (key_code == OBJ_SPHERE)
-	{
-		if ((*main->world->selected)->type == SPHERE)
-			printf("Sphere already selected\n");
-		else
-			set_selection(main->world->selected, main, SPHERE);
-	}
-	else if (key_code == OBJ_PLANE)
-	{
-		if ((*main->world->selected)->type == PLANE)
-			printf("Plane already selected\n");
-		else
-			set_selection(main->world->selected, main, PLANE);
-	}
-}
-
-
-void	set_selection(t_obj **base_selection, t_main *main, int target)
-{
-	*base_selection = main->world->objlist;
-	while (base_selection && (*base_selection)->type != target)
-	{
-		printf("object checked: %i\n", (*base_selection)->type);
-		if ((*base_selection)->type == target)
+		printf("object checked: %i\n", list->type);
+		if (list->type == target)
 			printf("FOUND!\n");
-		(*base_selection) = (*base_selection)->next;
+		list = list->next;
 	}
-	// main->world->selected = base_selection;
-	if ((*main->world->selected)->type == PLANE)
+	main->world->selected = list;
+	if (main->world->selected->type == PLANE)
 		printf("selection set to PLANE\n");
-	if ((*main->world->selected)->type == CYLINDER)
+	if (main->world->selected->type == CYLINDER)
 		printf("selection set to CYLINDER\n");
-	if ((*main->world->selected)->type == SPHERE)
+	if (main->world->selected->type == SPHERE)
 		printf("selection set to SPHERE\n");
-	if ((*main->world->selected)->type == CAMERA)
+	if (main->world->selected->type == CAMERA)
 		printf("selection set to CAMERA\n");
-	if ((*main->world->selected)->type == LIGHT)
+	if (main->world->selected->type == LIGHT)
 		printf("selection set to LIGHT\n");
 }

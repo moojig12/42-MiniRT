@@ -2,15 +2,13 @@
 
 t_vec	rotate_angle(int direction, double angle)
 {
-	t_vec	rotation;
-
 	if (direction == X_AXIS)
 		return (vec(angle, 0, 0, 0));
 	if (direction == Y_AXIS)
 		return (vec(0, angle, 0, 0));
 	if (direction == Z_AXIS)
 		return (vec(0, 0, angle, 0));
-	return (rotation);
+	return (vec(0, 0, 0, 0));
 }
 
 t_vec	movement_rotation(t_vec movement, int movement_code)
@@ -32,15 +30,13 @@ t_vec	movement_rotation(t_vec movement, int movement_code)
 
 t_vec	move_angle(int direction, double angle)
 {
-	t_vec	movement;
-
 	if (direction == X_AXIS)
 		return (vec(angle, 0, 0, 1));
 	if (direction == Y_AXIS)
 		return (vec(0, angle, 0, 1));
 	if (direction == Z_AXIS)
 		return (vec(0, 0, angle, 1));
-	return (movement);
+	return (vec(0, 0, 0, 1));
 }
 
 void	print_position(t_obj *selection)

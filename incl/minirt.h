@@ -22,12 +22,7 @@
 # define MAXDEPTH 8
 
 // objects
-# define AMBIENCE 1
-# define CAMERA 2
-# define LIGHT 3
-# define SPHERE 4
-# define PLANE 5
-# define CYLINDER 6
+
 
 // linear congruential generator constants
 # define A 1664525
@@ -80,9 +75,12 @@ typedef enum e_escape_key {
 }	t_escape_key;
 
 typedef enum e_object_type {
-	OBJECT_SPHERE,
-	OBJECT_PLANE,
-	OBJECT_CYLINDER
+	AMBIENCE = 1,
+	CAMERA,
+	LIGHT,
+	SPHERE,
+	PLANE,
+	CYLINDER
 }	t_object_type;
 
 typedef struct s_vector {
@@ -199,7 +197,7 @@ typedef struct s_world {
 	t_cyl		*cyl;
 	t_plane		*plane;
 	t_obj		*objlist;
-	t_obj		**selected;
+	t_obj		*selected;
 	int			object_num;
 }	t_world;
 
@@ -267,7 +265,7 @@ int				rotate_object(t_obj *object, t_vec rotation);
 t_vec			rotate_angle(int direction, double angle);
 void			check_selection(int key_code, t_main *main);
 t_vec			movement_rotation(t_vec movement, int movement_code);
-void			set_selection(t_obj **base_selection, t_main *main, int target);
+void			set_selection(t_obj *list, t_main *main, int target);
 int				rotation_selected(int key_code, t_obj *selected);
 int				movement_selected(int key_code, t_obj *selected);
 t_vec			move_angle(int direction, double angle);

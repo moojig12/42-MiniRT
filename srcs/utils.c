@@ -52,7 +52,7 @@ int	ft_isspace(char c)
 	else
 		return (0);
 }
-
+	// Don't need this!
 int	*alloc_int(int a, int b)
 {
 	int	*result;
@@ -93,103 +93,4 @@ int	ft_range_f(double num, double min, double max)
 		return (1);
 	else
 		return (0);
-}
-
-int	print_vec(char *string, t_vec vec)
-{
-	if (string)
-		printf("\n---\n%s\nx: %f\ny: %f\nz: %f\nw: %f\n", string, vec.x, vec.y, vec.z, vec.w);
-	else
-		printf("---\nx: %f\ny: %f\nz: %f\nw: %f\n", vec.x, vec.y, vec.z, vec.w);
-	return (0);
-}
-
-int	print_matrix(char *string, t_matrix mat)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	printf("%s\n", string);
-	while (i < 4)
-	{
-		j = 0;
-		while (j < 4)
-		{
-			printf("%f ", mat.matrix[i][j]);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
-	return (0);
-}
-
-int	print_color(char *string, t_rgb color)
-{
-	if (string)
-		printf("\n---\n%s\nr: %f\ng: %f\nb: %f\n", string, color.r, color.g, color.b);
-	else
-		printf("---\nr: %f\ng: %f\nb: %f\n", color.r, color.g, color.b);
-	return (0);
-}
-
-t_selected	discern_object(t_obj *object)
-{
-	t_selected	selected;
-
-	selected.pos = NULL;
-	selected.norm = NULL;
-	if (object->type == SPHERE)
-	{
-		selected.pos = &((t_sphere *)object->data)->pos;
-		selected.norm = NULL;
-		selected.type = SPHERE;
-	}
-	if (object->type == CYLINDER)
-	{
-		selected.pos = &((t_cyl *)object->data)->pos;
-		selected.norm = &((t_cyl *)object->data)->norm;
-		selected.type = CYLINDER;
-	}
-	if (object->type == PLANE)
-	{
-		selected.pos = &((t_plane *)object->data)->pos;
-		selected.norm = &((t_plane *)object->data)->norm;
-		selected.type = PLANE;
-	}
-	if (object->type == CAMERA)
-	{
-		selected.pos = &((t_camera *)object->data)->pos;
-		// selected.norm = &((t_camera *)object->data)->direction;
-		selected.norm = &((t_camera *)object->data)->norm;
-		selected.dir = &((t_camera *)object->data)->direction;
-		selected.type = CAMERA;
-	}
-	if (object->type == LIGHT)
-	{
-		selected.pos = &((t_light *)object->data)->pos;
-		selected.norm = NULL;
-		selected.type = LIGHT;
-	}
-	return (selected);
-}
-
-double	trace_time(int type)
-{
-	static clock_t last_time = 0;
-	clock_t current_time = clock();
-		
-	double elapsed_time = 0.0;
-	if (last_time != 0) {
-		elapsed_time = (double)(current_time - last_time) / CLOCKS_PER_SEC;
-	}
-	last_time = current_time;
-
-	if (type == 1)
-		return (elapsed_time);
-	else
-		printf("Time elapsed: %f\n\n", elapsed_time);
-	return (elapsed_time);
 }
