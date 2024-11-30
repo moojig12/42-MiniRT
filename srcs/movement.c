@@ -26,26 +26,6 @@ int	move(t_obj *obj, t_vec	movement, int movement_code)
 	return (0);
 }
 
-int	rotate_left(t_main *main)
-{
-	t_vec	rotated_vec;
-
-	rotated_vec = matrix_rotation(main->world->cam->direction, vec(0, -15, 0, 0));
-	main->world->cam->direction = rotated_vec;
-
-	return (0);
-}
-
-int	rotate_right(t_main *main)
-{
-	t_vec	rotated_vec;
-
-	rotated_vec = matrix_rotation(main->world->cam->direction, vec(0, 15, 0, 0));
-	main->world->cam->direction = rotated_vec;
-
-	return (0);
-}
-
 int	rotate_object(t_obj *object, t_vec rotation)
 {
 	t_vec	rotated_vec;
@@ -70,39 +50,19 @@ int	rotate_object(t_obj *object, t_vec rotation)
 
 int	movement(int key_code, t_main *main)
 {
-	//int		type;
-
 	printf("keycode: %i\n", key_code);
 	if (!main->world->selected)
 	{
 		main->world->selected = malloc(sizeof(t_obj));
 		set_selection(main->world->selected, main, CAMERA);
-		printf("mallocated\n");
+		printf("Initiated\n");
 	}
-	//type = (*main->world->selected)->type;
 	check_selection(key_code, main);
-	if (key_code == KEY_R)
-	{
-		if (main->render_switch == HIGH)
-		{
-			printf("Render mode is now set to: LOW\n");
-			main->render_switch = LOW;
-		}
-		else
-		{
-			printf("Render mode is now set to: HIGH\n");
-			main->render_switch = HIGH;
-		}
-		flush_screen(main, main->output);
-	}
-	if (key_code == ESC_WIN)
-		close_window(main);
+	miscel_keys(key_code, main);
 	if (key_code == ROTATE_LEFT)
 		rotate_left(main);
 	if (key_code == ROTATE_RIGHT)
 		rotate_right(main);
-	if (key_code == KEY_P)
-		print_position(main->world->selected);
 
 	movement_selected(key_code, main->world->selected);
 	rotation_selected(key_code, main->world->selected);

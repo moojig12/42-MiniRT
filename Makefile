@@ -36,6 +36,9 @@ SRC = srcs/parser/checks.c \
       srcs/utils.c \
       srcs/utils_print.c \
       srcs/utils_selection.c \
+      srcs/utils_vec2.c \
+      srcs/utils_atof.c \
+      srcs/movement_misc.c \
       srcs/main.c
 
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))

@@ -39,9 +39,9 @@ t_matrix	identity_matrix(void)
 t_matrix	matrix_multiply(t_matrix a, t_matrix b)
 {
 	t_matrix	post;
-	int	i;
-	int	j;
-	int	k;
+	int			i;
+	int			j;
+	int			k;
 
 	post = empty_matrix();
 	i = 0;
@@ -62,7 +62,6 @@ t_matrix	matrix_multiply(t_matrix a, t_matrix b)
 		j = 0;
 		i++;
 	}
-
 	return (post);
 }
 
@@ -156,18 +155,13 @@ t_vec	matrix_rotation(t_vec data, t_vec rotate)
 
 	post = identity_matrix();
 
-	// print_matrix("identity:", post);
 	x_rotation = rotate_x(post, rotate.x);
 	y_rotation = rotate_y(post, rotate.y);
 	z_rotation = rotate_z(post, rotate.z);
 
-	// print_matrix("rotated x:", x_rotation);
-	// print_matrix("rotated y:", y_rotation);
-	// print_matrix("rotated z:", z_rotation);
 	result = matrix_dot(x_rotation, data);
 	result = matrix_dot(y_rotation, result);
 	result = matrix_dot(z_rotation, result);
-	// print_vec("result:", result);
 
 	return (result);
 }

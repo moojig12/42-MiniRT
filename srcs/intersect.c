@@ -11,14 +11,12 @@ t_intersection	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersection inte
 	double	t;
 	t_vec	oc;
 
-		// Compute coefficients for the quadratic equation
 	oc = vec_sub(sphere->pos, ray.origin);
 	a = vec_dot(ray.dest, ray.dest);
 	b = -2.0 * vec_dot(oc, ray.dest);
 	c = vec_dot(oc, oc) - (sphere->diameter / 2) * (sphere->diameter / 2);
 	disc = b * b - 4 * a * c;
 
-		// Check if 2 points of intersection are correct
 	if (disc < 0)
 		return (intersection);
 	else

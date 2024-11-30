@@ -46,7 +46,7 @@ t_rgb	color_sub(t_rgb a, t_rgb b)
 
 t_rgb color_multiply(t_rgb a, t_rgb b)
 {
-    return ret_color(a.r * b.r, a.g * b.g, a.b * b.b);
+	return ret_color(a.r * b.r, a.g * b.g, a.b * b.b);
 }
 
 t_rgb	color_scalar(t_rgb a, double scalar)

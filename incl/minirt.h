@@ -263,12 +263,15 @@ int				movement(int key_code, t_main *main);
 int				move(t_obj *obj, t_vec	movement, int movement_code);
 int				rotate_object(t_obj *object, t_vec rotation);
 t_vec			rotate_angle(int direction, double angle);
+int				rotate_right(t_main *main);
+int				rotate_left(t_main *main);
 void			check_selection(int key_code, t_main *main);
 t_vec			movement_rotation(t_vec movement, int movement_code);
 void			set_selection(t_obj *list, t_main *main, int target);
 int				rotation_selected(int key_code, t_obj *selected);
 int				movement_selected(int key_code, t_obj *selected);
 t_vec			move_angle(int direction, double angle);
+void			miscel_keys(int key_code, t_main *main);
 
 // Parsing
 

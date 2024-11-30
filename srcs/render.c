@@ -8,37 +8,29 @@ void	key_handles(t_main *main)
 
 t_vec	cone_pewpew(t_vec norm, double diffuse)
 {
-	t_vec	return_dir;
+	t_vec	ret;
 	t_vec	dir;
 
 	dir = random_vec(0);
 
-	// dir = vec_normalize(vec_add(dir, vec_scalar(norm, 1)));
 	if (vec_dot(dir, norm) < 0)
 		dir = vec_scalar(dir, -1);
 
-	// Interpolate between the normal and the random direction based on diffuse
-	return_dir = vec_add(
-		vec_scalar(norm, 1.0 - diffuse),      // Normal contribution (tighter cone for lower diffuse)
-		vec_scalar(dir, diffuse)      // Random contribution (wider cone for higher diffuse)
-	);
-	return vec_normalize(return_dir);
-}
+	ret = vec_add(vec_scalar(norm, 1.0 - diffuse), vec_scalar(dir, diffuse));
 
+	return vec_normalize(ret);
+}
+	// Hybrid brdf, with Fresnel and Cook-torrance
 double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 {
 	double	fresnel;
 	double	diffuse;
 	double	specular;
-	double	cos_theta = vec_dot(ray.dest, norm);
+	double	cos_theta;
 
-	 // Fresnel reflectance (e.g., Schlick's approximation)
+	cos_theta = vec_dot(ray.dest, norm);
 	fresnel = intersection.reflectance + (1 - intersection.reflectance) * pow(1.0 - cos_theta, 5.0);
-
-	// Diffuse component
 	diffuse = intersection.diffuse * cos_theta;
-
-	// Specular component (e.g., Cook-Torrance model)
 	specular = fresnel * intersection.specular;
 
 	return (diffuse + specular);
@@ -46,7 +38,7 @@ double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 
 t_rgb	direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb return_color)
 {
-	t_ray shadow_ray;
+	t_ray	shadow_ray;
 	t_rgb	light_contribution;
 	double	attenuation;
 	double	light_distance;
@@ -61,7 +53,9 @@ t_rgb	direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb 
 		cos_theta = vec_dot(intersection.norm, shadow_ray.dest);
 		cos_theta = fmax(0.0, cos_theta);
 		BRDF = brdf_calculation(intersection, shadow_ray, intersection.norm) / PI;
-		light_contribution = color_scalar(color_multiply(world->light->color, intersection.color), cos_theta * attenuation * world->light->brightness * BRDF);
+		light_contribution = color_scalar(color_multiply(world->light->color, \
+				intersection.color), cos_theta * attenuation * \
+				world->light->brightness * BRDF);
 		return_color = color_add(return_color, light_contribution);
 	}
 	return (color_normalize(return_color));
@@ -71,29 +65,21 @@ t_rgb	direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb 
 t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 {
 	t_intersection	intersection;
-	t_rgb	return_color;
-	t_rgb	incoming;
-	t_ray	new_ray;
-	double	p;
-	double	BRDF;
+	t_rgb			return_color;
+	t_rgb			incoming;
+	t_ray			new_ray;
+	double			p;
+	double			BRDF;
 
 	return_color = ret_color(0, 0, 0);
 	if (depth >= MAXDEPTH)
 		return (color_scalar(world->amb->color, world->amb->ratio));
 
-		// Iterate over each object in the world and find the closest intersection.
-			// Also fetches data relating to the object such as Material and Norm direction
 	intersection = find_path(ray, world);
 	if (!intersection.hit)
 		return (color_scalar(world->amb->color, world->amb->ratio));
-		// return	(world->amb->color);
-
-		// initialize a new ray from the POINT of Intersection and random direction
+		// New ray
 	new_ray.origin = intersection.point;
-		// Shoots random rays in possible direction
-	// new_ray.dest = cone_pewpew(intersection.norm);
-
-		// Generate a random direction (diffuse component)
 	new_ray.dest = cone_pewpew(intersection.norm, intersection.diffuse);
 		// BRDF
 	BRDF = brdf_calculation(intersection, new_ray, intersection.norm);
@@ -108,7 +94,6 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 		// Indirect lighting
 	return_color = color_add(return_color, color_scalar(incoming, BRDF * p));
 
-
 	return (color_normalize(return_color));
 }
 
@@ -117,20 +102,24 @@ void	render_super(t_main *main, int x, int y, t_rgb **output)
 	t_ray	ray;
 	double	offset_x;
 	double	offset_y;
+	int	sub_y;
+	int	sub_x;
 
-	for (int sub_y = 0; sub_y < STATIC_SAMPLE; sub_y++)
+	sub_y = 0;
+	sub_x = 0;
+	while (sub_y < STATIC_SAMPLE)
 	{
-		for (int sub_x = 0; sub_x < STATIC_SAMPLE; sub_x++)
+		while (sub_x < STATIC_SAMPLE)
 		{
-				// Offset for each subpixel
-			offset_x = (sub_x) / STATIC_SAMPLE;
-			offset_y = (sub_y) / STATIC_SAMPLE;
-				// Initliaze individual sub_ray to pass into trace_path and average later on
+			offset_x = (double)sub_x / STATIC_SAMPLE;
+			offset_y = (double)sub_y / STATIC_SAMPLE;
 			ray = gen_ray(main->world->cam, x + offset_x, y + offset_y);
 			output[y][x] = color_add(output[y][x], trace_path(main->world, ray, 1));
+			sub_x++;
 		}
+		sub_x = 0;
+		sub_y++;
 	}
-		// Average the samples
 	output[y][x] = color_scalar_div(output[y][x], STATIC_SAMPLE * STATIC_SAMPLE);
 	output[y][x] = color_normalize(output[y][x]);
 }
@@ -153,7 +142,6 @@ void	put_pixel_to_img(int color, t_main main, int x, int y)
 		pxl = main.addr + (y * main.line_length + x *(main.bits_per_pixel / 8));
 		*(unsigned int*)pxl = color;
 	}
-	
 }
 
 // Main function for rendering the screen for each frame called by mlx_loop_hook
@@ -162,14 +150,12 @@ void	*render(void *arg)
 	t_render	*thread;
 	t_main	*main;
 	t_rgb	**output;
-	// pthread_mutex_t	*render_lock;
 	int		output_color;
 	int		x;
 	int		y;
 	int		y_limit;
 
 	thread = (t_render *)arg;
-	// render_lock = thread->render_lock;
 	main = thread->main;
 	output = main->output;
 	x = 0;
@@ -180,33 +166,24 @@ void	*render(void *arg)
 		y = 0 + (main->height / thread->id);
 		y_limit = (y_limit * thread->id);
 	}
-	// trace_time(1);
 	while (y < y_limit)
 	{
-		/* if (pthread_mutex_trylock(&render_lock[y]) != 0)
-		{ */
-			while (x < main->width)
-			{
-				if (main->render_switch == HIGH)
-					render_super(main, x, y, output);
-				else
-					render_low(main, x, y, output);
-				// Packs color into ARGB format for mlx_pixel_put
-				output_color = pack_color(output[y][x]);
-				if (main->render_switch == LOW)
-					output[y][x] = ret_color(0, 0, 0);
-				put_pixel_to_img(output_color, *main, x, y);
-				//mlx_pixel_put(main->mlx, main->win, x, y, output_color);
-				x++;
-			}
-			/* pthread_mutex_unlock(&render_lock[y]);
-		} */
+		while (x < main->width)
+		{
+			if (main->render_switch == HIGH)
+				render_super(main, x, y, output);
+			else
+				render_low(main, x, y, output);
+			output_color = pack_color(output[y][x]);
+			if (main->render_switch == LOW)
+				output[y][x] = ret_color(0, 0, 0);
+			put_pixel_to_img(output_color, *main, x, y);
+			x++;
+		}
 		x = 0;
 		y++;
 	}
-	// printf("thread id: %i\n", thread->id);
-	// trace_time(2);
-	if (pthread_mutex_lock(thread->write_lock) == 0)
+	if (pthread_mutex_trylock(thread->write_lock) == 0)
 	{
 		mlx_put_image_to_window(main->mlx, main->win, main->img, 0, 0);
 		pthread_mutex_unlock(thread->write_lock);
@@ -233,7 +210,7 @@ int	render_thread_wrapper(t_main *main)
 
 void	initiate_mutexes(t_main *main)
 {
-	int y = 0;
+	int	y = 0;
 
 	main->thread = malloc(THREAD_COUNT * sizeof(t_render));
 	pthread_mutex_init(&main->write_lock, NULL);

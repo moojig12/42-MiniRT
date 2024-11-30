@@ -12,7 +12,6 @@ t_selected	discern_nonobject(t_obj *object, t_selected selected)
 	if (object->type == LIGHT)
 	{
 		selected.pos = &((t_light *)object->data)->pos;
-		selected.norm = NULL;
 		selected.type = LIGHT;
 	}
 	return (selected);
@@ -28,7 +27,6 @@ t_selected	discern_object(t_obj *object)
 	if (object->type == SPHERE)
 	{
 		selected.pos = &((t_sphere *)object->data)->pos;
-		selected.norm = NULL;
 		selected.type = SPHERE;
 	}
 	else if (object->type == CYLINDER)
@@ -48,7 +46,7 @@ t_selected	discern_object(t_obj *object)
 	return (selected);
 }
 
-void	set_next(t_obj *selection)
+void	set_next(t_obj *selection, t_main *main)
 {
 	t_obj	*current;
 	int		target;
@@ -57,15 +55,15 @@ void	set_next(t_obj *selection)
 	current = selection->next;
 	while (current && current->type != target)
 	{
-		printf("object checked: %i\n", current->type);
+		printf("object checked inside: %i\n", current->type);
 		if (current->type == selection->type)
 			printf("FOUND!\n");
 		current = current->next;
 	}
 	if (!current)
-		return ;
+		set_selection(main->world->selected, main, target) ;
 	else
-		selection = current;
+		main->world->selected = current;
 }
 
 void	check_selection_inner(t_main *main, int type)
@@ -73,7 +71,7 @@ void	check_selection_inner(t_main *main, int type)
 	if (main->world->selected->type == type)
 	{
 		printf("print next\n");
-		set_next(main->world->selected);
+		set_next(main->world->selected, main);
 	}
 	else
 		set_selection(main->world->selected, main, type);
@@ -89,31 +87,11 @@ void	check_selection(int key_code, t_main *main)
 			set_selection(main->world->selected, main, CAMERA);
 	}
 	else if (key_code == OBJ_LIGHT)
-	{
-		if (main->world->selected->type == LIGHT)
-			printf("Light already selected\n");
-		else
-			set_selection(main->world->selected, main, LIGHT);
-	}
+		check_selection_inner(main, LIGHT);
 	else if (key_code == OBJ_CYL)
-	{
-		if (main->world->selected->type == CYLINDER)
-			printf("Cylinder already selected\n");
-		else
-			set_selection(main->world->selected, main, CYLINDER);
-	}
+		check_selection_inner(main, CYLINDER);
 	else if (key_code == OBJ_SPHERE)
-	{
-		if (main->world->selected->type == SPHERE)
-			printf("Sphere already selected\n");
-		else
-			set_selection(main->world->selected, main, SPHERE);
-	}
+		check_selection_inner(main, SPHERE);
 	else if (key_code == OBJ_PLANE)
-	{
-		if (main->world->selected->type == PLANE)
-			printf("Plane already selected\n");
-		else
-			set_selection(main->world->selected, main, PLANE);
-	}
+		check_selection_inner(main, PLANE);
 }
