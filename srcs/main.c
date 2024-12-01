@@ -13,7 +13,7 @@ void	sub_main_init(t_main *main)
 {
 	main->world->cam->width = main->width;
 	main->world->cam->height = main->height;
-	main->world->light->brightness *= 50;
+	main->world->light->brightness *= 25;
 	main->render_switch = LOW;
 	main->world->cam->norm = vec(0, 1, 0, 0);
 }

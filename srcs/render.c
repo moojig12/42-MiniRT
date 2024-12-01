@@ -6,19 +6,30 @@ void	key_handles(t_main *main)
 	mlx_hook(main->win, 17, 1L<<17, close_window, main);
 }
 
-t_vec	cone_pewpew(t_vec norm, double diffuse)
+t_vec	cone_pewpew(t_vec norm, t_intersection inter, t_ray ray)
 {
 	t_vec	ret;
-	t_vec	dir;
+	t_vec	diffuse_dir;
+	t_vec	reflected;
+	t_vec	spread_dir;
 
-	dir = random_vec(0);
+	ray.dest = vec_normalize(ray.dest);
+	norm = vec_normalize(norm);
+	diffuse_dir = random_vec_range(-1.0, 1.0, 0);
 
-	if (vec_dot(dir, norm) < 0)
-		dir = vec_scalar(dir, -1);
+	if (vec_dot(diffuse_dir, norm) < 0)
+		diffuse_dir = vec_scalar(diffuse_dir, -1);
 
-	ret = vec_add(vec_scalar(norm, 1.0 - diffuse), vec_scalar(dir, diffuse));
+	reflected = vec_sub(ray.dest, vec_scalar(norm, 2.0 * vec_dot(ray.dest, norm)));
 
-	return vec_normalize(ret);
+	spread_dir = vec_add(vec_scalar(reflected, 1.0 - inter.diffuse), \
+	vec_scalar(diffuse_dir, inter.diffuse));
+	spread_dir = vec_normalize(spread_dir);
+
+	ret = vec_add(vec_scalar(spread_dir, 1.0 - inter.reflectance), \
+	vec_scalar(reflected, inter.reflectance));
+
+	return (vec_normalize(ret));
 }
 	// Hybrid brdf, with Fresnel and Cook-torrance
 double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
@@ -80,7 +91,7 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 		return (color_scalar(world->amb->color, world->amb->ratio));
 		// New ray
 	new_ray.origin = intersection.point;
-	new_ray.dest = cone_pewpew(intersection.norm, intersection.diffuse);
+	new_ray.dest = cone_pewpew(intersection.norm, intersection, ray);
 		// BRDF
 	BRDF = brdf_calculation(intersection, new_ray, intersection.norm);
 	p = 1.0 / (PI);
