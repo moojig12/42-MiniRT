@@ -15,11 +15,11 @@
 // Constants
 # define PI 3.14159265358979323846
 # define EPSILON 0.0001
-# define STATIC_SAMPLE 4
-# define THREAD_COUNT 10
+# define STATIC_SAMPLE 2
+# define THREAD_COUNT 16
 
 // Max depth of bounces for tracing
-# define MAXDEPTH 8
+# define MAXDEPTH 4
 
 // objects
 

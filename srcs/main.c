@@ -9,11 +9,11 @@ int	close_window(t_main	*main)
 	exit (0);
 }
 
-void	sub_main_init(t_main *main, t_world *world)
+void	sub_main_init(t_main *main)
 {
 	main->world->cam->width = main->width;
 	main->world->cam->height = main->height;
-	main->world->light->brightness *= 20;
+	main->world->light->brightness *= 50;
 	main->render_switch = LOW;
 	main->world->cam->norm = vec(0, 1, 0, 0);
 }
@@ -36,7 +36,7 @@ void	initialize_main(t_main *main, t_world *world)
 	main->img = mlx_new_image(main->mlx, main->width, main->height);
 	main->addr = mlx_get_data_addr(main->img, \
 		&main->bits_per_pixel, &main->line_length, &main->endian);
-	sub_main_init(main, world);
+	sub_main_init(main);
 	main->output = (t_rgb **)calloc(world->cam->height + 1, sizeof(t_rgb *));
 	y = 0;
 	while (y < world->cam->height)
