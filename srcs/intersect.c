@@ -155,7 +155,7 @@ t_intersection	intersect(t_ray ray, t_obj *obj)
 	intersection.norm = vec(0, 0, 0, 0);
 
 	intersection.reflectance = 1;
-	intersection.diffuse = 0.01;
+	intersection.diffuse = 0.23;
 	intersection.specular = 0.93;
 
 	if (obj->type == SPHERE)
