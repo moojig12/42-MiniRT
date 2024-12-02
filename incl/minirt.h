@@ -19,7 +19,7 @@
 # define THREAD_COUNT 8
 
 // Max depth of bounces for tracing
-# define MAXDEPTH 4
+# define MAXDEPTH 8
 
 // objects
 
