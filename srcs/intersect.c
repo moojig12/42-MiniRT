@@ -154,7 +154,7 @@ t_intersection	intersect(t_ray ray, t_obj *obj)
 	intersection.point = vec(0, 0, 0, 0);
 	intersection.norm = vec(0, 0, 0, 0);
 
-	intersection.reflectance = 0.9;
+	intersection.reflectance = 0.5;
 	intersection.diffuse = 0.5;
 	intersection.specular = 0.93;
 

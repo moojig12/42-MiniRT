@@ -15,7 +15,7 @@ t_vec	cone_pewpew(t_vec norm, t_intersection inter, t_ray ray)
 
 	ray.dest = vec_normalize(ray.dest);
 	norm = vec_normalize(norm);
-	diffuse_dir = random_vec(0);
+	diffuse_dir = random_vec_range(-1.0, 1.0, 0);
 
 	if (vec_dot(diffuse_dir, norm) < 0)
 		diffuse_dir = vec_scalar(diffuse_dir, -1);
@@ -41,10 +41,10 @@ double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 
 	cos_theta = vec_dot(ray.dest, norm);
 	fresnel = intersection.reflectance + (1 - intersection.reflectance) * pow(1.0 - cos_theta, 5.0);
-	diffuse = intersection.diffuse * cos_theta ;
+	diffuse = intersection.diffuse * cos_theta * (1 / (PI * 2));
 	specular = fresnel * intersection.specular;
 
-	return ((diffuse + specular) * (1 / PI));
+	return ((diffuse + specular) );
 }
 
 t_rgb	direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb return_color)
@@ -84,11 +84,11 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 
 	return_color = ret_color(0, 0, 0);
 	if (depth >= MAXDEPTH)
-		return (color_scalar(world->amb->color, world->amb->ratio));
+		return (world->amb->color);
 
 	intersection = find_path(ray, world);
 	if (!intersection.hit)
-		return (color_scalar(world->amb->color, world->amb->ratio));
+		return (world->amb->color);
 		// New ray
 	new_ray.origin = intersection.point;
 	new_ray.dest = cone_pewpew(intersection.norm, intersection, ray);
