@@ -36,15 +36,15 @@ double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 {
 	double	fresnel;
 	double	diffuse;
-	double	specular;
 	double	cos_theta;
+	// double	specular;
 
 	cos_theta = vec_dot(ray.dest, norm);
 	fresnel = intersection.reflectance + (1 - intersection.reflectance) * pow(1.0 - cos_theta, 5.0);
-	diffuse = intersection.diffuse * cos_theta * (1 / (PI * 2));
-	specular = fresnel * intersection.specular;
+	diffuse = intersection.diffuse * cos_theta * (1.0 - fresnel) * (1 / (PI));
+	// specular = fresnel * intersection.specular;
 
-	return ((diffuse + specular) );
+	return ((diffuse + fresnel));
 }
 
 t_rgb	direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb return_color)
@@ -63,7 +63,7 @@ t_rgb	direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb 
 		attenuation = 1.0 / (light_distance * light_distance);
 		cos_theta = vec_dot(intersection.norm, shadow_ray.dest);
 		cos_theta = fmax(0.0, cos_theta);
-		BRDF = brdf_calculation(intersection, shadow_ray, intersection.norm) / PI;
+		BRDF = brdf_calculation(intersection, shadow_ray, intersection.norm);
 		light_contribution = color_scalar(color_multiply(world->light->color, \
 				intersection.color), cos_theta * attenuation * \
 				world->light->brightness * BRDF);
