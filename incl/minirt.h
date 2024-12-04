@@ -391,6 +391,7 @@ t_rgb	color_normalize(t_rgb color);
 
 // Matrix operations
 
+t_matrix	empty_matrix(void);
 t_matrix	identity_matrix(void);
 t_vec		matrix_translation(t_vec data, t_vec translate);
 t_vec		matrix_rotation(t_vec data, t_vec rotate);
