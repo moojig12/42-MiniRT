@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   movement_misc.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/04 08:09:06 by root              #+#    #+#             */
+/*   Updated: 2024/12/04 08:09:30 by root             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 void	miscel_keys(int key_code, t_main *main)
@@ -20,17 +32,15 @@ void	miscel_keys(int key_code, t_main *main)
 		close_window(main);
 	if (key_code == KEY_P)
 		print_position(main->world->selected);
-		
 }
-
 
 int	rotate_left(t_main *main)
 {
 	t_vec	rotated_vec;
 
-	rotated_vec = matrix_rotation(main->world->cam->direction, vec(0, -15, 0, 0));
+	rotated_vec = matrix_rotation(main->world->cam->direction, \
+	vec(0, -15, 0, 0));
 	main->world->cam->direction = rotated_vec;
-
 	return (0);
 }
 
@@ -38,8 +48,8 @@ int	rotate_right(t_main *main)
 {
 	t_vec	rotated_vec;
 
-	rotated_vec = matrix_rotation(main->world->cam->direction, vec(0, 15, 0, 0));
+	rotated_vec = matrix_rotation(main->world->cam->direction, \
+	vec(0, 15, 0, 0));
 	main->world->cam->direction = rotated_vec;
-
 	return (0);
 }

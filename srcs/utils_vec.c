@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_vec.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/04 10:24:48 by root              #+#    #+#             */
+/*   Updated: 2024/12/04 10:24:48 by root             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 t_vec	vec(double x, double y, double z, double w)
@@ -13,7 +25,7 @@ t_vec	vec(double x, double y, double z, double w)
 
 t_vec	vec_add(t_vec a, t_vec b)
 {
-	t_vec ret;
+	t_vec	ret;
 
 	ret.x = a.x + b.x;
 	ret.y = a.y + b.y;
@@ -23,7 +35,7 @@ t_vec	vec_add(t_vec a, t_vec b)
 
 t_vec	vec_sub(t_vec a, t_vec b)
 {
-	t_vec ret;
+	t_vec	ret;
 
 	ret.x = a.x - b.x;
 	ret.y = a.y - b.y;
@@ -33,7 +45,7 @@ t_vec	vec_sub(t_vec a, t_vec b)
 
 double	vec_dot(t_vec a, t_vec b)
 {
-	double ret;
+	double	ret;
 
 	ret = (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
 	return (ret);

@@ -180,6 +180,11 @@ typedef struct s_screen {
 	double	aspect_ratio;
 	t_vec	up;
 	t_vec	right;
+	t_vec	forward;
+	double	ndc_x;
+	double	ndc_y;
+	double	pixel_x;
+	double	pixel_y;
 }	t_screen;
 
 typedef struct s_selected {
@@ -340,6 +345,11 @@ void	free_tab(char **tab);
 int		check_size_matrix(char **matrix);
 int		check_file(char *file);
 
+// Free
+void	free_plane(t_plane *plane);
+void	free_cyl(t_cyl *cyl);
+void	free_tab(char **tab);
+
 // Utilities
 
 int		*alloc_int(int a, int b);
@@ -381,8 +391,12 @@ t_rgb	color_normalize(t_rgb color);
 
 // Matrix operations
 
-t_vec	matrix_translation(t_vec data, t_vec translate);
-t_vec	matrix_rotation(t_vec data, t_vec rotate);
+t_matrix	identity_matrix(void);
+t_vec		matrix_translation(t_vec data, t_vec translate);
+t_vec		matrix_rotation(t_vec data, t_vec rotate);
+t_matrix	rotate_x(t_matrix mat, double angle);
+t_matrix	rotate_y(t_matrix mat, double angle);
+t_matrix	rotate_z(t_matrix mat, double angle);
 
 // Randomness
 

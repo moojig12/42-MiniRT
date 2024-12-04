@@ -37,14 +37,13 @@ double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 	double	fresnel;
 	double	diffuse;
 	double	cos_theta;
-	// double	specular;
 
 	cos_theta = vec_dot(ray.dest, norm);
-	fresnel = intersection.reflectance + (1 - intersection.reflectance) * pow(1.0 - cos_theta, 5.0);
+	fresnel = intersection.reflectance + \
+		(1 - intersection.reflectance) * pow(1.0 - cos_theta, 5.0);
 	diffuse = intersection.diffuse * cos_theta * (1.0 - fresnel) * (1 / (PI));
-	// specular = fresnel * intersection.specular;
 
-	return ((diffuse + fresnel));
+	return (diffuse + fresnel);
 }
 
 t_rgb	direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb return_color)
@@ -247,11 +246,7 @@ int	main_pipeline(t_main *main)
 	}
 
 	initiate_mutexes(main);
-	// Take input
-	// Call render() function each frame with mlx_loop while handling input
 	mlx_loop_hook(main->mlx, render_thread_wrapper, main);
-	//render(main);
-	//mlx_put_image_to_window(main->mlx, main->win, main->img, 0, 0);
 	key_handles(main);
 	mlx_loop(main->mlx);
 	return (0);

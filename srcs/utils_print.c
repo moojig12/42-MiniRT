@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_print.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/04 10:01:23 by root              #+#    #+#             */
+/*   Updated: 2024/12/04 10:01:23 by root             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
-double	trace_time(int type)
+/* double	trace_time(int type)
 {
 	static clock_t	last_time = 0;
-	clock_t	current_time;
+	clock_t			current_time;
 	double elapsed_time;
 
 	current_time = clock();
@@ -18,7 +30,7 @@ double	trace_time(int type)
 		printf("Time elapsed: %f\n\n", elapsed_time);
 
 	return (elapsed_time);
-}
+} */
 
 int	print_color(char *string, t_rgb color)
 {

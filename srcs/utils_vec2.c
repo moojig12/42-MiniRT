@@ -1,5 +1,16 @@
-#include "minirt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_vec2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/04 08:05:54 by root              #+#    #+#             */
+/*   Updated: 2024/12/04 08:08:17 by root             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "minirt.h"
 
 t_vec	vec_cross(t_vec a, t_vec b)
 {
@@ -8,32 +19,30 @@ t_vec	vec_cross(t_vec a, t_vec b)
 	ret.x = a.y * b.z - a.z * b.y;
 	ret.y = a.z * b.x - a.x * b.z;
 	ret.z = a.x * b.y - a.y * b.x;
-
 	return (ret);
 }
 
-double vec_length(t_vec v)
+double	vec_length(t_vec v)
 {
-	return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+	return (sqrt(v.x * v.x + v.y * v.y + v.z * v.z));
 }
 
 t_vec	vec_scalar(t_vec a, double b)
 {
-	t_vec ret;
+	t_vec	ret;
 
 	ret.x = a.x * b;
 	ret.y = a.y * b;
 	ret.z = a.z * b;
-
 	return (ret);
 }
 
 t_vec	vec_normalize(t_vec v)
 {
-	double	magnitude = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+	double	magnitude;
 
+	magnitude = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 	if (magnitude == 0)
-		return (t_vec){0, 0, 0, 0};
-
-	return (t_vec){v.x / magnitude, v.y / magnitude, v.z / magnitude, 1};
+		return ((t_vec){0, 0, 0, 0});
+	return ((t_vec){v.x / magnitude, v.y / magnitude, v.z / magnitude, 1});
 }

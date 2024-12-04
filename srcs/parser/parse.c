@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:13:43 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/30 10:08:45 by root             ###   ########.fr       */
+/*   Updated: 2024/12/04 07:12:59 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,28 +49,26 @@ int	input_par(char **input, t_world *world, int type)
 	return (0);
 }
 
-int	check_par(t_world *world, char *input) 
+int	check_par(t_world *world, char *input)
 {
-	int	type;
+	int		type;
 	char	**input_matrix;
 
 	if (input == NULL || *input == '\n' || *input == '#')
 		return (0);
 	input_matrix = ft_split(input, ' ');
-	if (**input_matrix == '\n'){
+	if (**input_matrix == '\n')
+	{
 		free_tab(input_matrix);
 		return (0);
 	}
-	// printf("input_matrix[0]: %s\n", input_matrix[0]);
 	type = check_iden_type(input_matrix[0]);
-	// printf("type1: %i\n", type);
 	if (type != -1 && input_matrix[1])
 	{
 		input_par(input_matrix, world, type);
-		if (type == SPHERE || type == CYLINDER || type == PLANE || type == LIGHT || type == CAMERA)
-		{
+		if (type == SPHERE || type == CYLINDER || \
+			type == PLANE || type == LIGHT || type == CAMERA)
 			world->objlist = ft_add_obj_lst(type, world, &world->objlist);
-		}
 	}
 	free_tab(input_matrix);
 	return (type);
@@ -89,7 +87,7 @@ void	init_world(t_world *world)
 
 t_world	*parse_world(t_world *world, char **argv)
 {
-	int	fd;
+	int		fd;
 	char	*input;
 
 	fd = open(argv[1], O_RDONLY);

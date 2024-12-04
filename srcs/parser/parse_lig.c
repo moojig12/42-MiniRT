@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_lig.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:07:43 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/26 19:43:54 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/04 07:09:58 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ t_light	*ft_lstlast_lig_mrt(t_light *lst)
 		temp = temp->next;
 	return (temp);
 }
-
 
 int	parse_light(t_world *world, char **input)
 {

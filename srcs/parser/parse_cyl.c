@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cyl.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:01 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/26 19:43:48 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/04 07:44:20 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ t_cyl	*ft_lstlast_cyl_mrt(t_cyl *lst)
 
 int	parse_cyl(t_world *world, char **input)
 {
-	t_cyl *new;
-	int	size;
+	t_cyl	*new;
+	int		size;
 
 	size = check_size_matrix(input);
 	if (size != 6)
 		exit_err_init("Error\nToo many args for cylinder\n", 1, world);
-	new = malloc(sizeof(t_cyl)); 
+	new = malloc(sizeof(t_cyl));
 	if (input[1])
 		pop_vec(&new->pos, ft_split(input[1], ','), NULL, 1);
 	if (input[2])

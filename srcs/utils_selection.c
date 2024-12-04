@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_selection.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/04 09:55:30 by root              #+#    #+#             */
+/*   Updated: 2024/12/04 09:56:52 by root             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 t_selected	discern_nonobject(t_obj *object, t_selected selected)
@@ -61,7 +73,7 @@ void	set_next(t_obj *selection, t_main *main)
 		current = current->next;
 	}
 	if (!current)
-		set_selection(main->world->selected, main, target) ;
+		set_selection(main->world->selected, main, target);
 	else
 		main->world->selected = current;
 }

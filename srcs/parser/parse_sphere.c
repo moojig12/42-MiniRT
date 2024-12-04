@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_sphere.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:34 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/26 19:44:05 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/04 07:05:23 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_sphere	*ft_lstlast_sphere_mrt(t_sphere *lst)
 
 int	parse_sphere(t_world *world, char **input)
 {
-	int	size;
+	int			size;
 	t_sphere	*new;
 
 	size = check_size_matrix(input);

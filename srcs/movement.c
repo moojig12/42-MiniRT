@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   movement.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/04 10:00:02 by root              #+#    #+#             */
+/*   Updated: 2024/12/04 10:00:03 by root             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 int	move(t_obj *obj, t_vec	movement, int movement_code)
@@ -7,7 +19,6 @@ int	move(t_obj *obj, t_vec	movement, int movement_code)
 	t_selected	selected;
 
 	selected = discern_object(obj);
-
 	printf("selected: %i\n", selected.type);
 	if (selected.type != CAMERA)
 	{
@@ -22,14 +33,14 @@ int	move(t_obj *obj, t_vec	movement, int movement_code)
 		*selected.pos = vec_add(*selected.pos, moved_vec);
 		return (0);
 	}
-
 	return (0);
 }
 
 int	rotate_object(t_obj *object, t_vec rotation)
 {
-	t_vec	rotated_vec;
+	t_vec		rotated_vec;
 	t_selected	selected;
+	t_vec		right;
 
 	selected = discern_object(object);
 	if (selected.type != LIGHT && selected.type != SPHERE)
@@ -39,8 +50,10 @@ int	rotate_object(t_obj *object, t_vec rotation)
 		if (selected.type == CAMERA)
 		{
 			*selected.dir = matrix_rotation(*selected.dir, rotation);
-			t_vec	right = vec_normalize(vec_cross(*selected.dir, *selected.norm));
-			*selected.norm = vec_normalize(vec_cross(right, *selected.dir));
+			right = vec_normalize(\
+			vec_cross(*selected.dir, *selected.norm));
+			*selected.norm = vec_normalize(\
+			vec_cross(right, *selected.dir));
 		}
 	}
 	else
@@ -63,7 +76,6 @@ int	movement(int key_code, t_main *main)
 		rotate_left(main);
 	if (key_code == ROTATE_RIGHT)
 		rotate_right(main);
-
 	movement_selected(key_code, main->world->selected);
 	rotation_selected(key_code, main->world->selected);
 	return (1);

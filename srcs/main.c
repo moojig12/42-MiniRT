@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/04 08:14:29 by root              #+#    #+#             */
+/*   Updated: 2024/12/04 08:14:49 by root             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 int	close_window(t_main	*main)
@@ -60,7 +72,6 @@ int	main(int argc, char **argv)
 	if (!main)
 		return (1);
 	initialize_main(main, world);
-
 	main_pipeline(main);
 	return (0);
 }
