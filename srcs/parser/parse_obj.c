@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:40:56 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/04 07:56:04 by root             ###   ########.fr       */
+/*   Updated: 2024/12/04 20:46:34 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_obj	*add_sobj(int type, void *list)
 	return (new);
 }
 
-t_obj	*ft_add_obj_lst_sub(int type, t_world *world, t_obj **objlist)
+t_obj	*ft_add_obj_lst_sub(int type, t_world *world)
 {
 	t_obj	*last;
 	t_obj	*new;
@@ -31,7 +31,7 @@ t_obj	*ft_add_obj_lst_sub(int type, t_world *world, t_obj **objlist)
 	new = NULL;
 	if (type == LIGHT)
 	{
-		last = ft_lstlast_lig_mrt(world->light);
+		last = (void *)ft_lstlast_lig_mrt(world->light);
 		new = add_sobj(type, last);
 	}
 	else if (type == SPHERE)
@@ -55,7 +55,6 @@ t_obj	*ft_add_obj_lst_sub(int type, t_world *world, t_obj **objlist)
 t_obj	*ft_add_obj_lst(int type, t_world *world, t_obj **objlist)
 {
 	t_obj	*new;
-	void	*last;
 
 	new = NULL;
 	if (type < 1)
@@ -65,7 +64,7 @@ t_obj	*ft_add_obj_lst(int type, t_world *world, t_obj **objlist)
 	else if (type == CAMERA)
 		new = add_sobj(type, world->cam);
 	else
-		new = ft_add_obj_lst_sub(type, world, objlist);
+		new = ft_add_obj_lst_sub(type, world);
 	ft_lstadd_back_mrt(objlist, new);
 	return (*objlist);
 }

@@ -40,8 +40,8 @@ double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 
 	cos_theta = vec_dot(ray.dest, norm);
 	fresnel = intersection.reflectance + \
-		(1 - intersection.reflectance) * pow(1.0 - cos_theta, 5.0);
-	diffuse = intersection.diffuse * cos_theta * (1.0 - fresnel) * (1 / (PI));
+	(1 - intersection.reflectance) * pow(1.0 - cos_theta, 5.0);
+	diffuse = intersection.diffuse * cos_theta * (1 / (PI));
 
 	return (diffuse + fresnel);
 }

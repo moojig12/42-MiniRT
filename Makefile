@@ -24,14 +24,17 @@ SRC = srcs/parser/checks.c \
       srcs/cam_ray.c \
       srcs/error.c \
       srcs/free.c \
+      srcs/free2.c \
       srcs/intersect.c \
       srcs/matrix_ops.c \
+      srcs/matrix_ops2.c \
       srcs/movement.c \
       srcs/movement_utils.c \
       srcs/object_selection.c \
       srcs/random_gen.c \
       srcs/render.c \
       srcs/utils_color.c \
+      srcs/utils_color2.c \
       srcs/utils_vec.c \
       srcs/utils.c \
       srcs/utils_print.c \

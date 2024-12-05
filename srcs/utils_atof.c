@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 10:01:37 by root              #+#    #+#             */
-/*   Updated: 2024/12/04 10:13:30 by root             ###   ########.fr       */
+/*   Updated: 2024/12/05 00:03:00 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ double	ft_atof(char *str)
 	has_fraction = 0;
 	if (!str)
 		return (0.0);
+	printf("str: %s\n", str);
 	sign = sign_fract(&str, sign);
 	while (*str)
 	{
@@ -71,5 +72,6 @@ double	ft_atof(char *str)
 			break ;
 		str++;
 	}
+	printf("ft_atof: %f\n", result + sign);
 	return (result * sign);
 }
