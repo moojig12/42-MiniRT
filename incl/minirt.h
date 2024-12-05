@@ -100,6 +100,13 @@ typedef struct s_rgb {
 	double	b;
 }	t_rgb;
 
+typedef struct s_atof {
+	double	result;
+	double	fraction;
+	int		has_fraction;
+	int		sign;
+}	t_atof;
+
 typedef struct s_ray {
 	t_vec	origin;
 	t_vec	dest;

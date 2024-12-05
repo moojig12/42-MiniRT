@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 10:01:37 by root              #+#    #+#             */
-/*   Updated: 2024/12/05 00:03:00 by root             ###   ########.fr       */
+/*   Updated: 2024/12/05 08:00:23 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,42 +36,30 @@ int	sign_fract(char **str, int sign)
 	return (sign);
 }
 
-int	fraction_check(int *has_fraction, char c)
-{
-	if (c == '.')
-	{
-		if (*has_fraction == 1)
-			return (1);
-		*has_fraction = 1;
-	}
-	return (0);
-}
-
 // Function expects proper input! No '+' allowed
 double	ft_atof(char *str)
 {
-	double	result;
-	double	fraction;
-	int		has_fraction;
-	int		sign;
+	t_atof	f;
 
-	result = 0.0;
-	fraction = 1.0;
-	has_fraction = 0;
+	f.result = 0.0;
+	f.fraction = 1.0;
+	f.has_fraction = 0;
 	if (!str)
 		return (0.0);
-	printf("str: %s\n", str);
-	sign = sign_fract(&str, sign);
+	f.sign = sign_fract(&str, f.sign);
 	while (*str)
 	{
 		if (ft_isdigit(*str))
-			result = fract(&fraction, has_fraction, *str, result);
-		else if (!fraction_check(&has_fraction, *str))
-			break ;
+			f.result = fract(&f.fraction, f.has_fraction, *str, f.result);
+		else if (*str == '.')
+		{
+			if (f.has_fraction)
+				break ;
+			f.has_fraction = 1;
+		}
 		else
 			break ;
 		str++;
 	}
-	printf("ft_atof: %f\n", result + sign);
-	return (result * sign);
+	return (f.result * f.sign);
 }

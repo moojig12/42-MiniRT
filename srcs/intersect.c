@@ -37,6 +37,8 @@ t_intersection	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersection inte
 			intersection.norm = vec_normalize(vec_sub(intersection.point, sphere->pos));
 			intersection.point = vec_add(intersection.point, vec_scalar(intersection.norm, EPSILON));
 			intersection.color = sphere->color;
+			intersection.diffuse = 0.25;
+			intersection.reflectance = 0.75;
 		}
 	}
 
@@ -154,8 +156,8 @@ t_intersection	intersect(t_ray ray, t_obj *obj)
 	intersection.point = vec(0, 0, 0, 0);
 	intersection.norm = vec(0, 0, 0, 0);
 
-	intersection.reflectance = 0.6;
-	intersection.diffuse = 0.4;
+	intersection.reflectance = 0.25;
+	intersection.diffuse = 0.75;
 	intersection.specular = 0.0;
 
 	if (obj->type == SPHERE)

@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 08:14:29 by root              #+#    #+#             */
-/*   Updated: 2024/12/04 23:41:41 by root             ###   ########.fr       */
+/*   Updated: 2024/12/05 08:32:12 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	sub_main_init(t_main *main)
 {
 	main->world->cam->width = main->width;
 	main->world->cam->height = main->height;
-	main->world->light->brightness *= 10;
+	main->world->light->brightness *= 20;
 	main->render_switch = LOW;
 	main->world->cam->norm = vec(0, 1, 0, 0);
 }

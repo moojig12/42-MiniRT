@@ -41,7 +41,7 @@ double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
 	cos_theta = vec_dot(ray.dest, norm);
 	fresnel = intersection.reflectance + \
 	(1 - intersection.reflectance) * pow(1.0 - cos_theta, 5.0);
-	diffuse = intersection.diffuse * cos_theta * (1 / (PI));
+	diffuse = (intersection.diffuse + (intersection.reflectance / 2)) * cos_theta * (1 / (PI));
 
 	return (diffuse + fresnel);
 }
@@ -93,7 +93,7 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	new_ray.dest = cone_pewpew(intersection.norm, intersection, ray);
 		// BRDF
 	BRDF = brdf_calculation(intersection, new_ray, intersection.norm);
-	p = 1.0;
+	p = 1;
 		// Shoot the next ray recursively
 	incoming = trace_path(world, new_ray, depth + 1);
 		// Ambience
