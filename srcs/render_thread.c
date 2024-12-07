@@ -155,17 +155,28 @@ void	put_pixel_to_img(int color, t_main main, int x, int y)
 }
 
 // Main function for rendering the screen for each frame called by mlx_loop_hook
-int	render(t_main *main)
+void	*render_thread(void *arg)
 {
+	t_render	*thread;
+	t_main	*main;
 	t_rgb	**output;
 	int		output_color;
 	int		x;
 	int		y;
+	int		y_limit;
 
+	thread = (t_render *)arg;
+	main = thread->main;
 	output = main->output;
 	x = 0;
 	y = 0;
-	while (y < main->height)
+	y_limit = main->height / THREAD_COUNT;
+	if (thread->id != 1)
+	{
+		y = 0 + (main->height / thread->id);
+		y_limit = (y_limit * thread->id);
+	}
+	while (y < y_limit)
 	{
 		while (x < main->width)
 		{
@@ -182,13 +193,59 @@ int	render(t_main *main)
 		x = 0;
 		y++;
 	}
-	mlx_put_image_to_window(main->mlx, main->win, main->img, 0, 0);
+	if (pthread_mutex_trylock(thread->write_lock) == 0)
+	{
+		mlx_put_image_to_window(main->mlx, main->win, main->img, 0, 0);
+		pthread_mutex_unlock(thread->write_lock);
+	}
+	return (NULL);
+}
+
+int	render_thread_wrapper(t_main *main)
+{
+	t_render	*threads;
+	int	i;
+
+	i = 0;
+	threads = main->thread;
+	while (i < THREAD_COUNT)
+	{
+		pthread_create(&threads[i].thread, NULL, &render_thread, (void *)&threads[i]);
+		i++;
+	}
+	for (int j = 0; j < THREAD_COUNT; j++)
+		pthread_join(threads[j].thread, NULL);
 	return (0);
 }
 
-int	main_pipeline(t_main *main)
+void	initiate_mutexes(t_main *main)
 {
-	mlx_loop_hook(main->mlx, render, main);
+	int	y = 0;
+
+	main->thread = malloc(THREAD_COUNT * sizeof(t_render));
+	pthread_mutex_init(&main->write_lock, NULL);
+	main->output_pixel = (pthread_mutex_t *)malloc(main->height * sizeof(pthread_mutex_t));
+	while (y < THREAD_COUNT)
+	{
+		pthread_mutex_init(&main->output_pixel[y], NULL);
+		main->thread[y].id = y + 1;
+		main->thread[y].main = main;
+		main->thread[y].world = main->world;
+		main->thread[y].image_ptr = main->img;
+		main->thread[y].render_lock = main->output_pixel;
+		main->thread[y].write_lock = &main->write_lock;
+		y++;
+	}
+}
+
+int	main_pipeline_threaded(t_main *main)
+{
+	if (!XInitThreads()) {
+		fprintf(stderr, "Failed to initialize Xlib threads\n");
+		return (EXIT_FAILURE);
+	}
+	initiate_mutexes(main);
+	mlx_loop_hook(main->mlx, render_thread_wrapper, main);
 	key_handles(main);
 	mlx_loop(main->mlx);
 	return (0);

@@ -251,17 +251,13 @@ typedef struct s_main {
 	pthread_mutex_t	write_lock;
 }	t_main;
 
-/* typedef struct s_ray
-{
-
-}	t_ray; */
-
 // Main pipeline
 
 int				main_pipeline(t_main *main);
+int				main_pipeline_threaded(t_main *main);
 
 // Render
-void			*render(void *arg);
+void			*render_thread(void *arg);
 t_rgb			trace(t_ray ray, int depth, t_world *world);
 t_ray			gen_ray(t_camera *cam, int x, int y);
 t_ray			gen_ray_low(t_camera *cam, int x, int y);
