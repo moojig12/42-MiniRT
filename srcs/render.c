@@ -83,7 +83,7 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 
 	return_color = ret_color(0, 0, 0);
 	if (depth >= MAXDEPTH)
-		return (world->amb->color);
+		return (return_color);
 
 	intersection = find_path(ray, world);
 	if (!intersection.hit)
