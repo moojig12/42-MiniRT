@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_cyl.c                                        :+:      :+:    :+:   */
+/*   parse_plane_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 21:08:01 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 15:35:45 by fjoestin         ###   ########.fr       */
+/*   Created: 2024/10/14 21:08:18 by fjoestin          #+#    #+#             */
+/*   Updated: 2024/12/08 15:42:08 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void	ft_lstadd_back_cyl_mrt(t_cyl **lst, t_cyl *new)
+void	ft_lstadd_back_plane_mrt(t_plane **lst, t_plane *new)
 {
-	t_cyl	*last;
+	t_plane	*last;
 
-	last = ft_lstlast_cyl_mrt(*lst);
+	last = ft_lstlast_plane_mrt(*lst);
 	if (!last)
 		*lst = new;
 	else
@@ -26,40 +26,36 @@ void	ft_lstadd_back_cyl_mrt(t_cyl **lst, t_cyl *new)
 	}
 }
 
-t_cyl	*ft_lstlast_cyl_mrt(t_cyl *lst)
+t_plane	*ft_lstlast_plane_mrt(t_plane *lst)
 {
-	t_cyl	*temp;
+	t_plane	*temp;
 
 	if (!lst)
 		return (NULL);
 	temp = lst;
 	while (temp->next)
-	{
 		temp = temp->next;
-	}
 	return (temp);
 }
 
-int	parse_cyl(t_world *world, char **input)
+int	parse_plane(t_world *world, char **input)
 {
-	t_cyl	*new;
+	t_plane	*new;
 	int		size;
 
+	new = malloc(sizeof(t_plane));
 	size = check_size_matrix(input);
-	if (size != 6)
-		exit_err_init("Error\nToo many args for cylinder\n", 1, world);
-	new = malloc(sizeof(t_cyl));
+	if (size != 4 || size != 5)
+		exit_err_init("Error\nToo many args for plane\n", 1, world);
 	if (input[1])
 		pop_vec(&new->pos, ft_split(input[1], ','), NULL, 1);
 	if (input[2])
 		pop_vec(&new->norm, ft_split(input[2], ','), alloc_float(-1.0, 1.0), 0);
 	if (input[3])
-		new->diameter = ft_atof(input[3]);
+		pop_color(&new->color, ft_split(input[3], ','));
 	if (input[4])
-		new->height = ft_atof(input[4]);
-	if (input[5])
-		pop_color(&new->color, ft_split(input[5], ','));
+		pop_material(&new->material, ft_split(input[4], ','));
 	new->next = NULL;
-	ft_lstadd_back_cyl_mrt(&world->cyl, new);
+	ft_lstadd_back_plane_mrt(&world->plane, new);
 	return (0);
 }

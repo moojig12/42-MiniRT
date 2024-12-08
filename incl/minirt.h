@@ -118,6 +118,14 @@ typedef struct s_camera {
 	int		fov;
 }	t_camera;
 
+typedef struct s_emission {
+	double	reflect;
+	double	diffuse;
+	t_ray	depth;
+	double	sampsize;
+}	t_emission;
+
+
 typedef struct s_material {
 	t_rgb	reflectance;
 	t_rgb	emission;
@@ -140,6 +148,7 @@ typedef struct s_sphere {
 	t_vec	pos;
 	double	diameter;
 	t_rgb	color;
+	t_emission	material;
 	struct s_sphere	*next;
 }	t_sphere;
 
@@ -147,6 +156,7 @@ typedef struct s_plane {
 	t_vec	pos;
 	t_vec	norm;
 	t_rgb	color;
+	t_emission	material;
 	struct s_plane	*next;
 }	t_plane;
 
@@ -157,6 +167,7 @@ typedef struct s_cylinder {
 	double	diameter;
 	double	height;
 	t_rgb	color;
+	t_emission	material;
 	struct s_cylinder	*next;
 }	t_cyl;
 
@@ -176,7 +187,7 @@ typedef struct s_intersection {
 	double	distance;
 	int		hit;
 	t_rgb	color;
-}	t_intersection;
+}	t_x;
 
 typedef struct s_screen {
 	double	width;
@@ -258,7 +269,7 @@ void			*render_thread(void *arg);
 void			put_pixel_to_img(int color, t_main main, int x, int y);
 t_rgb			trace_path(t_world *world, t_ray ray, int depth);
 void			flush_screen(t_main *main, t_rgb **output);
-t_intersection	find_path(t_ray ray, t_world *world);
+t_x	find_path(t_ray ray, t_world *world);
 
 // Light and ray calculations
 t_rgb			direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb return_color);
@@ -287,6 +298,10 @@ int				rotation_selected(int key_code, t_obj *selected);
 int				movement_selected(int key_code, t_obj *selected);
 t_vec			move_angle(int direction, double angle);
 void			miscel_keys(int key_code, t_main *main);
+
+// intersec
+double	calc_t(double a, double b, double disc);
+void	pop_intersec(t_x *inters, double t, t_ray ray, t_sphere *sphere);
 
 // Parsing
 

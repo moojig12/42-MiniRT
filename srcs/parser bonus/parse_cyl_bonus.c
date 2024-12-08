@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_cyl.c                                        :+:      :+:    :+:   */
+/*   parse_cyl_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:01 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 15:35:45 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/08 15:40:38 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	parse_cyl(t_world *world, char **input)
 	int		size;
 
 	size = check_size_matrix(input);
-	if (size != 6)
+	if (size != 6 || size != 7)
 		exit_err_init("Error\nToo many args for cylinder\n", 1, world);
 	new = malloc(sizeof(t_cyl));
 	if (input[1])
@@ -59,6 +59,8 @@ int	parse_cyl(t_world *world, char **input)
 		new->height = ft_atof(input[4]);
 	if (input[5])
 		pop_color(&new->color, ft_split(input[5], ','));
+	if (input[6])
+		pop_material(&new->material, ft_split(input[6], ','));
 	new->next = NULL;
 	ft_lstadd_back_cyl_mrt(&world->cyl, new);
 	return (0);
