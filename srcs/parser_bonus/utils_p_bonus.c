@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 16:47:03 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 16:17:50 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/08 17:27:43 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@ void	pop_material(t_emission *material, char **input)
 		material->reflect = ft_atof(input[0]);
 	if (1 < size)
 		material->diffuse = ft_atof(input[1]);
-	if (2 < size)
-		material->sampsize = ft_atof(input[2]);
+	// if (2 < size)
+	// 	material->sampsize = ft_atof(input[2]);
+}
+
+void	pop_material_basic(t_emission *material)
+{
+	material->reflect = 0.75;
+	material->diffuse = 0.25;
+	material->sampsize = 0;
 }

@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:18 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 16:22:16 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/08 17:04:03 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	parse_plane(t_world *world, char **input)
 
 	new = malloc(sizeof(t_plane));
 	size = check_size_matrix(input);
-	if (size != 4 || size != 5)
+	if (size < 4 || size > 5)
 		exit_err_init("Error\nToo many args for plane\n", 1, world);
 	if (input[1])
 		pop_vec(&new->pos, ft_split(input[1], ','), NULL, 1);

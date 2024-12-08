@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:29:59 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 16:22:43 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/08 16:59:30 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,74 +62,48 @@ t_x	intersect_plane(t_ray ray, t_plane *plane, t_x *intersc)
 
 t_x	intersect_cylinder(t_ray ray, t_cyl *cyl, t_x inter)
 {
-	// ray.dest = vec_normalize(ray.dest);
-	t_vec oc = vec_sub(ray.origin, cyl->pos);
-	t_vec axis = vec_normalize(cyl->norm);
-	double radius_squared = (cyl->diameter / 2) * (cyl->diameter / 2);
+	t_vec	point_on_axis;
+	double	projection;
+	double	projection1;
+	double	projection2;
+	t_comp	comp;
 
-		// Compute coefficients for the quadratic equation
-	double a = vec_dot(ray.dest, ray.dest) - vec_dot(ray.dest, axis) * vec_dot(ray.dest, axis);
-	double b = 2.0 * (vec_dot(oc, ray.dest) - vec_dot(ray.dest, axis) * vec_dot(oc, axis));
-	double c = vec_dot(oc, oc) - vec_dot(oc, axis) * vec_dot(oc, axis) - radius_squared;
-
-	double discriminant = b * b - 4 * a * c;
-
-		// Check if 2 points of intersection are correct
-	if (discriminant < 0)
+	comp = calc_computations(ray, cyl);
+	if (comp.disc < 0)
 		return (inter);
 	else
 	{
-		double t;
-		double	t1 = (-b - sqrt(discriminant)) / (2.0 * a);
-		double	t2 = (-b + sqrt(discriminant)) / (2.0 * a);
-
-		if (t1 < t2 && t1 > 0)
-			t = t1;
-		else if (t2 > 0)
-			t = t2;
-		else
-			t = INFINITY;
-
-		if (t < INFINITY)
+		comp_calc_t(&comp);
+		if (comp.t < INFINITY)
 		{
-			intersection.distance = t;
-			intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t));
-
-			// Check t1 against height projection
-			double projection1 = vec_dot(vec_sub(vec_add(ray.origin, vec_scalar(ray.dest, t1)), cyl->pos), axis);
-			if (t1 > 0 && projection1 >= 0.0001 && projection1 <= cyl->height)
+			inter.distance = comp.t;
+			inter.point = vec_add(ray.origin, vec_scalar(ray.dest, comp.t));
+			projection1 = vec_dot(vec_sub(vec_add(ray.origin, vec_scalar(ray.dest, comp.t1)), cyl->pos), comp.axis);
+			if (comp.t1 > 0 && projection1 >= 0.0001 && projection1 <= cyl->height)
 			{
-				t = t1;
-				intersection.hit = 1;
+				comp.t = comp.t1;
+				inter.hit = 1;
 			}
-
-			// Check t2 only if t1 is invalid or farther
-			double projection2 = vec_dot(vec_sub(vec_add(ray.origin, vec_scalar(ray.dest, t2)), cyl->pos), axis);
-			if ((!intersection.hit || t2 < t) && t2 > 0 && projection2 >= 0.0001 && projection2 <= cyl->height)
+			projection2 = vec_dot(vec_sub(vec_add(ray.origin, vec_scalar(ray.dest, comp.t2)), cyl->pos), comp.axis);
+			if ((!inter.hit || comp.t2 < comp.t) && comp.t2 > 0 && projection2 >= 0.0001 && projection2 <= cyl->height)
 			{
-				t = t2;
-				intersection.hit = 1;
+				comp.t = comp.t2;
+				inter.hit = 1;
 			}
-			// If no valid intersection was found, return no-hit intersection
-			if (!intersection.hit)
-				return intersection;
-			// Calculate intersection details
-			intersection.distance = t;
-			intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t));
-			// Calculate point on cylinder axis
-			double projection = vec_dot(vec_sub(intersection.point, cyl->pos), axis);
-			t_vec point_on_axis = vec_add(cyl->pos, vec_scalar(axis, projection));
-
-			intersection.norm = vec_normalize(vec_sub(intersection.point, point_on_axis));
-			intersection.color = cyl->color;
-
-			// If point of impact is inside cylinder invert the normal
-			if (vec_dot(ray.dest, intersection.norm) > 0)
-				intersection.norm = vec_scalar(intersection.norm, -1);
-			intersection.point = vec_add(intersection.point, vec_scalar(intersection.norm, EPSILON));
+			if (!inter.hit)
+				return (inter);
+			inter.distance = comp.t;
+			inter.point = vec_add(ray.origin, vec_scalar(ray.dest, comp.t));
+			projection = vec_dot(vec_sub(inter.point, cyl->pos), comp.axis);
+			point_on_axis = vec_add(cyl->pos, vec_scalar(comp.axis, projection));
+			inter.norm = vec_normalize(vec_sub(inter.point, point_on_axis));
+			inter.color = cyl->color;
+			if (vec_dot(ray.dest, inter.norm) > 0)
+				inter.norm = vec_scalar(inter.norm, -1);
+			inter.point = vec_add(inter.point, vec_scalar(inter.norm, EPSILON));
 		}
 	}
-	return (intersection);
+	return (inter);
 }
 
 t_x	intersect(t_ray ray, t_obj *obj)

@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:30:28 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 15:30:29 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/08 17:04:27 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	key_handles(t_main *main)
 	// The function for simulating and bouncing a ray off an object
 t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 {
-	t_intersection	intersection;
+	t_x	intersection;
 	t_rgb			return_color;
 	t_rgb			incoming;
 	t_ray			new_ray;

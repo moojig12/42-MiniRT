@@ -28,6 +28,7 @@ SRC = srcs/parser/checks.c \
       srcs/free.c \
       srcs/free2.c \
       srcs/intersect.c \
+      srcs/intersect_helper.c \
       srcs/matrix_ops.c \
       srcs/matrix_ops2.c \
       srcs/movement.c \
@@ -62,6 +63,7 @@ SRC_B = srcs/parser_bonus/checks_bonus.c \
       srcs/free.c \
       srcs/free2.c \
       srcs/intersect.c \
+	  srcs/intersect_helper.c \
       srcs/matrix_ops.c \
       srcs/matrix_ops2.c \
       srcs/movement.c \

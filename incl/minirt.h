@@ -125,6 +125,16 @@ typedef struct s_emission {
 	double	sampsize;
 }	t_emission;
 
+typedef struct s_computation {
+	double	a;
+	double	b;
+	double	c;
+	double	disc;
+	double	t;
+	double	t1;
+	double	t2;
+	t_vec	axis;
+}	t_comp;
 
 typedef struct s_material {
 	t_rgb	reflectance;
@@ -271,9 +281,9 @@ t_rgb			trace_path(t_world *world, t_ray ray, int depth);
 void			flush_screen(t_main *main, t_rgb **output);
 
 // Light and ray calculations
-t_rgb			direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb return_color);
-t_vec			cone_pewpew(t_vec norm, t_intersection inter, t_ray ray);
-double			brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm);
+t_rgb			direct_light_occlusion(t_x intersection, t_world *world, t_rgb return_color);
+t_vec			cone_pewpew(t_vec norm, t_x inter, t_ray ray);
+double			brdf_calculation(t_x intersection, t_ray ray, t_vec norm);
 int				is_occluded(t_ray shadow_ray, t_world *world, double light_distance);
 
 // Render modes
@@ -303,6 +313,8 @@ double	calc_t(double a, double b, double disc);
 void	pop_intersec(t_x *inters, double t, t_ray ray, t_sphere *sphere);
 t_x		intersect(t_ray ray, t_obj *obj);
 t_x		find_path(t_ray ray, t_world *world);
+t_comp	calc_computations(t_ray ray, t_cyl *cyl);
+void	comp_calc_t(t_comp *comp);
 
 // Parsing
 
@@ -391,6 +403,7 @@ int		print_matrix(char *string, t_matrix mat);
 t_selected	discern_object(t_obj *obj);
 double	trace_time(int type);
 void	print_position(t_obj *selection);
+void	pop_material(t_emission *material, char **input);
 
 // Vector operations
 

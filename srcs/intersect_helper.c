@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:57:44 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 16:24:15 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/08 17:19:59 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,3 +67,51 @@ t_x	find_path(t_ray ray, t_world *world)
 	return (closest_x);
 }
 
+t_comp	calc_computations(t_ray ray, t_cyl *cyl)
+{
+	t_vec	oc;
+	t_comp	comp;
+	double	radius_squared;
+
+	oc = vec_sub(ray.origin, cyl->pos);
+	comp.axis = vec_normalize(cyl->norm);
+	radius_squared = (cyl->diameter / 2) * (cyl->diameter / 2);
+	comp.a = vec_dot(ray.dest, ray.dest) - vec_dot(ray.dest, comp.axis) * \
+												vec_dot(ray.dest, comp.axis);
+	comp.b = 2.0 * (vec_dot(oc, ray.dest) - vec_dot(ray.dest, comp.axis) \
+												* vec_dot(oc, comp.axis));
+	comp.c = vec_dot(oc, oc) - vec_dot(oc, comp.axis) \
+			* vec_dot(oc, comp.axis) - radius_squared;
+	comp.disc = comp.b * comp.b - 4 * comp.a * comp.c;
+	return (comp);
+}
+
+void	comp_calc_t(t_comp *comp)
+{
+	comp->t1 = (-comp->b - sqrt(comp->disc)) / (2.0 * comp->a);
+	comp->t2 = (-comp->b + sqrt(comp->disc)) / (2.0 * comp->a);
+	if (comp->t1 < comp->t2 && comp->t1 > 0)
+		comp->t = comp->t1;
+	else if (comp->t2 > 0)
+		comp->t = comp->t2;
+	else
+		comp->t = INFINITY;
+}
+
+/* void	calc_projection()
+{
+	double	projection1;
+	double	projection2;
+		projection1 = vec_dot(vec_sub(vec_add(ray.origin, vec_scalar(ray.dest, comp.t1)), cyl->pos), comp.axis);
+			if (comp.t1 > 0 && projection1 >= 0.0001 && projection1 <= cyl->height)
+			{
+				comp.t = comp.t1;
+				inter.hit = 1;
+			}
+			projection2 = vec_dot(vec_sub(vec_add(ray.origin, vec_scalar(ray.dest, comp.t2)), cyl->pos), comp.axis);
+			if ((!inter.hit || comp.t2 < comp.t) && comp.t2 > 0 && projection2 >= 0.0001 && projection2 <= cyl->height)
+			{
+				comp.t = comp.t2;
+				inter.hit = 1;
+			}
+} */

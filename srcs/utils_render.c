@@ -1,7 +1,7 @@
 #include "minirt.h"
 
 
-t_vec	cone_pewpew(t_vec norm, t_intersection inter, t_ray ray)
+t_vec	cone_pewpew(t_vec norm, t_x inter, t_ray ray)
 {
 	t_vec	ret;
 	t_vec	diffuse_dir;
@@ -23,7 +23,7 @@ t_vec	cone_pewpew(t_vec norm, t_intersection inter, t_ray ray)
 	return (vec_normalize(ret));
 }
 	// Hybrid brdf, with Fresnel and Cook-torrance
-double	brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm)
+double	brdf_calculation(t_x intersection, t_ray ray, t_vec norm)
 {
 	double	fresnel;
 	double	diffuse;
@@ -48,7 +48,7 @@ void	put_pixel_to_img(int color, t_main main, int x, int y)
 	}
 }
 
-t_rgb	direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb return_color)
+t_rgb	direct_light_occlusion(t_x intersection, t_world *world, t_rgb return_color)
 {
 	t_ray	shadow_ray;
 	t_rgb	light_contribution;
