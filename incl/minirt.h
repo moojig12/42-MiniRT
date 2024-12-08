@@ -269,7 +269,6 @@ void			*render_thread(void *arg);
 void			put_pixel_to_img(int color, t_main main, int x, int y);
 t_rgb			trace_path(t_world *world, t_ray ray, int depth);
 void			flush_screen(t_main *main, t_rgb **output);
-t_x	find_path(t_ray ray, t_world *world);
 
 // Light and ray calculations
 t_rgb			direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb return_color);
@@ -302,6 +301,8 @@ void			miscel_keys(int key_code, t_main *main);
 // intersec
 double	calc_t(double a, double b, double disc);
 void	pop_intersec(t_x *inters, double t, t_ray ray, t_sphere *sphere);
+t_x		intersect(t_ray ray, t_obj *obj);
+t_x		find_path(t_ray ray, t_world *world);
 
 // Parsing
 
@@ -324,6 +325,7 @@ int		pop_fov(int *fov, char *input, int *range);
 int		ft_strcmp(const char *s1, const char *s2);
 int		check_file(char *file);
 int		check_size_matrix(char **matrix);
+void	pop_material_basic(t_emission *material);
 
 // Parsing amb
 

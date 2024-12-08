@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:29:59 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 16:12:26 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/08 16:22:43 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,30 +167,4 @@ int	is_occluded(t_ray shadow_ray, t_world *world, double light_distance)
 		object = object->next;
 	}
 	return (0);
-}
-
-t_x	find_path(t_ray ray, t_world *world)
-{
-	double	closest_distance;
-	t_x		closest_x;
-	t_x		inter;
-	t_obj	*object;
-
-	closest_distance = INFINITY;
-	closest_x.hit = 0;
-	object = world->objlist;
-	while (object)
-	{
-		if (object->type > 3)
-		{
-			inter = intersect(ray, object);
-			if (inter.hit && inter.distance < closest_distance)
-			{
-				closest_distance = inter.distance;
-				closest_x = inter;
-			}
-		}
-		object = object->next;
-	}
-	return (closest_x);
 }

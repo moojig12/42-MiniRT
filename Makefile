@@ -46,17 +46,17 @@ SRC = srcs/parser/checks.c \
       srcs/movement_misc.c \
       srcs/main.c
 
-SRC_B = srcs/parser/checks.c \
-      srcs/parser/parse_amb.c \
-      srcs/parser/parse_cam.c \
-      srcs/parser/parse_cyl.c \
-      srcs/parser/parse_lig.c \
-      srcs/parser/parse_obj.c \
-      srcs/parser/parse_plane.c \
-      srcs/parser/parse_sphere.c \
-      srcs/parser/parse_utils.c \
-      srcs/parser/utils_p.c \
-      srcs/parser/parse.c \
+SRC_B = srcs/parser_bonus/checks_bonus.c \
+      srcs/parser_bonus/parse_amb_bonus.c \
+      srcs/parser_bonus/parse_cam_bonus.c \
+      srcs/parser_bonus/parse_cyl_bonus.c \
+      srcs/parser_bonus/parse_lig_bonus.c \
+      srcs/parser_bonus/parse_obj_bonus.c \
+      srcs/parser_bonus/parse_plane_bonus.c \
+      srcs/parser_bonus/parse_sphere_bonus.c \
+      srcs/parser_bonus/parse_utils_bonus.c \
+      srcs/parser_bonus/utils_p_bonus.c \
+      srcs/parser_bonus/parse_bonus.c \
       srcs/cam_ray.c \
       srcs/error.c \
       srcs/free.c \

@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 16:47:03 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 15:47:49 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/08 16:17:50 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	ft_strcmp(const char *s1, const char *s2)
 	}
 	return (*(unsigned char *)s1 - *(unsigned char *)s2);
 }
+
 void	pop_material(t_emission *material, char **input)
 {
 	int	size;

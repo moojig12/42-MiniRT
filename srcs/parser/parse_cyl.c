@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:01 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 15:35:45 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/08 16:20:52 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	parse_cyl(t_world *world, char **input)
 		new->height = ft_atof(input[4]);
 	if (input[5])
 		pop_color(&new->color, ft_split(input[5], ','));
+	pop_material_basic(&new->material);
 	new->next = NULL;
 	ft_lstadd_back_cyl_mrt(&world->cyl, new);
 	return (0);

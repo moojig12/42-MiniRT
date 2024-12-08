@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:18 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 15:42:08 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/08 16:22:16 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ int	parse_plane(t_world *world, char **input)
 		pop_color(&new->color, ft_split(input[3], ','));
 	if (input[4])
 		pop_material(&new->material, ft_split(input[4], ','));
+	else
+		pop_material_basic(&new->material);
 	new->next = NULL;
 	ft_lstadd_back_plane_mrt(&world->plane, new);
 	return (0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_sphere.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:34 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/04 07:05:23 by root             ###   ########.fr       */
+/*   Updated: 2024/12/08 16:21:19 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	parse_sphere(t_world *world, char **input)
 		new->diameter = ft_atof(input[2]);
 	if (input[3])
 		pop_color(&new->color, ft_split(input[3], ','));
+	pop_material_basic(&new->material);
 	new->next = NULL;
 	ft_lstadd_back_sphere_mrt(&world->sphere, new);
 	return (0);
