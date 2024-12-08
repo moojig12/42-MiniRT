@@ -45,31 +45,30 @@ t_intersection	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersection inte
 	return (intersection);
 }
 
-t_intersection	intersect_plane(t_ray ray, t_plane *plane, t_intersection intersection)
+t_intersection	intersect_plane(t_ray ray, t_plane *plane, t_intersection *intersection)
 {
 	double denominator = vec_dot(ray.dest, plane->norm);
 	if (fabs(denominator) < 1e-6)
-		return intersection; // Ray is parallel to the plane
+		return *intersection; // Ray is parallel to the plane
 
 	double t = vec_dot(vec_sub(plane->pos, ray.origin), plane->norm) / denominator;
 	if (t >= 0)
 	{
-		intersection.hit = 1;
-		intersection.distance = t;
-		intersection.point = vec_add(ray.origin, vec_scalar(ray.dest, t)); // O + tD
-		intersection.norm = vec_normalize(plane->norm);
-		if (vec_dot(ray.dest, intersection.norm) > 0)
-			intersection.norm = vec_scalar(intersection.norm, -1); // Flip normal
-		intersection.point = vec_add(intersection.point, vec_scalar(intersection.norm, EPSILON));
-		intersection.color = plane->color;
+		intersection->hit = 1;
+		intersection->distance = t;
+		intersection->point = vec_add(ray.origin, vec_scalar(ray.dest, t)); // O + tD
+		intersection->norm = plane->norm;
+		if (denominator > 0)
+			intersection->norm = vec_scalar(intersection->norm, -1); // Flip normal
+		intersection->point = vec_add(intersection->point, vec_scalar(intersection->norm, EPSILON));
+		intersection->color = plane->color;
 	}
-
-	return intersection;
+	return *intersection;
 }
 
 t_intersection	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersection intersection)
 {
-	ray.dest = vec_normalize(ray.dest);
+	// ray.dest = vec_normalize(ray.dest);
 	t_vec oc = vec_sub(ray.origin, cyl->pos);
 	t_vec axis = vec_normalize(cyl->norm);
 	double radius_squared = (cyl->diameter / 2) * (cyl->diameter / 2);
@@ -156,16 +155,16 @@ t_intersection	intersect(t_ray ray, t_obj *obj)
 	intersection.point = vec(0, 0, 0, 0);
 	intersection.norm = vec(0, 0, 0, 0);
 
-	intersection.reflectance = 0.25;
-	intersection.diffuse = 0.75;
+	intersection.reflectance = 0.5;
+	intersection.diffuse = 0.5;
 	intersection.specular = 0.0;
-
+	ray.dest = vec_normalize(ray.dest);
 	if (obj->type == SPHERE)
 		return (intersect_sphere(ray, (t_sphere *)obj->data, intersection));
 	else if (obj->type == CYLINDER)
 		return (intersect_cylinder(ray, (t_cyl *)obj->data, intersection));
 	else if (obj->type == PLANE)
-		return (intersect_plane(ray, (t_plane *)obj->data, intersection));
+		return (intersect_plane(ray, (t_plane *)obj->data, &intersection));
 	/* else
 		printf("Error\nNo object type for intersection\n"); */
 	return (intersection);

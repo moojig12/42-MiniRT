@@ -21,10 +21,7 @@
 // Max depth of bounces for tracing
 # define MAXDEPTH 8
 
-// objects
-
-
-// linear congruential generator constants
+// Constants for random
 # define A 1664525
 # define C 1013904223
 # define M 0xFFFFFFFF
@@ -170,15 +167,15 @@ typedef struct s_obj {
 }	t_obj;
 
 typedef struct s_intersection {
-	t_vec	origin;
-	t_vec	norm;
 	t_vec	point;
-	t_rgb	color;
+	t_vec	norm;
+	t_vec	origin;
 	double	reflectance;
 	double	diffuse;
 	double	specular;
 	double	distance;
 	int		hit;
+	t_rgb	color;
 }	t_intersection;
 
 typedef struct s_screen {
@@ -258,12 +255,22 @@ int				main_pipeline_threaded(t_main *main);
 
 // Render
 void			*render_thread(void *arg);
-t_rgb			trace(t_ray ray, int depth, t_world *world);
+void			put_pixel_to_img(int color, t_main main, int x, int y);
+t_rgb			trace_path(t_world *world, t_ray ray, int depth);
+void			flush_screen(t_main *main, t_rgb **output);
+t_intersection	find_path(t_ray ray, t_world *world);
+
+// Light and ray calculations
+t_rgb			direct_light_occlusion(t_intersection intersection, t_world *world, t_rgb return_color);
+t_vec			cone_pewpew(t_vec norm, t_intersection inter, t_ray ray);
+double			brdf_calculation(t_intersection intersection, t_ray ray, t_vec norm);
+int				is_occluded(t_ray shadow_ray, t_world *world, double light_distance);
+
+// Render modes
 t_ray			gen_ray(t_camera *cam, int x, int y);
 t_ray			gen_ray_low(t_camera *cam, int x, int y);
-int				is_occluded(t_ray shadow_ray, t_world *world, double light_distance);
-t_intersection	find_path(t_ray ray, t_world *world);
-void			flush_screen(t_main *main, t_rgb **output);
+void			render_super(t_main *main, int x, int y, t_rgb **output);
+void			render_low(t_main *main, int x, int y, t_rgb **output);
 
 // Movement
 
