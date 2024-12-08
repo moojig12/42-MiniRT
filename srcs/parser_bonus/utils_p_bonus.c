@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 16:47:03 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 17:27:43 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/08 19:12:30 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,19 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return (*(unsigned char *)s1 - *(unsigned char *)s2);
 }
 
-void	pop_material(t_emission *material, char **input)
+int	check_material(char *input)
 {
-	int	size;
-
-	size = check_size_matrix(input);
-	if (0 < size)
-		material->reflect = ft_atof(input[0]);
-	if (1 < size)
-		material->diffuse = ft_atof(input[1]);
-	// if (2 < size)
-	// 	material->sampsize = ft_atof(input[2]);
+	if (ft_strcmp(input, "metal") == 0)
+		return (METAL);
+	if (ft_strcmp(input, "glass") == 0)
+		return (GLASS);
+	if (ft_strcmp(input, "plastic") == 0)
+		return (PLASTIC);
+	return (STANDARD);
 }
 
-void	pop_material_basic(t_emission *material)
+void	pop_material_basic(t_mat *material)
 {
 	material->reflect = 0.75;
 	material->diffuse = 0.25;
-	material->sampsize = 0;
 }

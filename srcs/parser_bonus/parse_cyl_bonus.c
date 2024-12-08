@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:01 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 17:03:05 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/08 18:56:02 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,7 @@ int	parse_cyl(t_world *world, char **input)
 	if (input[5])
 		pop_color(&new->color, ft_split(input[5], ','));
 	if (input[6])
-		pop_material(&new->material, ft_split(input[6], ','));
-	else
-		pop_material_basic(&new->material);
+		new->material = check_material(input[6]);
 	new->next = NULL;
 	ft_lstadd_back_cyl_mrt(&world->cyl, new);
 	return (0);

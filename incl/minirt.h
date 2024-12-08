@@ -77,8 +77,16 @@ typedef enum e_object_type {
 	LIGHT,
 	SPHERE,
 	PLANE,
-	CYLINDER
+	CYLINDER,
+	EMISSION
 }	t_object_type;
+
+typedef enum e_material_type {
+	METAL = 1,
+	GLASS,
+	PLASTIC,
+	STANDARD
+}	t_material_type;
 
 typedef struct s_vector {
 	double	x;
@@ -119,11 +127,9 @@ typedef struct s_camera {
 }	t_camera;
 
 typedef struct s_emission {
-	double	reflect;
-	double	diffuse;
-	t_ray	depth;
-	double	sampsize;
-}	t_emission;
+	int		depth;
+	int		sampsize;
+}		t_emission;
 
 typedef struct s_computation {
 	double	a;
@@ -137,9 +143,8 @@ typedef struct s_computation {
 }	t_comp;
 
 typedef struct s_material {
-	t_rgb	reflectance;
-	t_rgb	emission;
-	t_rgb	color;
+	double	reflect;
+	double	diffuse;
 }	t_mat;
 
 typedef struct s_ambient {
@@ -148,38 +153,38 @@ typedef struct s_ambient {
 }	t_ambient;
 
 typedef struct s_light {
-	t_vec	pos;
-	double	brightness;
-	t_rgb	color;
+	t_vec			pos;
+	double			brightness;
+	t_rgb			color;
 	struct s_light	*next;
-}	t_light;
+}		t_light;
 
 typedef struct s_sphere {
-	t_vec	pos;
-	double	diameter;
-	t_rgb	color;
-	t_emission	material;
+	t_vec			pos;
+	double			diameter;
+	t_rgb			color;
+	t_material_type	material;
 	struct s_sphere	*next;
-}	t_sphere;
+}		t_sphere;
 
 typedef struct s_plane {
-	t_vec	pos;
-	t_vec	norm;
-	t_rgb	color;
-	t_emission	material;
+	t_vec			pos;
+	t_vec			norm;
+	t_rgb			color;
+	t_material_type	material;
 	struct s_plane	*next;
-}	t_plane;
+}		t_plane;
 
 typedef struct s_cylinder {
-	t_vec	pos;
-	t_vec	norm;
-	double	direction;
-	double	diameter;
-	double	height;
-	t_rgb	color;
-	t_emission	material;
+	t_vec				pos;
+	t_vec				norm;
+	double				direction;
+	double				diameter;
+	double				height;
+	t_rgb				color;
+	t_material_type		material;
 	struct s_cylinder	*next;
-}	t_cyl;
+}		t_cyl;
 
 typedef struct s_obj {
 	int		type;
@@ -228,23 +233,24 @@ typedef struct s_world {
 	t_plane		*plane;
 	t_obj		*objlist;
 	t_obj		*selected;
+	t_emission	*emission;
 	int			object_num;
 }	t_world;
 
 typedef struct s_render {
-	pthread_t	thread;
-	int			id;
-	void		*mlx;
-	void		*win;
-	void		*image_ptr;
-	int			*render_switch;
-	t_world		*world;
-	t_main		*main;
-	pthread_t	*next;
+	pthread_t		thread;
+	int				id;
+	void			*mlx;
+	void			*win;
+	void			*image_ptr;
+	int				*render_switch;
+	t_world			*world;
+	t_main			*main;
+	pthread_t		*next;
 	pthread_mutex_t	*render_lock;
 	pthread_mutex_t	*object_lock;
 	pthread_mutex_t	*write_lock;
-}	t_render;
+}		t_render;
 
 typedef struct s_move_thread {
 	pthread_t	thread;
@@ -252,22 +258,22 @@ typedef struct s_move_thread {
 }	t_move_thread;
 
 typedef struct s_main {
-	void	*mlx;
-	void	*win;
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-	int		width;
-	int		height;
-	int		render_switch;
-	t_rgb	**output;
-	t_world	*world;
-	t_render	*thread;
+	void			*mlx;
+	void			*win;
+	void			*img;
+	char			*addr;
+	int				bits_per_pixel;
+	int				line_length;
+	int				endian;
+	int				width;
+	int				height;
+	int				render_switch;
+	t_rgb			**output;
+	t_world			*world;
+	t_render		*thread;
 	pthread_mutex_t	*output_pixel;
 	pthread_mutex_t	write_lock;
-}	t_main;
+}		t_main;
 
 // Main pipeline
 
@@ -309,13 +315,12 @@ t_vec			move_angle(int direction, double angle);
 void			miscel_keys(int key_code, t_main *main);
 
 // intersec
-double	calc_t(double a, double b, double disc);
-void	pop_intersec(t_x *inters, double t, t_ray ray, t_sphere *sphere);
-t_x		intersect(t_ray ray, t_obj *obj);
-t_x		find_path(t_ray ray, t_world *world);
-t_comp	calc_computations(t_ray ray, t_cyl *cyl);
-void	comp_calc_t(t_comp *comp);
-
+double			calc_t(double a, double b, double disc);
+void			pop_intersec(t_x *inters, double t, t_ray ray, t_sphere *sphere);
+t_x				intersect(t_ray ray, t_obj *obj);
+t_x				find_path(t_ray ray, t_world *world);
+t_comp			calc_computations(t_ray ray, t_cyl *cyl);
+void			comp_calc_t(t_comp *comp);
 // Parsing
 
 t_world			*parse_world(t_world *world, char **argv);
@@ -323,121 +328,122 @@ void			init_world(t_world *world);
 
 // Parsing obj
 
-t_obj	*ft_add_obj_lst(int type, t_world *world, t_obj **objlist);
-t_obj	*ft_lstlast_mrt(t_obj *lst);
-void	ft_lstadd_back_mrt(t_obj **lst, t_obj *new);
-t_obj	*add_light(t_light *lightlist);
-t_obj	*add_sobj(int type, void *list);
+t_obj			*ft_add_obj_lst(int type, t_world *world, t_obj **objlist);
+t_obj			*ft_lstlast_mrt(t_obj *lst);
+void			ft_lstadd_back_mrt(t_obj **lst, t_obj *new);
+t_obj			*add_light(t_light *lightlist);
+t_obj			*add_sobj(int type, void *list);
 
 // Parsing utilities
 
-int		pop_color(t_rgb *rgb, char **input);
-int		pop_vec(t_vec *vec, char **input, double *range, double type);
-int		pop_fov(int *fov, char *input, int *range);
-int		ft_strcmp(const char *s1, const char *s2);
-int		check_file(char *file);
-int		check_size_matrix(char **matrix);
-void	pop_material_basic(t_emission *material);
+int				pop_color(t_rgb *rgb, char **input);
+int				pop_vec(t_vec *vec, char **input, double *range, double type);
+int				pop_fov(int *fov, char *input, int *range);
+int				ft_strcmp(const char *s1, const char *s2);
+int				check_file(char *file);
+int				check_size_matrix(char **matrix);
+t_emission		*parse_emission(t_world *world, char **input);
+int				check_material(char *input);
 
 // Parsing amb
 
-t_ambient	*parse_amb(t_world *world, char **input);
+t_ambient		*parse_amb(t_world *world, char **input);
 
 // Parsing cam
 
-t_camera	*parse_cam(t_world *world, char **input);
+t_camera		*parse_cam(t_world *world, char **input);
 
 // Parsing light
 
-t_light	*ft_lstlast_lig_mrt(t_light *lst);
-void	ft_lstadd_back_lig_mrt(t_light **lst, t_light *new);
-int		parse_light(t_world *world, char **input);
-void	print_light(t_light *ptr);
+t_light			*ft_lstlast_lig_mrt(t_light *lst);
+void			ft_lstadd_back_lig_mrt(t_light **lst, t_light *new);
+int				parse_light(t_world *world, char **input);
+void			print_light(t_light *ptr);
 
 //Parsing cyl
 
-int		parse_cyl(t_world *world, char **input);
-t_cyl	*ft_lstlast_cyl_mrt(t_cyl *lst);
-void	ft_lstadd_back_cyl_mrt(t_cyl **lst, t_cyl *new);
+int				parse_cyl(t_world *world, char **input);
+t_cyl			*ft_lstlast_cyl_mrt(t_cyl *lst);
+void			ft_lstadd_back_cyl_mrt(t_cyl **lst, t_cyl *new);
 
 //Parsing sphere
 
-int			parse_sphere(t_world *world, char **input);
-t_sphere	*ft_lstlast_sphere_mrt(t_sphere *lst);
-void		ft_lstadd_back_sphere_mrt(t_sphere **lst, t_sphere *new);
+int				parse_sphere(t_world *world, char **input);
+t_sphere		*ft_lstlast_sphere_mrt(t_sphere *lst);
+void			ft_lstadd_back_sphere_mrt(t_sphere **lst, t_sphere *new);
 
 // Parsing plane
 
-int		parse_plane(t_world *world, char **input);
-t_plane	*ft_lstlast_plane_mrt(t_plane *lst);
-void	ft_lstadd_back_plane_mrt(t_plane **lst, t_plane *new);
+int				parse_plane(t_world *world, char **input);
+t_plane			*ft_lstlast_plane_mrt(t_plane *lst);
+void			ft_lstadd_back_plane_mrt(t_plane **lst, t_plane *new);
 
 // error
-void	exit_err(char *message, int code, t_main *main);
-void	exit_err_init(char *msg, int code, t_world *world);
-void	free_world(t_world *world);
-void	free_main(t_main *main);
-void	free_tab(char **tab);
+void			exit_err(char *message, int code, t_main *main);
+void			exit_err_init(char *msg, int code, t_world *world);
+void			free_world(t_world *world);
+void			free_main(t_main *main);
+void			free_tab(char **tab);
 
 // Checks
 
-int		check_size_matrix(char **matrix);
-int		check_file(char *file);
+int				check_size_matrix(char **matrix);
+int				check_file(char *file);
 
 // Free
-void	free_plane(t_plane *plane);
-void	free_cyl(t_cyl *cyl);
-void	free_tab(char **tab);
+void			free_plane(t_plane *plane);
+void			free_cyl(t_cyl *cyl);
+void			free_tab(char **tab);
 
 // Utilities
 
-int		*alloc_int(int a, int b);
-double	*alloc_float(double a, double b);
-int		ft_range(int num, int min, int max);
-int		ft_range_f(double num, double min, double max);
-double	ft_atof(char *str);
-int		print_vec(char *string,t_vec vec);
-int		close_window(t_main	*main);
-int		print_color(char *string, t_rgb color);
-int		print_matrix(char *string, t_matrix mat);
-t_selected	discern_object(t_obj *obj);
-double	trace_time(int type);
-void	print_position(t_obj *selection);
-void	pop_material(t_emission *material, char **input);
+int				*alloc_int(int a, int b);
+double			*alloc_float(double a, double b);
+int				ft_range(int num, int min, int max);
+int				ft_range_f(double num, double min, double max);
+double			ft_atof(char *str);
+int				print_vec(char *string,t_vec vec);
+int				close_window(t_main	*main);
+int				print_color(char *string, t_rgb color);
+int				print_matrix(char *string, t_matrix mat);
+t_selected		discern_object(t_obj *obj);
+double			trace_time(int type);
+void			print_position(t_obj *selection);
+void			pop_material(t_emission *material, char **input);
 
 // Vector operations
 
-t_vec	vec(double x, double y, double z, double w);
-t_vec	vec_add(t_vec a, t_vec b);
-t_vec	vec_sub(t_vec a, t_vec b);
-t_vec	vec_scalar(t_vec a, double b);
-t_vec	vec_cross(t_vec a, t_vec b);
-t_vec	vec_multiply(t_vec a, t_vec b);
-t_vec	vec_normalize(t_vec v);
-t_vec	vec_orthogonal(t_vec vec);
-double	vec_length(t_vec v);
+t_vec			vec(double x, double y, double z, double w);
+t_vec			vec_add(t_vec a, t_vec b);
+t_vec			vec_sub(t_vec a, t_vec b);
+t_vec			vec_scalar(t_vec a, double b);
+t_vec			vec_cross(t_vec a, t_vec b);
+t_vec			vec_multiply(t_vec a, t_vec b);
+t_vec			vec_normalize(t_vec v);
+t_vec			vec_orthogonal(t_vec vec);
+double			vec_length(t_vec v);
 
 // Color operations
 
-int		pack_color(t_rgb color);
-t_rgb	color_add(t_rgb a, t_rgb b);
-t_rgb	color_sub(t_rgb a, t_rgb b);
-t_rgb	color_scalar(t_rgb color, double scalar);
-t_rgb	color_scalar_div(t_rgb a, double scalar);
-t_rgb	color_multiply(t_rgb a, t_rgb b);
-double	vec_dot(t_vec a, t_vec b);
-t_rgb	ret_color(double r, double g, double b);
-t_rgb	color_normalize(t_rgb color);
+int				pack_color(t_rgb color);
+t_rgb			color_add(t_rgb a, t_rgb b);
+t_rgb			color_sub(t_rgb a, t_rgb b);
+t_rgb			color_scalar(t_rgb color, double scalar);
+t_rgb			color_scalar_div(t_rgb a, double scalar);
+t_rgb			color_multiply(t_rgb a, t_rgb b);
+double			vec_dot(t_vec a, t_vec b);
+t_rgb			ret_color(double r, double g, double b);
+t_rgb			color_normalize(t_rgb color);
 
 // Matrix operations
 
-t_matrix	empty_matrix(void);
-t_matrix	identity_matrix(void);
-t_vec		matrix_translation(t_vec data, t_vec translate);
-t_vec		matrix_rotation(t_vec data, t_vec rotate);
-t_matrix	rotate_x(t_matrix mat, double angle);
-t_matrix	rotate_y(t_matrix mat, double angle);
-t_matrix	rotate_z(t_matrix mat, double angle);
+t_matrix		empty_matrix(void);
+t_matrix		identity_matrix(void);
+t_vec			matrix_translation(t_vec data, t_vec translate);
+t_vec			matrix_rotation(t_vec data, t_vec rotate);
+t_matrix		rotate_x(t_matrix mat, double angle);
+t_matrix		rotate_y(t_matrix mat, double angle);
+t_matrix		rotate_z(t_matrix mat, double angle);
 
 // Randomness
 

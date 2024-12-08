@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse.c                                            :+:      :+:    :+:   */
+/*   parse_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:13:43 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/04 07:12:59 by root             ###   ########.fr       */
+/*   Updated: 2024/12/08 19:03:28 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	check_iden_type(char *input)
 		return (SPHERE);
 	if (ft_strcmp(input, "cy") == 0)
 		return (CYLINDER);
+	if (ft_strcmp(input, "E") == 0)
+		return (EMISSION);
 	return (-1);
 }
 
@@ -43,6 +45,8 @@ int	input_par(char **input, t_world *world, int type)
 		parse_plane(world, input);
 	else if (type == CYLINDER)
 		parse_cyl(world, input);
+	else if (type == EMISSION)
+		world->emission = parse_emission(world, input);
 	else
 		printf("Error\ninvalid type");
 	printf("type: %i\n", type);
@@ -83,6 +87,7 @@ void	init_world(t_world *world)
 	world->cyl = NULL;
 	world->plane = NULL;
 	world->sphere = NULL;
+	world->emission = NULL;
 }
 
 t_world	*parse_world(t_world *world, char **argv)

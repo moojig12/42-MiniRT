@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:34 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 17:04:15 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/08 18:55:20 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,7 @@ int	parse_sphere(t_world *world, char **input)
 	if (input[3])
 		pop_color(&new->color, ft_split(input[3], ','));
 	if (input[4])
-		pop_material(&new->material, ft_split(input[4], ','));
-	else
-		pop_material_basic(&new->material);
+		new->material = check_material(input[4]);
 	new->next = NULL;
 	ft_lstadd_back_sphere_mrt(&world->sphere, new);
 	return (0);
