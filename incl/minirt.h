@@ -17,7 +17,7 @@
 # define EPSILON 0.0001
 # define STATIC_SAMPLE 4
 # define THREAD_COUNT 4
-
+# define WHITE_SPACE "\f\r\v\t\n "
 // Max depth of bounces for tracing
 # define MAXDEPTH 8
 
@@ -345,6 +345,7 @@ int				check_file(char *file);
 int				check_size_matrix(char **matrix);
 t_emission		*parse_emission(t_world *world, char **input);
 int				check_material(char *input);
+char			*ft_strtrim_mrt(char const *s1, char const *set);
 
 // Parsing amb
 

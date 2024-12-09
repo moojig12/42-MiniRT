@@ -56,6 +56,7 @@ int	check_par(t_world *world, char *input)
 
 	if (input == NULL || *input == '\n' || *input == '#')
 		return (0);
+	input = ft_strtrim_mrt(input, WHITE_SPACE);
 	input_matrix = ft_split(input, ' ');
 	if (**input_matrix == '\n')
 	{

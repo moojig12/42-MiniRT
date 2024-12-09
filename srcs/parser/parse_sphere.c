@@ -46,6 +46,7 @@ int	parse_sphere(t_world *world, char **input)
 	t_sphere	*new;
 
 	size = check_size_matrix(input);
+	printf("size: %i\n", size);
 	if (size != 4)
 		exit_err_init("Error\nToo many args for sphere\n", 1, world);
 	new = malloc(sizeof(t_sphere));
