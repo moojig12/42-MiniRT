@@ -1,5 +1,16 @@
-#include "minirt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_render.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/09 19:21:15 by root              #+#    #+#             */
+/*   Updated: 2024/12/09 19:21:15 by root             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "minirt.h"
 
 t_vec	cone_pewpew(t_vec norm, t_material *mat, t_ray ray)
 {
@@ -11,7 +22,8 @@ t_vec	cone_pewpew(t_vec norm, t_material *mat, t_ray ray)
 	ray.dest = vec_normalize(ray.dest);
 	norm = vec_normalize(norm);
 	if (mat->metalness == 1)
-		return (vec_sub(ray.dest, vec_scalar(norm, 2.0 * vec_dot(ray.dest, norm))));
+		return (vec_sub(ray.dest, vec_scalar(norm, 2.0 * \
+		vec_dot(ray.dest, norm))));
 	diffuse_dir = random_vec_range(-1.0, 1.0, 0);
 	if (vec_dot(diffuse_dir, norm) < 0)
 		diffuse_dir = vec_scalar(diffuse_dir, -1);
@@ -36,7 +48,8 @@ double	brdf_calculation(t_material mat, t_ray ray, t_vec norm)
 	return (diffuse + fresnel);
 }
 
-t_rgb	direct_light_occlusion(t_intersect intersect, t_world *world, t_rgb return_color)
+t_rgb	direct_light_occlusion(t_intersect intersect, t_world *world, \
+t_rgb return_color)
 {
 	t_ray	shadow_ray;
 	t_rgb	light_contribution;
@@ -45,10 +58,13 @@ t_rgb	direct_light_occlusion(t_intersect intersect, t_world *world, t_rgb return
 	double	cos_theta;
 	double	brdf;
 
-	shadow_ray.origin = vec_add(intersect.point, vec_scalar(intersect.norm, EPSILON));
-	shadow_ray.dest = vec_normalize(vec_sub(world->light->pos, shadow_ray.origin));
+	shadow_ray.origin = vec_add(intersect.point, vec_scalar(intersect.norm, \
+	EPSILON));
+	shadow_ray.dest = vec_normalize(vec_sub(world->light->pos, \
+	shadow_ray.origin));
 	light_distance =  vec_length(vec_sub(world->light->pos, intersect.point));
-	if (!is_occluded(shadow_ray, world, light_distance)) {
+	if (!is_occluded(shadow_ray, world, light_distance))
+	{
 		attenuation = 1.0 / (light_distance * light_distance);
 		cos_theta = vec_dot(intersect.norm, shadow_ray.dest);
 		cos_theta = fmax(0.0, cos_theta);
@@ -68,6 +84,6 @@ void	put_pixel_to_img(int color, t_main main, int x, int y)
 	if (x >= 0 && x < main.width && y >= 0 && y < main.height)
 	{
 		pxl = main.addr + (y * main.line_length + x *(main.bits_per_pixel / 8));
-		*(unsigned int*)pxl = color;
+		*(unsigned int *)pxl = color;
 	}
 }
