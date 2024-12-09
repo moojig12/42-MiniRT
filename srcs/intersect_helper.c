@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:57:44 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/09 07:21:55 by root             ###   ########.fr       */
+/*   Updated: 2024/12/09 12:03:45 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,15 @@ void	pop_intersec(t_intersect *inters, double t, t_ray ray, t_sphere *sphere)
 	inters->norm = vec_normalize(vec_sub(inters->point, sphere->pos));
 	inters->point = vec_add(inters->point, vec_scalar(inters->norm, EPSILON));
 	inters->color = sphere->color;
-	// inters->diffuse = sphere->material.diffuse;
-	// inters->reflectance = sphere->material.reflect;
+	material_init(&inters->material, METAL_ROUGH);
 }
 
 t_intersect	find_path(t_ray ray, t_world *world)
 {
-	double	closest_distance;
+	double			closest_distance;
 	t_intersect		closest_x;
 	t_intersect		inter;
-	t_obj	*object;
+	t_obj			*object;
 
 	closest_distance = INFINITY;
 	closest_x.hit = 0;
@@ -97,21 +96,3 @@ void	comp_calc_t(t_comp *comp)
 	else
 		comp->t = INFINITY;
 }
-
-/* void	calc_projection()
-{
-	double	projection1;
-	double	projection2;
-		projection1 = vec_dot(vec_sub(vec_add(ray.origin, vec_scalar(ray.dest, comp.t1)), cyl->pos), comp.axis);
-			if (comp.t1 > 0 && projection1 >= 0.0001 && projection1 <= cyl->height)
-			{
-				comp.t = comp.t1;
-				inter.hit = 1;
-			}
-			projection2 = vec_dot(vec_sub(vec_add(ray.origin, vec_scalar(ray.dest, comp.t2)), cyl->pos), comp.axis);
-			if ((!inter.hit || comp.t2 < comp.t) && comp.t2 > 0 && projection2 >= 0.0001 && projection2 <= cyl->height)
-			{
-				comp.t = comp.t2;
-				inter.hit = 1;
-			}
-} */

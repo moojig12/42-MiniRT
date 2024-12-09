@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:30:24 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/09 07:35:42 by root             ###   ########.fr       */
+/*   Updated: 2024/12/09 15:00:13 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,9 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	return_color = ret_color(0, 0, 0);
 	if (depth >= MAXDEPTH)
 		return (return_color);
-
 	intersection = find_path(ray, world);
 	if (!intersection.hit)
-		return (world->amb->color);
+		return (return_color);
 	new_ray.origin = intersection.point;
 	new_ray.dest = cone_pewpew(intersection.norm, &intersection.material, ray);
 	brdf = brdf_calculation(intersection.material, new_ray, intersection.norm);

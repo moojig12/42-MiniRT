@@ -15,7 +15,7 @@
 // Constants
 # define PI 3.14159265358979323846
 # define EPSILON 0.0001
-# define STATIC_SAMPLE 4
+# define STATIC_SAMPLE 8
 # define THREAD_COUNT 4
 
 // Max depth of bounces for tracing
@@ -87,7 +87,8 @@ typedef enum e_material_type {
 	PLASTIC,
 	STANDARD,
 	METAL_ROUGH,
-	MIRROR
+	MIRROR,
+	ROCK
 }	t_material_type;
 
 typedef struct s_vector {
@@ -145,8 +146,8 @@ typedef struct s_computation {
 }	t_comp;
 
 typedef struct s_material {
-	double	reflect;
-	double	diffuse;
+	double	metalness;
+	double	roughness;
 	double	spec;
 }	t_material;
 

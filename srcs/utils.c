@@ -6,45 +6,11 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 08:05:16 by root              #+#    #+#             */
-/*   Updated: 2024/12/09 08:02:02 by root             ###   ########.fr       */
+/*   Updated: 2024/12/09 12:04:42 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-void	material_init(t_material *material, int type)
-{
-	if (type == METAL)
-	{
-		material->diffuse = 0.23;
-		material->reflect = 0.77;
-		material->spec = 0.2;
-	}
-	else if (type == METAL_ROUGH)
-	{
-		material->diffuse = 0.44;
-		material->reflect = 0.56;
-		material->spec = 0.6;
-	}
-	else if (type == PLASTIC)
-	{
-		material->diffuse = 0.80;
-		material->reflect = 0.13;
-		material->spec = 0.1;
-	}
-	else if (type == MIRROR)
-	{
-		material->reflect = 1.0;
-		material->diffuse = 0.0;
-		material->spec = 0.0;
-	}
-	else
-	{
-		material->diffuse = 0.5;
-		material->reflect = 0.5;
-		material->spec = 0.0;
-	}
-}
 
 int	ft_isspace(char c)
 {
