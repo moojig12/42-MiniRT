@@ -47,6 +47,7 @@ SRC = srcs/parser/checks.c \
       srcs/movement_misc.c \
       srcs/render_modes.c \
       srcs/utils_render.c \
+      srcs/utils_material.c \
       srcs/main.c
 
 SRC_B = srcs/parser_bonus/checks_bonus.c \

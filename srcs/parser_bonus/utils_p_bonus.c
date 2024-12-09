@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 16:47:03 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/09 08:19:26 by root             ###   ########.fr       */
+/*   Updated: 2024/12/09 13:28:57 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,6 @@ int	check_material(char *input)
 
 void	pop_material_basic(t_material *material)
 {
-	material->diffuse = 0.80;
-	material->reflect = 0.13;
+	material->roughness = 0.80;
+	material->metalness = 0.13;
 }

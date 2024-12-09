@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:29:59 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/09 08:02:19 by root             ###   ########.fr       */
+/*   Updated: 2024/12/09 14:54:50 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_intersect	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersect inters)
 		c = calc_t(a, b, disc);
 		if (c < INFINITY)
 			pop_intersec(&inters, c, ray, sphere);
-		material_init(&inters.material, METAL_ROUGH);
+		material_init(&inters.material, MIRROR);
 	}
 	return (inters);
 }
@@ -102,7 +102,7 @@ t_intersect	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersect inter)
 			if (vec_dot(ray.dest, inter.norm) > 0)
 				inter.norm = vec_scalar(inter.norm, -1);
 			inter.point = vec_add(inter.point, vec_scalar(inter.norm, EPSILON));
-			material_init(&inter.material, PLASTIC);
+			material_init(&inter.material, ROCK);
 		}
 	}
 	return (inter);
@@ -116,7 +116,7 @@ t_intersect	intersect(t_ray ray, t_obj *obj)
 	inter.distance = INFINITY;
 	inter.point = vec(0, 0, 0, 0);
 	inter.norm = vec(0, 0, 0, 0);
-	material_init(&inter.material, METAL_ROUGH);
+	material_init(&inter.material, 0);
 	ray.dest = vec_normalize(ray.dest);
 	if (obj->type == SPHERE)
 		return (intersect_sphere(ray, (t_sphere *)obj->data, inter));
