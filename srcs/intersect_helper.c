@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersect_helper.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:57:44 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 19:04:12 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/09 07:21:55 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ double	calc_t(double a, double b, double disc)
 	return (t);
 }
 
-void	pop_intersec(t_x *inters, double t, t_ray ray, t_sphere *sphere)
+void	pop_intersec(t_intersect *inters, double t, t_ray ray, t_sphere *sphere)
 {
 	inters->hit = 1;
 	inters->distance = t;
@@ -41,11 +41,11 @@ void	pop_intersec(t_x *inters, double t, t_ray ray, t_sphere *sphere)
 	// inters->reflectance = sphere->material.reflect;
 }
 
-t_x	find_path(t_ray ray, t_world *world)
+t_intersect	find_path(t_ray ray, t_world *world)
 {
 	double	closest_distance;
-	t_x		closest_x;
-	t_x		inter;
+	t_intersect		closest_x;
+	t_intersect		inter;
 	t_obj	*object;
 
 	closest_distance = INFINITY;

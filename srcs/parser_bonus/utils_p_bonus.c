@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_p_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 16:47:03 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 19:12:30 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/09 07:27:55 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	check_material(char *input)
 	return (STANDARD);
 }
 
-void	pop_material_basic(t_mat *material)
+void	pop_material_basic(t_material *material)
 {
 	material->reflect = 0.75;
 	material->diffuse = 0.25;

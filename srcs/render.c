@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:30:24 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 17:01:26 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/09 07:35:42 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	key_handles(t_main *main)
 	// The function for simulating and bouncing a ray off an object
 t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 {
-	t_x	intersection;
+	t_intersect		intersection;
 	t_rgb			return_color;
 	t_rgb			incoming;
 	t_ray			new_ray;
@@ -35,8 +35,8 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	if (!intersection.hit)
 		return (world->amb->color);
 	new_ray.origin = intersection.point;
-	new_ray.dest = cone_pewpew(intersection.norm, intersection, ray);
-	brdf = brdf_calculation(intersection, new_ray, intersection.norm);
+	new_ray.dest = cone_pewpew(intersection.norm, &intersection.material, ray);
+	brdf = brdf_calculation(intersection.material, new_ray, intersection.norm);
 	incoming = trace_path(world, new_ray, depth + 1);
 	return_color = color_multiply(world->amb->color, intersection.color);
 	return_color = color_scalar(return_color, world->amb->ratio);

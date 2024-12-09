@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   intersect.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:29:59 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 16:59:30 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/09 08:02:19 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_x	intersect_sphere(t_ray ray, t_sphere *sphere, t_x inters)
+t_intersect	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersect inters)
 {
 	double	a;
 	double	b;
@@ -32,11 +32,12 @@ t_x	intersect_sphere(t_ray ray, t_sphere *sphere, t_x inters)
 		c = calc_t(a, b, disc);
 		if (c < INFINITY)
 			pop_intersec(&inters, c, ray, sphere);
+		material_init(&inters.material, METAL_ROUGH);
 	}
 	return (inters);
 }
 
-t_x	intersect_plane(t_ray ray, t_plane *plane, t_x *intersc)
+t_intersect	intersect_plane(t_ray ray, t_plane *plane, t_intersect *intersc)
 {
 	double	denom;
 	double	t;
@@ -60,7 +61,7 @@ t_x	intersect_plane(t_ray ray, t_plane *plane, t_x *intersc)
 	return (*intersc);
 }
 
-t_x	intersect_cylinder(t_ray ray, t_cyl *cyl, t_x inter)
+t_intersect	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersect inter)
 {
 	t_vec	point_on_axis;
 	double	projection;
@@ -101,22 +102,21 @@ t_x	intersect_cylinder(t_ray ray, t_cyl *cyl, t_x inter)
 			if (vec_dot(ray.dest, inter.norm) > 0)
 				inter.norm = vec_scalar(inter.norm, -1);
 			inter.point = vec_add(inter.point, vec_scalar(inter.norm, EPSILON));
+			material_init(&inter.material, PLASTIC);
 		}
 	}
 	return (inter);
 }
 
-t_x	intersect(t_ray ray, t_obj *obj)
+t_intersect	intersect(t_ray ray, t_obj *obj)
 {
-	t_x	inter;
+	t_intersect	inter;
 
 	inter.hit = 0;
 	inter.distance = INFINITY;
 	inter.point = vec(0, 0, 0, 0);
 	inter.norm = vec(0, 0, 0, 0);
-	inter.reflectance = 0.5;
-	inter.diffuse = 0.5;
-	inter.specular = 0.0;
+	material_init(&inter.material, METAL_ROUGH);
 	ray.dest = vec_normalize(ray.dest);
 	if (obj->type == SPHERE)
 		return (intersect_sphere(ray, (t_sphere *)obj->data, inter));
@@ -130,7 +130,7 @@ t_x	intersect(t_ray ray, t_obj *obj)
 int	is_occluded(t_ray shadow_ray, t_world *world, double light_distance)
 {
 	t_obj	*object;
-	t_x		inter;
+	t_intersect		inter;
 
 	object = world->objlist;
 	while (object)

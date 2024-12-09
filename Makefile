@@ -45,6 +45,8 @@ SRC = srcs/parser/checks.c \
       srcs/utils_vec2.c \
       srcs/utils_atof.c \
       srcs/movement_misc.c \
+      srcs/render_modes.c \
+      srcs/utils_render.c \
       srcs/main.c
 
 SRC_B = srcs/parser_bonus/checks_bonus.c \
@@ -58,20 +60,19 @@ SRC_B = srcs/parser_bonus/checks_bonus.c \
       srcs/parser_bonus/parse_utils_bonus.c \
       srcs/parser_bonus/utils_p_bonus.c \
       srcs/parser_bonus/parse_bonus.c \
-	  srcs/parser_bonus/parse_emission.c \
+      srcs/parser_bonus/parse_emission.c \
       srcs/cam_ray.c \
       srcs/error.c \
       srcs/free.c \
       srcs/free2.c \
       srcs/intersect.c \
-	  srcs/intersect_helper.c \
+      srcs/intersect_helper.c \
       srcs/matrix_ops.c \
       srcs/matrix_ops2.c \
       srcs/movement.c \
       srcs/movement_utils.c \
       srcs/object_selection.c \
       srcs/random_gen.c \
-      srcs/render_thread.c \
       srcs/utils_color.c \
       srcs/utils_color2.c \
       srcs/utils_vec.c \
@@ -81,8 +82,9 @@ SRC_B = srcs/parser_bonus/checks_bonus.c \
       srcs/utils_vec2.c \
       srcs/utils_atof.c \
       srcs/movement_misc.c \
-	  srcs/render_modes.c \
-	  srcs/utils_render.c \
+      srcs/render_thread.c \
+      srcs/render_modes.c \
+      srcs/utils_render.c \
       srcs/main.c
 
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))

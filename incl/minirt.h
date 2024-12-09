@@ -85,7 +85,9 @@ typedef enum e_material_type {
 	METAL = 1,
 	GLASS,
 	PLASTIC,
-	STANDARD
+	STANDARD,
+	METAL_ROUGH,
+	MIRROR
 }	t_material_type;
 
 typedef struct s_vector {
@@ -145,7 +147,8 @@ typedef struct s_computation {
 typedef struct s_material {
 	double	reflect;
 	double	diffuse;
-}	t_mat;
+	double	spec;
+}	t_material;
 
 typedef struct s_ambient {
 	double	ratio;
@@ -193,16 +196,14 @@ typedef struct s_obj {
 }	t_obj;
 
 typedef struct s_intersection {
+	t_material	material;
 	t_vec	point;
 	t_vec	norm;
 	t_vec	origin;
-	double	reflectance;
-	double	diffuse;
-	double	specular;
 	double	distance;
 	int		hit;
 	t_rgb	color;
-}	t_x;
+}	t_intersect;
 
 typedef struct s_screen {
 	double	width;
@@ -287,9 +288,9 @@ t_rgb			trace_path(t_world *world, t_ray ray, int depth);
 void			flush_screen(t_main *main, t_rgb **output);
 
 // Light and ray calculations
-t_rgb			direct_light_occlusion(t_x intersection, t_world *world, t_rgb return_color);
-t_vec			cone_pewpew(t_vec norm, t_x inter, t_ray ray);
-double			brdf_calculation(t_x intersection, t_ray ray, t_vec norm);
+t_rgb			direct_light_occlusion(t_intersect intersection, t_world *world, t_rgb return_color);
+t_vec			cone_pewpew(t_vec norm, t_material *mat, t_ray ray);
+double			brdf_calculation(t_material mat, t_ray ray, t_vec norm);
 int				is_occluded(t_ray shadow_ray, t_world *world, double light_distance);
 
 // Render modes
@@ -316,9 +317,9 @@ void			miscel_keys(int key_code, t_main *main);
 
 // intersec
 double			calc_t(double a, double b, double disc);
-void			pop_intersec(t_x *inters, double t, t_ray ray, t_sphere *sphere);
-t_x				intersect(t_ray ray, t_obj *obj);
-t_x				find_path(t_ray ray, t_world *world);
+void			pop_intersec(t_intersect *inters, double t, t_ray ray, t_sphere *sphere);
+t_intersect				intersect(t_ray ray, t_obj *obj);
+t_intersect				find_path(t_ray ray, t_world *world);
 t_comp			calc_computations(t_ray ray, t_cyl *cyl);
 void			comp_calc_t(t_comp *comp);
 // Parsing
@@ -397,6 +398,7 @@ void			free_tab(char **tab);
 
 // Utilities
 
+void			material_init(t_material *material, int type);
 int				*alloc_int(int a, int b);
 double			*alloc_float(double a, double b);
 int				ft_range(int num, int min, int max);
