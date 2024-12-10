@@ -296,9 +296,9 @@ t_rgb			trace_path(t_world *world, t_ray ray, int depth);
 void			flush_screen(t_main *main, t_rgb **output);
 
 // Render thread
-void	initiate_mutexes(t_main *main);
-void	thread_inner_render(t_main *main, t_rgb **output, int x, int y);
-t_main	*screen_init_thread(t_thread_screen *screen, t_render *thread);
+void			initiate_mutexes(t_main *main);
+void			thread_inner_render(t_main *main, t_rgb **output, int x, int y);
+t_main			*screen_init_thread(t_thread_screen *screen, t_render *thread);
 
 // Light and ray calculations
 t_rgb			direct_light_occlusion(t_intersect intersection, t_world *world, t_rgb return_color);
@@ -331,11 +331,14 @@ void			miscel_keys(int key_code, t_main *main);
 
 // intersec
 double			calc_t(double a, double b, double disc);
-void			pop_intersec(t_intersect *inters, double t, t_ray ray, t_sphere *sphere);
-t_intersect				intersect(t_ray ray, t_obj *obj);
-t_intersect				find_path(t_ray ray, t_world *world);
+void			calc_projection(t_ray ray, t_comp *comp, t_cyl *cyl, t_intersect *inter);
+void			pop_intersec_sphere(t_intersect *inters, double t, t_ray ray, t_sphere *sphere);
+t_intersect		intersect(t_ray ray, t_obj *obj);
+t_intersect		find_path(t_ray ray, t_world *world);
 t_comp			calc_computations(t_ray ray, t_cyl *cyl);
 void			comp_calc_t(t_comp *comp);
+void			pop_intersec_cyl(t_ray ray, t_intersect *inter, t_comp comp, t_cyl *cyl);
+
 // Parsing
 
 t_world			*parse_world(t_world *world, char **argv);

@@ -29,7 +29,7 @@ double	calc_t(double a, double b, double disc)
 	return (t);
 }
 
-void	pop_intersec(t_intersect *inters, double t, t_ray ray, t_sphere *sphere)
+void	pop_intersec_sphere(t_intersect *inters, double t, t_ray ray, t_sphere *sphere)
 {
 	inters->hit = 1;
 	inters->distance = t;
@@ -96,3 +96,4 @@ void	comp_calc_t(t_comp *comp)
 	else
 		comp->t = INFINITY;
 }
+

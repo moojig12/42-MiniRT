@@ -54,18 +54,3 @@ void	free_tab(char **tab)
 	}
 	free(tab);
 }
-
-
-int	powerset(int *set, int index, int *subs, int subsize)
-{
-	check_sum();
-	print_nums(subs, SUBSIZE);
-	return ;
-
-	
-	subs[subsize] = set[index];
-	powerset(set, index + 1, subs, subsize + 1);
-	powerset(set, index, subs, subsize + 1);
-}
-
-3 2 1 0

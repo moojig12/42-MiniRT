@@ -31,7 +31,7 @@ t_intersect	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersect inters)
 	{
 		c = calc_t(a, b, disc);
 		if (c < INFINITY)
-			pop_intersec(&inters, c, ray, sphere);
+			pop_intersec_sphere(&inters, c, ray, sphere);
 		material_init(&inters.material, MIRROR);
 	}
 	return (inters);
@@ -63,10 +63,6 @@ t_intersect	intersect_plane(t_ray ray, t_plane *plane, t_intersect *intersc)
 
 t_intersect	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersect inter)
 {
-	t_vec	point_on_axis;
-	double	projection;
-	double	projection1;
-	double	projection2;
 	t_comp	comp;
 
 	comp = calc_computations(ray, cyl);
@@ -77,28 +73,10 @@ t_intersect	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersect inter)
 		comp_calc_t(&comp);
 		if (comp.t < INFINITY)
 		{
-			inter.distance = comp.t;
-			inter.point = vec_add(ray.origin, vec_scalar(ray.dest, comp.t));
-			projection1 = vec_dot(vec_sub(vec_add(ray.origin, vec_scalar(ray.dest, comp.t1)), cyl->pos), comp.axis);
-			if (comp.t1 > 0 && projection1 >= 0.0001 && projection1 <= cyl->height)
-			{
-				comp.t = comp.t1;
-				inter.hit = 1;
-			}
-			projection2 = vec_dot(vec_sub(vec_add(ray.origin, vec_scalar(ray.dest, comp.t2)), cyl->pos), comp.axis);
-			if ((!inter.hit || comp.t2 < comp.t) && comp.t2 > 0 && projection2 >= 0.0001 && projection2 <= cyl->height)
-			{
-				comp.t = comp.t2;
-				inter.hit = 1;
-			}
+			calc_projection(ray, &comp, cyl, &inter);
 			if (!inter.hit)
 				return (inter);
-			inter.distance = comp.t;
-			inter.point = vec_add(ray.origin, vec_scalar(ray.dest, comp.t));
-			projection = vec_dot(vec_sub(inter.point, cyl->pos), comp.axis);
-			point_on_axis = vec_add(cyl->pos, vec_scalar(comp.axis, projection));
-			inter.norm = vec_normalize(vec_sub(inter.point, point_on_axis));
-			inter.color = cyl->color;
+			pop_intersec_cyl(ray, &inter, comp, cyl);
 			if (vec_dot(ray.dest, inter.norm) > 0)
 				inter.norm = vec_scalar(inter.norm, -1);
 			inter.point = vec_add(inter.point, vec_scalar(inter.norm, EPSILON));
