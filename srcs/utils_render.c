@@ -3,14 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   utils_render.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 19:21:15 by root              #+#    #+#             */
-/*   Updated: 2024/12/09 19:21:15 by root             ###   ########.fr       */
+/*   Updated: 2024/12/10 13:45:09 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+void	put_color_to_buff(t_main *main, t_rgb **output, int x, int y)
+{
+	int	output_color;
+
+	output_color = pack_color(output[y][x]);
+	if (main->render_switch == LOW)
+		output[y][x] = ret_color(0, 0, 0);
+	put_pixel_to_img(output_color, *main, x, y);
+}
 
 t_vec	cone_pewpew(t_vec norm, t_material *mat, t_ray ray)
 {
@@ -35,6 +45,7 @@ t_vec	cone_pewpew(t_vec norm, t_material *mat, t_ray ray)
 	ret = spread_dir;
 	return (vec_normalize(ret));
 }
+
 	// Hybrid brdf, with Fresnel and Cook-torrance
 double	brdf_calculation(t_material mat, t_ray ray, t_vec norm)
 {
@@ -48,6 +59,7 @@ double	brdf_calculation(t_material mat, t_ray ray, t_vec norm)
 	return (diffuse + fresnel);
 }
 
+// Checking for direct occlusion to a single point light
 t_rgb	direct_light_occlusion(t_intersect intersect, t_world *world, \
 t_rgb return_color)
 {
@@ -56,22 +68,22 @@ t_rgb return_color)
 	double	attenuation;
 	double	light_distance;
 	double	cos_theta;
-	double	brdf;
 
 	shadow_ray.origin = vec_add(intersect.point, vec_scalar(intersect.norm, \
 	EPSILON));
 	shadow_ray.dest = vec_normalize(vec_sub(world->light->pos, \
 	shadow_ray.origin));
-	light_distance =  vec_length(vec_sub(world->light->pos, intersect.point));
+	light_distance = vec_length(vec_sub(world->light->pos, intersect.point));
 	if (!is_occluded(shadow_ray, world, light_distance))
 	{
 		attenuation = 1.0 / (light_distance * light_distance);
 		cos_theta = vec_dot(intersect.norm, shadow_ray.dest);
 		cos_theta = fmax(0.0, cos_theta);
-		brdf = brdf_calculation(intersect.material, shadow_ray, intersect.norm);
 		light_contribution = color_scalar(color_multiply(world->light->color, \
 				intersect.color), cos_theta * attenuation * \
-				world->light->brightness * brdf);
+				world->light->brightness * \
+				brdf_calculation(intersect.material, shadow_ray, \
+				intersect.norm));
 		return_color = color_add(return_color, light_contribution);
 	}
 	return (color_normalize(return_color));

@@ -86,6 +86,8 @@ SRC_B = srcs/parser_bonus/checks_bonus.c \
       srcs/render_thread.c \
       srcs/render_modes.c \
       srcs/utils_render.c \
+      srcs/render_thread_sub.c \
+      srcs/utils_material.c \
       srcs/main.c
 
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))

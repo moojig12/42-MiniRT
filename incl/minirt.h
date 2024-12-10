@@ -16,7 +16,7 @@
 # define PI 3.14159265358979323846
 # define EPSILON 0.0001
 # define STATIC_SAMPLE 8
-# define THREAD_COUNT 4
+# define THREAD_COUNT 24
 # define WHITE_SPACE "\f\r\v\t\n "
 // Max depth of bounces for tracing
 # define MAXDEPTH 8
@@ -239,6 +239,12 @@ typedef struct s_world {
 	int			object_num;
 }	t_world;
 
+typedef struct s_thread_screen {
+	int	x;
+	int	y;
+	int	y_limit;
+}	t_thread_screen;
+
 typedef struct s_render {
 	pthread_t		thread;
 	int				id;
@@ -284,9 +290,15 @@ int				main_pipeline_threaded(t_main *main);
 
 // Render
 void			*render_thread(void *arg);
+void			put_color_to_buff(t_main *main, t_rgb **output, int x, int y);
 void			put_pixel_to_img(int color, t_main main, int x, int y);
 t_rgb			trace_path(t_world *world, t_ray ray, int depth);
 void			flush_screen(t_main *main, t_rgb **output);
+
+// Render thread
+void	initiate_mutexes(t_main *main);
+void	thread_inner_render(t_main *main, t_rgb **output, int x, int y);
+t_main	*screen_init_thread(t_thread_screen *screen, t_render *thread);
 
 // Light and ray calculations
 t_rgb			direct_light_occlusion(t_intersect intersection, t_world *world, t_rgb return_color);
@@ -302,6 +314,7 @@ void			render_low(t_main *main, int x, int y, t_rgb **output);
 
 // Movement
 
+void			key_handles(t_main *main);
 int				movement(int key_code, t_main *main);
 int				move(t_obj *obj, t_vec	movement, int movement_code);
 int				rotate_object(t_obj *object, t_vec rotation);

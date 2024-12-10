@@ -3,20 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:30:24 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/09 15:00:13 by root             ###   ########.fr       */
+/*   Updated: 2024/12/10 14:00:52 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-void	key_handles(t_main *main)
-{
-	mlx_key_hook(main->win, movement, main);
-	mlx_hook(main->win, 17, 1L << 17, close_window, main);
-}
 
 	// The function for simulating and bouncing a ray off an object
 t_rgb	trace_path(t_world *world, t_ray ray, int depth)
@@ -48,7 +42,6 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 int	render(t_main *main)
 {
 	t_rgb	**output;
-	int		output_color;
 	int		x;
 	int		y;
 
@@ -63,10 +56,7 @@ int	render(t_main *main)
 				render_super(main, x, y, output);
 			else
 				render_low(main, x, y, output);
-			output_color = pack_color(output[y][x]);
-			if (main->render_switch == LOW)
-				output[y][x] = ret_color(0, 0, 0);
-			put_pixel_to_img(output_color, *main, x, y);
+			put_color_to_buff(main, output, x, y);
 			x++;
 		}
 		x = 0;

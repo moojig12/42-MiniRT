@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 09:55:18 by root              #+#    #+#             */
-/*   Updated: 2024/12/04 09:56:40 by root             ###   ########.fr       */
+/*   Updated: 2024/12/10 15:03:14 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,3 +54,18 @@ void	free_tab(char **tab)
 	}
 	free(tab);
 }
+
+
+int	powerset(int *set, int index, int *subs, int subsize)
+{
+	check_sum();
+	print_nums(subs, SUBSIZE);
+	return ;
+
+	
+	subs[subsize] = set[index];
+	powerset(set, index + 1, subs, subsize + 1);
+	powerset(set, index, subs, subsize + 1);
+}
+
+3 2 1 0

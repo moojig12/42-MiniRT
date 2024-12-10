@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   movement_misc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 08:09:06 by root              #+#    #+#             */
-/*   Updated: 2024/12/04 08:09:30 by root             ###   ########.fr       */
+/*   Updated: 2024/12/10 13:41:36 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+void	key_handles(t_main *main)
+{
+	mlx_key_hook(main->win, movement, main);
+	mlx_hook(main->win, 17, 1L << 17, close_window, main);
+}
 
 void	miscel_keys(int key_code, t_main *main)
 {
