@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:30:24 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/10 14:00:52 by nmandakh         ###   ########.fr       */
+/*   Updated: 2024/12/11 00:20:30 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 	return_color = color_scalar(return_color, world->amb->ratio);
 	return_color = direct_light_occlusion(intersection, world, return_color);
 	return_color = color_add(return_color, color_scalar(incoming, brdf));
+	return_color = color_add(return_color, color_scalar(ret_color(1.0, 1.0, 1.0), intersection.emission));
 	return (color_normalize(return_color));
 }
 

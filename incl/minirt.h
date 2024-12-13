@@ -16,7 +16,7 @@
 # define PI 3.14159265358979323846
 # define EPSILON 0.0001
 # define STATIC_SAMPLE 8
-# define THREAD_COUNT 24
+# define THREAD_COUNT 8
 # define WHITE_SPACE "\f\r\v\t\n "
 // Max depth of bounces for tracing
 # define MAXDEPTH 8
@@ -118,7 +118,6 @@ typedef struct s_atof {
 typedef struct s_ray {
 	t_vec	origin;
 	t_vec	dest;
-	// t_vec	norm;
 }	t_ray;
 typedef struct s_camera {
 	t_vec	pos;
@@ -149,6 +148,7 @@ typedef struct s_material {
 	double	metalness;
 	double	roughness;
 	double	spec;
+	double	emission;
 }	t_material;
 
 typedef struct s_ambient {
@@ -193,6 +193,7 @@ typedef struct s_cylinder {
 typedef struct s_obj {
 	int		type;
 	void	*data;
+	int		emissive;
 	t_obj	*next;
 }	t_obj;
 
@@ -202,6 +203,7 @@ typedef struct s_intersection {
 	t_vec	norm;
 	t_vec	origin;
 	double	distance;
+	double	emission;
 	int		hit;
 	t_rgb	color;
 }	t_intersect;
@@ -235,8 +237,7 @@ typedef struct s_world {
 	t_plane		*plane;
 	t_obj		*objlist;
 	t_obj		*selected;
-	t_emission	*emission;
-	int			object_num;
+	// t_emission	*emission;
 }	t_world;
 
 typedef struct s_thread_screen {

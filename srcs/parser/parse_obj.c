@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:40:56 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/04 20:46:34 by root             ###   ########.fr       */
+/*   Updated: 2024/12/11 00:15:00 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_obj	*add_sobj(int type, void *list)
 	new = malloc(sizeof(t_obj));
 	new->type = type;
 	new->data = list;
+	new->emissive = 0;
 	new->next = NULL;
 	return (new);
 }

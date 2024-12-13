@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:57:44 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/09 12:03:45 by root             ###   ########.fr       */
+/*   Updated: 2024/12/11 00:22:14 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ t_intersect	find_path(t_ray ray, t_world *world)
 			{
 				closest_distance = inter.distance;
 				closest_x = inter;
+				closest_x.emission = (double)object->emissive;
 			}
 		}
 		object = object->next;

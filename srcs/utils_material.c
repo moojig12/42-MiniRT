@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 12:04:30 by root              #+#    #+#             */
-/*   Updated: 2024/12/09 19:18:10 by root             ###   ########.fr       */
+/*   Updated: 2024/12/11 18:05:15 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,5 @@ void	material_init(t_material *material, int type)
 	else if (type == ROCK)
 		material_pop(material, 1.0, 0.0, 0.1);
 	else
-		material_pop(material, 0.5, 0.5, 0.5);
+		material_pop(material, 1, 0.5, 0.5);
 }

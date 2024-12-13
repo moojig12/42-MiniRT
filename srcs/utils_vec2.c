@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 08:05:54 by root              #+#    #+#             */
-/*   Updated: 2024/12/04 08:08:17 by root             ###   ########.fr       */
+/*   Updated: 2024/12/11 23:38:19 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,11 @@ t_vec	vec_scalar(t_vec a, double b)
 t_vec	vec_normalize(t_vec v)
 {
 	double	magnitude;
+	double inv_mag;
 
-	magnitude = sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
-	if (magnitude == 0)
+	magnitude = v.x * v.x + v.y * v.y + v.z * v.z;
+	if (magnitude < 1e-6)
 		return ((t_vec){0, 0, 0, 0});
-	return ((t_vec){v.x / magnitude, v.y / magnitude, v.z / magnitude, 1});
+	inv_mag = 1.0 / sqrt(magnitude);
+	return ((t_vec){v.x * inv_mag, v.y * inv_mag, v.z * inv_mag, 1});
 }

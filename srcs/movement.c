@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 10:00:02 by root              #+#    #+#             */
-/*   Updated: 2024/12/04 10:00:03 by root             ###   ########.fr       */
+/*   Updated: 2024/12/13 08:29:13 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int	move(t_obj *obj, t_vec	movement, int movement_code)
 		moved_vec = matrix_rotation(*selected.dir, movement_angle);
 		moved_vec = vec_normalize(moved_vec);
 		*selected.pos = vec_add(*selected.pos, moved_vec);
-		return (0);
 	}
 	return (0);
 }
@@ -61,6 +60,14 @@ int	rotate_object(t_obj *object, t_vec rotation)
 	return (0);
 }
 
+void	emmit(t_obj *obj)
+{
+	if (obj->emissive == 1)
+		obj->emissive = 0;
+	else
+		obj->emissive = 1;
+}
+
 int	movement(int key_code, t_main *main)
 {
 	printf("keycode: %i\n", key_code);
@@ -76,6 +83,8 @@ int	movement(int key_code, t_main *main)
 		rotate_left(main);
 	if (key_code == ROTATE_RIGHT)
 		rotate_right(main);
+	if (key_code == 103)
+		emmit(main->world->selected);
 	movement_selected(key_code, main->world->selected);
 	rotation_selected(key_code, main->world->selected);
 	return (1);

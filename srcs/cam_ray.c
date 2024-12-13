@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 08:04:56 by root              #+#    #+#             */
-/*   Updated: 2024/12/04 08:04:56 by root             ###   ########.fr       */
+/*   Updated: 2024/12/11 22:51:01 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ t_ray	gen_ray(t_camera *cam, int x, int y)
 	t_screen	screen;
 
 	screen.aspect_ratio = ((double)cam->width / (double)cam->height);
-	screen.ndc_x = (x + 0.5) / cam->width;
+	screen.ndc_x = (x + 0.5) / cam->width * screen.aspect_ratio;
 	screen.ndc_y = (y + 0.5) / cam->height;
 	screen.pixel_x = (2 * screen.ndc_x - 1) * \
-	tan((double)cam->fov * 0.5 * PI / 180) * screen.aspect_ratio;
+	tan((double)cam->fov * 0.5 * PI / 180);
 	screen.pixel_y = (1 - 2 * screen.ndc_y) * \
 	tan((double)cam->fov * 0.5 * PI / 180);
 	screen.forward = vec_normalize(cam->direction);
