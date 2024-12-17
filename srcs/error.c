@@ -6,7 +6,7 @@
 /*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 16:17:00 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/17 13:52:17 by nmandakh         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:57:23 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,9 @@ void	free_main(t_main *main)
 	if (main->win)
 		mlx_destroy_window(main->mlx, main->win);
 	if (main->mlx)
+	{
 		mlx_destroy_display(main->mlx);
+		free(main->mlx);
+	}
 	free(main);
 }

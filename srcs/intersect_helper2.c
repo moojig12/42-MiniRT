@@ -6,11 +6,11 @@
 /*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:02:22 by nmandakh          #+#    #+#             */
-/*   Updated: 2024/12/17 13:02:56 by nmandakh         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:59:14 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-                #include "minirt.h"
+#include "minirt.h"
 
 void	calc_projection(t_ray ray, t_comp *comp, t_cyl *cyl, t_intersect *inter)
 {

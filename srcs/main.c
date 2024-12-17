@@ -6,7 +6,7 @@
 /*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 08:14:29 by root              #+#    #+#             */
-/*   Updated: 2024/12/17 13:47:12 by nmandakh         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:59:04 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 int	close_window(t_main	*main)
 {
-	// free_world(main->world);
 	free_main(main);
 	exit (0);
 }

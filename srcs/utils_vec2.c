@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_vec2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 08:05:54 by root              #+#    #+#             */
-/*   Updated: 2024/12/11 23:38:19 by root             ###   ########.fr       */
+/*   Updated: 2024/12/17 13:59:31 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_vec	vec_scalar(t_vec a, double b)
 t_vec	vec_normalize(t_vec v)
 {
 	double	magnitude;
-	double inv_mag;
+	double	inv_mag;
 
 	magnitude = v.x * v.x + v.y * v.y + v.z * v.z;
 	if (magnitude < 1e-6)
