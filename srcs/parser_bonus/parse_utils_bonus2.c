@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_utils_bonus2.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/17 13:37:09 by fjoestin          #+#    #+#             */
+/*   Updated: 2024/12/17 13:40:03 by fjoestin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 static void	*ft_free_w(char **result, int w)
@@ -15,14 +27,7 @@ static void	*ft_free_w(char **result, int w)
 	return (NULL);
 }
 
-static bool is_whitespace(char c)
-{
-	if ((c >= 11 && c <= 13) || c == 32 || c == 9)
-		return (true);
-	return (false);
-}
-
-static int count_splits(char *str)
+static int	count_splits(char *str)
 {
 	int		i;
 	int		count;
@@ -31,13 +36,14 @@ static int count_splits(char *str)
 	i = 0;
 	count = 0;
 	ready = false;
-	if(!str)
-		return(0);
+	if (!str)
+		return (0);
 	while (str[i] != '\0')
 	{
 		if (is_whitespace(str[i]) == false)
 			ready = true;
-		if (((is_whitespace(str[i]) == true) || str[i + 1] == '\0') && ready == true)
+		if (((is_whitespace(str[i]) == true) || str[i + 1] == '\0') 
+			&& ready == true)
 		{
 			ready = false;
 			count++;
@@ -47,7 +53,7 @@ static int count_splits(char *str)
 	return (count);
 }
 
-static char *form_word(char *str, int i)
+static char	*form_word(char *str, int i)
 {
 	char	*ret;
 	int		j;
@@ -68,7 +74,7 @@ static char *form_word(char *str, int i)
 	return (ret);
 }
 
-static char *make_word(char *str, int pos)
+static char	*make_word(char *str, int pos)
 {
 	int		i;
 	int		count;
@@ -93,12 +99,14 @@ static char *make_word(char *str, int pos)
 	return (NULL);
 }
 
-char **split_whitesp(char *str)
+char	**split_whitesp(char *str)
 {
 	char	**ret;
 	int		words;
 	int		i;
 
+	if (!str)
+		return (NULL);
 	words = count_splits(str);
 	if (words == 0)
 		return (NULL);

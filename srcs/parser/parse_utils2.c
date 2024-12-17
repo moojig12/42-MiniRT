@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_utils2.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/17 12:32:49 by fjoestin          #+#    #+#             */
+/*   Updated: 2024/12/17 12:56:44 by fjoestin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 static void	*ft_free_w(char **result, int w)
@@ -15,13 +27,6 @@ static void	*ft_free_w(char **result, int w)
 	return (NULL);
 }
 
-static bool	is_whitespace(char c)
-{
-	if ((c >= 11 && c <= 13) || c == 32 || c == 9)
-		return (true);
-	return (false);
-}
-
 static int	count_splits(char *str)
 {
 	int		i;
@@ -31,13 +36,14 @@ static int	count_splits(char *str)
 	i = 0;
 	count = 0;
 	ready = false;
-	if(!str)
-		return(0);
+	if (!str)
+		return (0);
 	while (str[i] != '\0')
 	{
 		if (is_whitespace(str[i]) == false)
 			ready = true;
-		if (((is_whitespace(str[i]) == true) || str[i + 1] == '\0') && ready == true)
+		if (((is_whitespace(str[i]) == true) || str[i + 1] == '\0') 
+			&& ready == true)
 		{
 			ready = false;
 			count++;
@@ -99,6 +105,8 @@ char	**split_whitesp(char *str)
 	int		words;
 	int		i;
 
+	if (!str)
+		return (NULL);
 	words = count_splits(str);
 	if (words == 0)
 		return (NULL);

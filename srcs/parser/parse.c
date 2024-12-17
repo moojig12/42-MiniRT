@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:13:43 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/04 07:12:59 by root             ###   ########.fr       */
+/*   Updated: 2024/12/17 13:39:19 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ int	check_par(t_world *world, char *input)
 	int		type;
 	char	**input_matrix;
 
-	if (input == NULL || *input == '\n' || *input == '#')
+	if (input == NULL || *input == '\n' || *input == '#' 
+		|| is_allwhitespace(input) == true)
 		return (0);
 	input = ft_strtrim_mrt(input, WHITE_SPACE);
 	input_matrix = split_whitesp(input);

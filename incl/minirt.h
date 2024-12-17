@@ -366,6 +366,8 @@ t_emission		*parse_emission(t_world *world, char **input);
 int				check_material(char *input);
 char			*ft_strtrim_mrt(char const *s1, char const *set);
 char			**split_whitesp(char *str);
+bool				is_whitespace(char c);
+bool			is_allwhitespace(char *s);
 
 // Parsing amb
 

@@ -62,6 +62,7 @@ SRC_B = srcs/parser_bonus/checks_bonus.c \
       srcs/parser_bonus/parse_sphere_bonus.c \
       srcs/parser_bonus/parse_utils_bonus.c \
       srcs/parser_bonus/parse_utils_bonus2.c \
+	  srcs/parser_bonus/parse_utils_bonus3.c \
       srcs/parser_bonus/utils_p_bonus.c \
       srcs/parser_bonus/parse_bonus.c \
       srcs/parser_bonus/parse_emission.c \

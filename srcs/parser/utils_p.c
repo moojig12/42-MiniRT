@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 16:47:03 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 18:50:27 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:31:04 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,27 @@ char	*ft_strtrim_mrt(char const *s1, char const *set)
 	}
 	str = get_new_str(s1, start, end + 1);
 	return (str);
+}
+
+bool	is_whitespace(char c)
+{
+	if ((c >= 9 && c <= 13) || c == 32)
+		return (true);
+	return (false);
+}
+
+bool	is_allwhitespace(char *s)
+{
+	int		i;
+	bool	ret;
+
+	i = 0;
+	ret = true;
+	while (s[i] && s[i] != '\n')
+	{
+		if (is_whitespace(s[i]) == false)
+			ret = false;
+		i++;
+	}
+	return (ret);
 }
