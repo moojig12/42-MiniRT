@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:39:58 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/17 13:50:59 by nmandakh         ###   ########.fr       */
+/*   Updated: 2024/12/17 14:08:47 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,6 @@ static void	free_obj(t_obj *obj)
 		next = obj->next;
 		free(obj);
 		obj = next;
-	}
-}
-
-static void	free_light(t_light *light)
-{
-	t_light	*next;
-
-	if (!light)
-		return ;
-	while (light)
-	{
-		next = light->next;
-		free(light);
-		light = next;
 	}
 }
 
@@ -64,7 +50,7 @@ void	free_world(t_world *world)
 	if (world->cam)
 		free(world->cam);
 	if (world->light)
-		free_light(world->light);
+		free(world->light);
 	if (world->sphere)
 		free_sphere(world->sphere);
 	if (world->plane)

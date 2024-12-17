@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_obj.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:40:56 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/11 00:15:00 by root             ###   ########.fr       */
+/*   Updated: 2024/12/17 14:00:24 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,7 @@ t_obj	*ft_add_obj_lst_sub(int type, t_world *world)
 	t_obj	*new;
 
 	new = NULL;
-	if (type == LIGHT)
-	{
-		last = (void *)ft_lstlast_lig_mrt(world->light);
-		new = add_sobj(type, last);
-	}
-	else if (type == SPHERE)
+	if (type == SPHERE)
 	{
 		last = (void *)ft_lstlast_sphere_mrt(world->sphere);
 		new = add_sobj(type, last);
@@ -64,6 +59,8 @@ t_obj	*ft_add_obj_lst(int type, t_world *world, t_obj **objlist)
 		new = add_sobj(type, world->amb);
 	else if (type == CAMERA)
 		new = add_sobj(type, world->cam);
+	else if (type == LIGHT)
+		new = add_sobj(type, world->light);
 	else
 		new = ft_add_obj_lst_sub(type, world);
 	ft_lstadd_back_mrt(objlist, new);

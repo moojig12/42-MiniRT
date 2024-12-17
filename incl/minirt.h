@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minirt.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/17 13:45:45 by fjoestin          #+#    #+#             */
+/*   Updated: 2024/12/17 13:51:19 by fjoestin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINIRT_H
 # define MINIRT_H
 
@@ -27,8 +39,9 @@
 # define C 1013904223
 # define M 0xFFFFFFFF
 
-typedef struct s_obj t_obj;
-typedef struct s_main t_main;
+typedef struct s_obj	t_obj;
+
+typedef struct s_main	t_main;
 
 typedef enum e_fidelity {
 	LOW,
@@ -100,8 +113,8 @@ typedef struct s_vector {
 }	t_vec;
 
 typedef struct s_matrix {
-	double matrix[4][4];
-}	t_matrix;
+	double	matrix[4][4];
+}		t_matrix;
 
 typedef struct s_rgb {
 	double	r;
@@ -120,6 +133,7 @@ typedef struct s_ray {
 	t_vec	origin;
 	t_vec	dest;
 }	t_ray;
+
 typedef struct s_camera {
 	t_vec	pos;
 	t_vec	norm;
@@ -161,7 +175,6 @@ typedef struct s_light {
 	t_vec			pos;
 	double			brightness;
 	t_rgb			color;
-	struct s_light	*next;
 }		t_light;
 
 typedef struct s_sphere {
@@ -200,14 +213,14 @@ typedef struct s_obj {
 
 typedef struct s_intersection {
 	t_material	material;
-	t_vec	point;
-	t_vec	norm;
-	t_vec	origin;
-	double	distance;
-	double	emission;
-	int		hit;
-	t_rgb	color;
-}	t_intersect;
+	t_vec		point;
+	t_vec		norm;
+	t_vec		origin;
+	double		distance;
+	double		emission;
+	int			hit;
+	t_rgb		color;
+}		t_intersect;
 
 typedef struct s_screen {
 	double	width;
@@ -303,10 +316,12 @@ void			thread_inner_render(t_main *main, t_rgb **output, int x, int y);
 t_main			*screen_init_thread(t_thread_screen *screen, t_render *thread);
 
 // Light and ray calculations
-t_rgb			direct_light_occlusion(t_intersect intersection, t_world *world, t_rgb return_color);
+t_rgb			direct_light_occlusion(t_intersect intersection, \
+				t_world *world, t_rgb return_color);
 t_vec			cone_pewpew(t_vec norm, t_material *mat, t_ray ray);
 double			brdf_calculation(t_material mat, t_ray ray, t_vec norm);
-int				is_occluded(t_ray shadow_ray, t_world *world, double light_distance);
+int				is_occluded(t_ray shadow_ray, t_world *world, \
+			double light_distance);
 
 // Render modes
 t_ray			gen_ray(t_camera *cam, int x, int y);
@@ -333,13 +348,16 @@ void			miscel_keys(int key_code, t_main *main);
 
 // intersec
 double			calc_t(double a, double b, double disc);
-void			calc_projection(t_ray ray, t_comp *comp, t_cyl *cyl, t_intersect *inter);
-void			pop_intersec_sphere(t_intersect *inters, double t, t_ray ray, t_sphere *sphere);
+void			calc_projection(t_ray ray, t_comp *comp, t_cyl *cyl, \
+	t_intersect *inter);
+void			pop_intersec_sphere(t_intersect *inters, double t, \
+		t_ray ray, t_sphere *sphere);
 t_intersect		intersect(t_ray ray, t_obj *obj);
 t_intersect		find_path(t_ray ray, t_world *world);
 t_comp			calc_computations(t_ray ray, t_cyl *cyl);
 void			comp_calc_t(t_comp *comp);
-void			pop_intersec_cyl(t_ray ray, t_intersect *inter, t_comp comp, t_cyl *cyl);
+void			pop_intersec_cyl(t_ray ray, t_intersect *inter, \
+		t_comp comp, t_cyl *cyl);
 
 // Parsing
 
@@ -366,7 +384,7 @@ t_emission		*parse_emission(t_world *world, char **input);
 int				check_material(char *input);
 char			*ft_strtrim_mrt(char const *s1, char const *set);
 char			**split_whitesp(char *str);
-bool				is_whitespace(char c);
+bool			is_whitespace(char c);
 bool			is_allwhitespace(char *s);
 
 // Parsing amb
@@ -381,8 +399,7 @@ t_camera		*parse_cam(t_world *world, char **input);
 
 t_light			*ft_lstlast_lig_mrt(t_light *lst);
 void			ft_lstadd_back_lig_mrt(t_light **lst, t_light *new);
-int				parse_light(t_world *world, char **input);
-void			print_light(t_light *ptr);
+t_light			*parse_light(t_world *world, char **input);
 
 //Parsing cyl
 
@@ -427,7 +444,7 @@ double			*alloc_float(double a, double b);
 int				ft_range(int num, int min, int max);
 int				ft_range_f(double num, double min, double max);
 double			ft_atof(char *str);
-int				print_vec(char *string,t_vec vec);
+int				print_vec(char *string, t_vec vec);
 int				close_window(t_main	*main);
 int				print_color(char *string, t_rgb color);
 int				print_matrix(char *string, t_matrix mat);
