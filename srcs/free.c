@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 17:39:58 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/04 08:14:21 by root             ###   ########.fr       */
+/*   Updated: 2024/12/17 13:50:59 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,7 @@ void	free_world(t_world *world)
 		free_cyl(world->cyl);
 	if (world->objlist)
 		free_obj(world->objlist);
+	if (world->selected)
+		free(world->selected);
 	free(world);
 }

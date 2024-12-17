@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersect.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:29:59 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/09 14:54:50 by root             ###   ########.fr       */
+/*   Updated: 2024/12/17 13:00:11 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ t_intersect	intersect(t_ray ray, t_obj *obj)
 
 int	is_occluded(t_ray shadow_ray, t_world *world, double light_distance)
 {
-	t_obj	*object;
+	t_obj			*object;
 	t_intersect		inter;
 
 	object = world->objlist;

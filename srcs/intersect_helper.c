@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersect_helper.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:57:44 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/11 00:22:14 by root             ###   ########.fr       */
+/*   Updated: 2024/12/17 13:01:18 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ double	calc_t(double a, double b, double disc)
 	return (t);
 }
 
-void	pop_intersec_sphere(t_intersect *inters, double t, t_ray ray, t_sphere *sphere)
+void	pop_intersec_sphere(t_intersect *inters, \
+double t, t_ray ray, t_sphere *sphere)
 {
 	inters->hit = 1;
 	inters->distance = t;
@@ -97,4 +98,3 @@ void	comp_calc_t(t_comp *comp)
 	else
 		comp->t = INFINITY;
 }
-

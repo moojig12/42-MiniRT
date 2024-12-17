@@ -1,4 +1,16 @@
-#include "minirt.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   intersect_helper2.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/17 13:02:22 by nmandakh          #+#    #+#             */
+/*   Updated: 2024/12/17 13:02:56 by nmandakh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+                #include "minirt.h"
 
 void	calc_projection(t_ray ray, t_comp *comp, t_cyl *cyl, t_intersect *inter)
 {
@@ -7,14 +19,17 @@ void	calc_projection(t_ray ray, t_comp *comp, t_cyl *cyl, t_intersect *inter)
 
 	inter->distance = comp->t;
 	inter->point = vec_add(ray.origin, vec_scalar(ray.dest, comp->t));
-	projection1 = vec_dot(vec_sub(vec_add(ray.origin, vec_scalar(ray.dest, comp->t1)), cyl->pos), comp->axis);
+	projection1 = vec_dot(vec_sub(vec_add(ray.origin, \
+	vec_scalar(ray.dest, comp->t1)), cyl->pos), comp->axis);
 	if (comp->t1 > 0 && projection1 >= 0.0001 && projection1 <= cyl->height)
 	{
 		comp->t = comp->t1;
 		inter->hit = 1;
 	}
-	projection2 = vec_dot(vec_sub(vec_add(ray.origin, vec_scalar(ray.dest, comp->t2)), cyl->pos), comp->axis);
-	if ((!inter->hit || comp->t2 < comp->t) && comp->t2 > 0 && projection2 >= 0.0001 && projection2 <= cyl->height)
+	projection2 = vec_dot(vec_sub(vec_add(ray.origin, \
+	vec_scalar(ray.dest, comp->t2)), cyl->pos), comp->axis);
+	if ((!inter->hit || comp->t2 < comp->t) && comp->t2 > 0 \
+	&& projection2 >= 0.0001 && projection2 <= cyl->height)
 	{
 		comp->t = comp->t2;
 		inter->hit = 1;

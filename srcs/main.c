@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 08:14:29 by root              #+#    #+#             */
-/*   Updated: 2024/12/13 07:54:05 by root             ###   ########.fr       */
+/*   Updated: 2024/12/17 13:47:12 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,8 @@
 
 int	close_window(t_main	*main)
 {
-	free_world(main->world);
-	mlx_clear_window(main->mlx, main->win);
-	mlx_destroy_window(main->mlx, main->win);
-	//free(main);
+	// free_world(main->world);
+	free_main(main);
 	exit (0);
 }
 
@@ -25,15 +23,18 @@ void	sub_main_init(t_main *main)
 {
 	main->world->cam->width = main->width;
 	main->world->cam->height = main->height;
-	main->world->light->brightness *= 20;
-	main->render_switch = LOW;
 	main->world->cam->norm = vec(0, 1, 0, 0);
+	if (main->world->light)
+		main->world->light->brightness *= 20;
+	main->render_switch = LOW;
 }
 
 void	initialize_main(t_main *main, t_world *world)
 {
 	int	y;
 
+	main->width = 800;
+	main->height = 600;
 	main->world = world;
 	main->mlx = mlx_init();
 	if (main->mlx)
@@ -43,8 +44,6 @@ void	initialize_main(t_main *main, t_world *world)
 		printf("MLX not initialized properly\n");
 		exit(0);
 	}
-	main->width = 800;
-	main->height = 600;
 	main->img = mlx_new_image(main->mlx, main->width, main->height);
 	main->addr = mlx_get_data_addr(main->img, \
 		&main->bits_per_pixel, &main->line_length, &main->endian);
