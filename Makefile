@@ -21,6 +21,7 @@ SRC = srcs/parser/checks.c \
       srcs/parser/parse_plane.c \
       srcs/parser/parse_sphere.c \
       srcs/parser/parse_utils.c \
+      srcs/parser/parse_utils2.c \
       srcs/parser/utils_p.c \
       srcs/parser/parse.c \
       srcs/cam_ray.c \
@@ -60,6 +61,7 @@ SRC_B = srcs/parser_bonus/checks_bonus.c \
       srcs/parser_bonus/parse_plane_bonus.c \
       srcs/parser_bonus/parse_sphere_bonus.c \
       srcs/parser_bonus/parse_utils_bonus.c \
+      srcs/parser_bonus/parse_utils_bonus2.c \
       srcs/parser_bonus/utils_p_bonus.c \
       srcs/parser_bonus/parse_bonus.c \
       srcs/parser_bonus/parse_emission.c \

@@ -60,8 +60,9 @@ int	check_par(t_world *world, char *input)
 
 	if (input == NULL || *input == '\n' || *input == '#')
 		return (0);
-	input_matrix = ft_split(input, ' ');
-	if (**input_matrix == '\n')
+	input = ft_strtrim_mrt(input, WHITE_SPACE);
+	input_matrix = split_whitesp(input);
+	if (**input_matrix == '\n' || input_matrix == NULL)
 	{
 		free_tab(input_matrix);
 		return (0);
@@ -103,7 +104,7 @@ t_world	*parse_world(t_world *world, char **argv)
 	while (input)
 	{
 		if (check_par(world, input) == -1)
-			exit_err_init("wrong type\n", 1, world);
+			exit_err_init("wrong type\n", -1, world);
 		free(input);
 		input = get_next_line(fd);
 	}

@@ -11,6 +11,7 @@
 # include <time.h>
 # include <pthread.h>
 # include <X11/Xlib.h>
+# include <stdbool.h>
 
 // Constants
 # define PI 3.14159265358979323846
@@ -237,7 +238,7 @@ typedef struct s_world {
 	t_plane		*plane;
 	t_obj		*objlist;
 	t_obj		*selected;
-	// t_emission	*emission;
+	t_emission	*emission;
 }	t_world;
 
 typedef struct s_thread_screen {
@@ -364,6 +365,7 @@ int				check_size_matrix(char **matrix);
 t_emission		*parse_emission(t_world *world, char **input);
 int				check_material(char *input);
 char			*ft_strtrim_mrt(char const *s1, char const *set);
+char			**split_whitesp(char *str);
 
 // Parsing amb
 
