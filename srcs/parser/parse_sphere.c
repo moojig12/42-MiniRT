@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:34 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 19:08:41 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/17 16:38:15 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ int	parse_sphere(t_world *world, char **input)
 	t_sphere	*new;
 
 	size = check_size_matrix(input);
-	printf("size: %i\n", size);
 	if (size != 4)
 		exit_err_init("Error\nToo many args for sphere\n", 1, world);
 	new = malloc(sizeof(t_sphere));

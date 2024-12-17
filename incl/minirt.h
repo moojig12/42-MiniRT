@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:45:45 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/17 13:51:19 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/17 16:30:02 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <math.h>
 # include "libft/libft.h"
 # include "get_next_line/get_next_line.h"
-# include "mlx/mlx.h"
+# include "minilibx-linux/mlx.h"
 # include <time.h>
 # include <pthread.h>
 # include <X11/Xlib.h>
