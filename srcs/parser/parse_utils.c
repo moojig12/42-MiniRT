@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 08:05:08 by root              #+#    #+#             */
-/*   Updated: 2024/12/04 08:05:08 by root             ###   ########.fr       */
+/*   Updated: 2024/12/19 19:13:50 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,14 @@ int	pop_color(t_rgb *rgb, char **input)
 	i = 0;
 	while (input[i])
 	{
-		if (!ft_range(ft_atof(input[i]), 0, 255))
+		if (ft_range(ft_atof(input[i]), 0, 255) == 0 || i > 2)
 		{
-			printf("Error\nInvalid range for color");
-			exit (0);
+			free_tab(input);
+			return (-1);
 		}
 		i++;
 	}
-	if (i != 3)
-		return (1);
-	else
-		put_colors(rgb, input);
+	put_colors(rgb, input);
 	i = 0;
 	while (input[i])
 	{
@@ -69,8 +66,8 @@ int	pop_vec(t_vec *pos, char **input, double *range, double type)
 	{
 		if (range && !ft_range_f(ft_atof(input[i]), range[0], range[1]))
 		{
-			printf("Error\nInvalid range for vec\n");
-			exit(0);
+			free(range);
+			return (-1);
 		}
 		i++;
 	}
@@ -88,9 +85,11 @@ int	pop_vec(t_vec *pos, char **input, double *range, double type)
 int	pop_fov(int *fov, char *input, int *range)
 {
 	if (!input)
-		return (0);
+		return (-1);
 	if (ft_range(ft_atoi(input), range[0], range[1]))
 		*fov = ft_atoi(input);
+	else
+		return (free(range), -1);
 	free(range);
 	return (0);
 }

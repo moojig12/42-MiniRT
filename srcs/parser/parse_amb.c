@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:48 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/17 13:46:39 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/19 18:50:57 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,7 @@ t_ambient	*parse_amb(t_world *world, char **input)
 		new->ratio = ft_atof(input[1]);
 	else
 		exit_err_init("Error\nWrong ambience light ratio\n", 1, world);
-	if (input[2])
-		pop_color(&new->color, ft_split(input[2], ','));
-	else
+	if (!input[2] || (pop_color(&new->color, ft_split(input[2], ',')) != 0))
 		exit_err_init("Error\ninvalid input for ambience\n", 1, world);
 	return (new);
 }

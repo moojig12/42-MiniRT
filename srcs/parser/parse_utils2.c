@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 12:32:49 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/17 12:56:44 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/19 18:51:34 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,6 @@ char	**split_whitesp(char *str)
 	if (words == 0)
 		return (NULL);
 	ret = (char **)malloc(sizeof(char *) * (words + 1));
-	if (!ret)
-		return (NULL);
 	i = 0;
 	while (i < words)
 	{
@@ -125,5 +123,6 @@ char	**split_whitesp(char *str)
 		i++;
 	}
 	ret[i] = NULL;
+	free(str);
 	return (ret);
 }

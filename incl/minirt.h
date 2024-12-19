@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:45:45 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/17 16:30:02 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/19 17:30:38 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 // Constants
 # define PI 3.14159265358979323846
 # define EPSILON 0.0001
-# define STATIC_SAMPLE 8
+# define STATIC_SAMPLE 4
 # define THREAD_COUNT 8
 # define WHITE_SPACE "\f\r\v\t\n "
 // Max depth of bounces for tracing

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 16:17:00 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/17 13:57:23 by nmandakh         ###   ########.fr       */
+/*   Updated: 2024/12/19 18:22:48 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	exit_err_init(char *msg, int code, t_world *world)
 {
 	if (msg)
-		perror(msg);
+		ft_putstr_fd(msg, 2);
 	if (world)
 		free_world(world);
 	exit (code);
@@ -24,7 +24,7 @@ void	exit_err_init(char *msg, int code, t_world *world)
 void	exit_err(char *message, int code, t_main *main)
 {
 	if (message)
-		perror(message);
+		ft_putstr_fd(message, 2);
 	if (main)
 		free_main(main);
 	exit(code);
@@ -58,8 +58,8 @@ void	free_main(t_main *main)
 		mlx_destroy_window(main->mlx, main->win);
 	if (main->mlx)
 	{
-		mlx_destroy_display(main->mlx);
+		//mlx_destroy_display(main->mlx);
 		free(main->mlx);
 	}
-	free(main);
+	//free(main);
 }

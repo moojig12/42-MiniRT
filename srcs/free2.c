@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   free2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 09:55:18 by root              #+#    #+#             */
-/*   Updated: 2024/12/10 15:03:14 by nmandakh         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:12:28 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void	free_plane(t_plane *plane)
+/* void	free_plane(t_plane *plane)
 {
 	t_plane	*next;
 
@@ -39,7 +39,7 @@ void	free_cyl(t_cyl *cyl)
 		cyl = next;
 	}
 }
-
+ */
 void	free_tab(char **tab)
 {
 	int	i;

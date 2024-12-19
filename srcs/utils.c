@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 08:05:16 by root              #+#    #+#             */
-/*   Updated: 2024/12/17 16:36:15 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/19 18:33:23 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ double	*alloc_float(double a, double b)
 // returns 1 if within range. 0 if outside of range
 int	ft_range(int num, int min, int max)
 {
-	if (num >= min || num <= max)
+	if (num >= min && num <= max)
 		return (1);
 	else
 		return (0);
@@ -57,7 +57,7 @@ int	ft_range(int num, int min, int max)
 // returns 1 if within range. 0 if outside of range
 int	ft_range_f(double num, double min, double max)
 {
-	if (num >= min || num <= max)
+	if (num >= min && num <= max)
 		return (1);
 	else
 		return (0);
