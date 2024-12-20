@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   object_selection.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 08:19:55 by root              #+#    #+#             */
-/*   Updated: 2024/12/19 17:30:17 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:15:50 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,17 @@ int	rotation_selected(int key_code, t_obj *selected)
 int	movement_selected(int key_code, t_obj *selected)
 {
 	if (key_code == FORWARD)
-		move(selected, move_angle(Z_AXIS, 1), key_code);
+		move(selected, move_angle(Z_AXIS, 0.5), key_code);
 	if (key_code == LEFT)
-		move(selected, move_angle(X_AXIS, -1), key_code);
+		move(selected, move_angle(X_AXIS, -0.5), key_code);
 	if (key_code == BACK)
-		move(selected, move_angle(Z_AXIS, -1), key_code);
+		move(selected, move_angle(Z_AXIS, -0.5), key_code);
 	if (key_code == RIGHT)
-		move(selected, move_angle(X_AXIS, 1), key_code);
+		move(selected, move_angle(X_AXIS, 0.5), key_code);
 	if (key_code == UP)
-		move(selected, move_angle(Y_AXIS, 1), key_code);
+		move(selected, move_angle(Y_AXIS, 0.5), key_code);
 	if (key_code == DOWN)
-		move(selected, move_angle(Y_AXIS, -1), key_code);
+		move(selected, move_angle(Y_AXIS, -0.5), key_code);
 	return (0);
 }
 
@@ -51,12 +51,13 @@ void	set_selection(t_obj *list, t_main *main, int target)
 	list = main->world->objlist;
 	while (list && list->type != target)
 	{
-		printf("object checked: %i\n", list->type);
 		if (list->type == target)
 			printf("FOUND!\n");
 		list = list->next;
 	}
 	main->world->selected = list;
+	if (!main->world->selected)
+		main->world->selected = main->world->objlist;
 	if (main->world->selected->type == PLANE)
 		printf("selection set to PLANE\n");
 	if (main->world->selected->type == CYLINDER)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cam_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:07:11 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/19 19:09:13 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:35:17 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,3 +29,4 @@ t_camera	*parse_cam(t_world *world, char **input)
 	if (!input[3] || pop_fov(&ret->fov, input[3], alloc_int(0, 180)))
 		exit_err_init("Error\nWrong fov range for cam\n", 1, world);
 	return (ret);
+}

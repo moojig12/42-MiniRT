@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 16:17:00 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/19 18:22:48 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:24:10 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,5 @@ void	free_main(t_main *main)
 	if (main->win)
 		mlx_destroy_window(main->mlx, main->win);
 	if (main->mlx)
-	{
-		//mlx_destroy_display(main->mlx);
 		free(main->mlx);
-	}
-	//free(main);
 }

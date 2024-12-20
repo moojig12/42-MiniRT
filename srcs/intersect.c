@@ -6,13 +6,13 @@
 /*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:29:59 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/20 13:28:54 by nmandakh         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:57:31 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-t_intersect	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersect inters)
+t_intersect	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersect inter)
 {
 	double	a;
 	double	b;
@@ -26,40 +26,40 @@ t_intersect	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersect inters)
 	c = vec_dot(oc, oc) - (sphere->diameter / 2) * (sphere->diameter / 2);
 	disc = b * b - 4 * a * c;
 	if (disc < 0)
-		return (inters);
+		return (inter);
 	else
 	{
 		c = calc_t(a, b, disc);
 		if (c < INFINITY)
-			pop_intersec_sphere(&inters, c, ray, sphere);
-		inters.material = sphere->material;
+			pop_intersec_sphere(&inter, c, ray, sphere);
+		inter.material = sphere->material;
 	}
-	return (inters);
+	return (inter);
 }
 
-t_intersect	intersect_plane(t_ray ray, t_plane *plane, t_intersect *intersc)
+t_intersect	intersect_plane(t_ray ray, t_plane *plane, t_intersect *inter)
 {
 	double	denom;
 	double	t;
 
 	denom = vec_dot(ray.dest, plane->norm);
 	if (fabs(denom) < 1e-6)
-		return (*intersc);
+		return (*inter);
 	t = vec_dot(vec_sub(plane->pos, ray.origin), plane->norm) / denom;
 	if (t >= 0)
 	{
-		intersc->hit = 1;
-		intersc->distance = t;
-		intersc->point = vec_add(ray.origin, vec_scalar(ray.dest, t));
-		intersc->norm = plane->norm;
+		inter->hit = 1;
+		inter->distance = t;
+		inter->point = vec_add(ray.origin, vec_scalar(ray.dest, t));
+		inter->norm = plane->norm;
 		if (denom > 0)
-			intersc->norm = vec_scalar(intersc->norm, -1);
-		intersc->point = vec_add(intersc->point, 
-				vec_scalar(intersc->norm, EPSILON));
-		intersc->color = plane->color;
-		inters.material = plane->material;
+			inter->norm = vec_scalar(inter->norm, -1);
+		inter->point = vec_add(inter->point, 
+				vec_scalar(inter->norm, EPSILON));
+		inter->color = plane->color;
+		inter->material = plane->material;
 	}
-	return (*intersc);
+	return (*inter);
 }
 
 t_intersect	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersect inter)
@@ -81,7 +81,7 @@ t_intersect	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersect inter)
 			if (vec_dot(ray.dest, inter.norm) > 0)
 				inter.norm = vec_scalar(inter.norm, -1);
 			inter.point = vec_add(inter.point, vec_scalar(inter.norm, EPSILON));
-			inters.material = cyl->material;
+			inter.material = cyl->material;
 		}
 	}
 	return (inter);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_color2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 09:57:45 by root              #+#    #+#             */
-/*   Updated: 2024/12/17 16:35:47 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:49:11 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,5 @@ int	pack_color(t_rgb color)
 	g = (int)(255.0 * color.g);
 	b = (int)(255.0 * color.b);
 	t = 255;
-	return (t << 24 | r << 16 | g << 8 | b);
+	return ((unsigned)t << 24 | r << 16 | g << 8 | b);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 10:00:02 by root              #+#    #+#             */
-/*   Updated: 2024/12/19 17:38:13 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:43:27 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 int	move(t_obj *obj, t_vec	movement, int movement_code)
 {
-	t_vec		movement_angle;
 	t_vec		moved_vec;
 	t_selected	selected;
 
 	selected = discern_object(obj);
 	printf("selected: %i\n", selected.type);
+	(void)movement_code;
 	if (selected.type != CAMERA)
 	{
 		moved_vec = matrix_translation(*selected.pos, movement);
@@ -27,10 +27,8 @@ int	move(t_obj *obj, t_vec	movement, int movement_code)
 	}
 	else
 	{
-		movement_angle = movement_rotation(movement, movement_code);
-		moved_vec = matrix_rotation(*selected.dir, movement_angle);
-		moved_vec = vec_normalize(moved_vec);
-		*selected.pos = vec_add(*selected.pos, moved_vec);
+		moved_vec = matrix_translation(*selected.pos, movement);
+		*selected.pos = moved_vec;
 	}
 	return (0);
 }

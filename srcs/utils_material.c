@@ -6,7 +6,7 @@
 /*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 12:04:30 by root              #+#    #+#             */
-/*   Updated: 2024/12/20 13:23:31 by nmandakh         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:24:19 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,3 @@ void	material_init(t_material *material, int type)
 	else
 		material_pop(material, 1, 0.5, 0.5);
 }
-
-

@@ -6,7 +6,7 @@
 /*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:30:24 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/17 13:58:47 by nmandakh         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:23:52 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,30 @@
 t_rgb	trace_path(t_world *world, t_ray ray, int depth)
 {
 	t_intersect		intersection;
-	t_rgb			return_color;
+	t_rgb			color;
 	t_rgb			incoming;
 	t_ray			new_ray;
 	double			brdf;
 
-	return_color = ret_color(0, 0, 0);
+	color = ret_color(0, 0, 0);
 	if (depth >= MAXDEPTH)
-		return (return_color);
+		return (color);
 	intersection = find_path(ray, world);
 	if (!intersection.hit)
-		return (return_color);
+		return (color);
 	new_ray.origin = intersection.point;
 	new_ray.dest = cone_pewpew(intersection.norm, &intersection.material, ray);
 	brdf = brdf_calculation(intersection.material, new_ray, intersection.norm);
 	incoming = trace_path(world, new_ray, depth + 1);
-	return_color = color_multiply(world->amb->color, intersection.color);
-	return_color = color_scalar(return_color, world->amb->ratio);
+	color = color_multiply(world->amb->color, intersection.color);
+	color = color_scalar(color, world->amb->ratio);
 	if (world->light)
-		return_color = direct_light_occlusion(intersection, \
-		world, return_color);
-	return_color = color_add(return_color, color_scalar(incoming, brdf));
-	return_color = color_add(return_color, \
+		color = direct_light_occlusion(intersection, \
+		world, color);
+	color = color_add(color, color_scalar(incoming, brdf * (1 / PI)));
+	color = color_add(color, \
 	color_scalar(ret_color(1.0, 1.0, 1.0), intersection.emission));
-	return (color_normalize(return_color));
+	return (color_normalize(color));
 }
 
 // Main function for rendering the screen for each frame called by mlx_loop_hook

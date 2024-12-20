@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:13:43 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/17 13:50:28 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:53:08 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	input_par(char **input, t_world *world, int type)
 		parse_cyl(world, input);
 	else
 		printf("Error\ninvalid type");
-	printf("type: %i\n", type);
 	return (0);
 }
 
@@ -94,13 +93,13 @@ t_world	*parse_world(t_world *world, char **argv)
 
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
-		exit_err_init("failed opening files\n", 1, NULL);
+		exit_err_init("Error\nfailed opening files\n", 1, NULL);
 	input = get_next_line(fd);
 	init_world(world);
 	while (input)
 	{
 		if (check_par(world, input) == -1)
-			exit_err_init("wrong type\n", 1, world);
+			exit_err_init("Error\nwrong type\n", 1, world);
 		free(input);
 		input = get_next_line(fd);
 	}

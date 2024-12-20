@@ -9,7 +9,7 @@ INC = -I ./incl -I $(MLX_DIR)
 OBJ_DIR = obj/
 OBJ_B_DIR = obj_thread/
 CC = cc
-CFLAGS = -O3 -pthread -g $(INC) -Wall -Wextra -Werror
+CFLAGS = -O3 -pthread -g $(INC) -Wall -Wextra -Werror -fsanitize=address,undefined
 MFLAG = -L $(MLX_DIR) -lmlx -lXext -lX11 -lm -lbsd
 RM = rm -f
 
