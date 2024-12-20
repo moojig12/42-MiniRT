@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 16:47:03 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/26 19:44:19 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:31:04 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,69 @@ int	ft_strcmp(const char *s1, const char *s2)
 		s2++;
 	}
 	return (*(unsigned char *)s1 - *(unsigned char *)s2);
+}
+
+static char	*get_new_str(char const *s, int start, int end)
+{
+	int		len;
+	char	*str;
+
+	len = end - start;
+	if (len < 0)
+		len = 0;
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (NULL);
+	*(str + len) = '\0';
+	while (--len >= 0)
+		*(str + len) = *(s + start + len);
+	return (str);
+}
+
+char	*ft_strtrim_mrt(char const *s1, char const *set)
+{
+	size_t	start;
+	size_t	end;
+	char	*chr;
+	char	*str;
+
+	start = 0;
+	end = ft_strlen(s1);
+	chr = ft_strchr(set, *s1);
+	while (chr)
+	{
+		start++;
+		chr = ft_strchr(set, *(s1 + start));
+	}
+	chr = ft_strchr(set, *(s1 + --end));
+	while (chr)
+	{
+		end--;
+		chr = ft_strchr(set, *(s1 + end));
+	}
+	str = get_new_str(s1, start, end + 1);
+	return (str);
+}
+
+bool	is_whitespace(char c)
+{
+	if ((c >= 9 && c <= 13) || c == 32)
+		return (true);
+	return (false);
+}
+
+bool	is_allwhitespace(char *s)
+{
+	int		i;
+	bool	ret;
+
+	i = 0;
+	ret = true;
+	while (s[i] && s[i] != '\n')
+	{
+		if (is_whitespace(s[i]) == false)
+			ret = false;
+		i++;
+	}
+	return (ret);
 }

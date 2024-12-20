@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 15:54:20 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/11/26 19:41:54 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:46:30 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,10 @@ int	check_size_matrix(char **matrix)
 {
 	int	i;
 
-	i = 0;
 	if (!matrix)
 		return (-1);
-	while(matrix[i]){
-		// printf("line: %s\n", matrix[i]);
+	i = 0;
+	while (matrix[i])
 		i++;
-	}
-	return(i);
+	return (i);
 }

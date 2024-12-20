@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   random_gen.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/04 10:25:03 by root              #+#    #+#             */
+/*   Updated: 2024/12/08 15:30:43 by fjoestin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minirt.h"
 
 unsigned int	ft_rand(void)
@@ -24,7 +36,7 @@ t_vec	random_vec(double w)
 }
 
 t_vec	random_vec_range(double min, double max, double w)
- {
+{
 	return (vec(random_double_range(min, max), \
 			random_double_range(min, max), \
 			random_double_range(min, max), w));
