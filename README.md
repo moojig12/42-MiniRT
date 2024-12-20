@@ -3,10 +3,9 @@ Title: The name of your project.
 # 42-miniRT
 
 miniRT is a project from the 4th circle of The Core Curriculum in 42 Berlin. The purpose of this project is to dwelve deeper into
-graphical programming by developing a basic Raytracing program using minilibx. In our implementation of miniRT, we've referenced Pathtracing and made a functional bare bones program with basic controls for manipulating the scene.
+graphical programming by developing a basic Raytracing program using minilibx. In our implementation of miniRT,
+we've referenced Pathtracing and made a functional bare bones program with basic controls for manipulating the scene.
 
----
-[[TOC]]
 ---
 # Installation
 
