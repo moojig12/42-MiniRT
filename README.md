@@ -9,7 +9,6 @@ we've referenced Pathtracing and made a functional bare bones program with basic
 ---
 # Installation
 
-
 1.	Check dependencies and install missing ones
 		The project requires:
 		-	XShm extension must be present (package libxext-dev)
