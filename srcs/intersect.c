@@ -6,7 +6,7 @@
 /*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:29:59 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/20 12:58:50 by nmandakh         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:22:08 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ t_intersect	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersect inters)
 		c = calc_t(a, b, disc);
 		if (c < INFINITY)
 			pop_intersec_sphere(&inters, c, ray, sphere);
-		// material_init(&inters.material, MIRROR);
-		inters.material = sphere->material
+		inters.material = sphere->material;
 	}
 	return (inters);
 }
@@ -58,6 +57,7 @@ t_intersect	intersect_plane(t_ray ray, t_plane *plane, t_intersect *intersc)
 		intersc->point = vec_add(intersc->point, 
 				vec_scalar(intersc->norm, EPSILON));
 		intersc->color = plane->color;
+		inters.material = plane->material;
 	}
 	return (*intersc);
 }
@@ -81,7 +81,7 @@ t_intersect	intersect_cylinder(t_ray ray, t_cyl *cyl, t_intersect inter)
 			if (vec_dot(ray.dest, inter.norm) > 0)
 				inter.norm = vec_scalar(inter.norm, -1);
 			inter.point = vec_add(inter.point, vec_scalar(inter.norm, EPSILON));
-			material_init(&inter.material, ROCK);
+			inters.material = cyl->material;
 		}
 	}
 	return (inter);

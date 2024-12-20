@@ -6,7 +6,7 @@
 /*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:45:45 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/20 12:58:57 by nmandakh         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:03:14 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ typedef struct s_plane {
 	t_vec			pos;
 	t_vec			norm;
 	t_rgb			color;
-	t_material	material;
+	t_material		material;
 	struct s_plane	*next;
 }		t_plane;
 

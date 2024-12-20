@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_plane.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:18 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/19 19:23:08 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:18:59 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	parse_plane(t_world *world, char **input)
 		exit_err_init("Error\nWrong vec range for plane\n", 1, world);
 	if (!input[3] || pop_color(&new->color, ft_split(input[3], ',')))
 		exit_err_init("Error\nWrong color range for plane\n", 1, world);
+	material_init(&new->material, 0);
 	new->next = NULL;
 	ft_lstadd_back_plane_mrt(&world->plane, new);
 	return (0);

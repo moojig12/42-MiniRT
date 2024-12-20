@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cyl.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:01 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/19 19:28:58 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:24:04 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int	parse_cyl(t_world *world, char **input)
 	if (!input[5] || pop_color(&new->color, ft_split(input[5], ',')))
 		exit_err_init("Error\nWrong color range for cylinder", 1, world);
 	new->next = NULL;
+	material_init(&new->material, 0);
 	ft_lstadd_back_cyl_mrt(&world->cyl, new);
 	return (0);
 }

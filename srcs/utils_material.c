@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_material.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 12:04:30 by root              #+#    #+#             */
-/*   Updated: 2024/12/17 16:35:51 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:23:31 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,3 +35,5 @@ void	material_init(t_material *material, int type)
 	else
 		material_pop(material, 1, 0.5, 0.5);
 }
+
+

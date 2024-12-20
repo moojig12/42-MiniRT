@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_sphere.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:34 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/19 19:24:00 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:19:21 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int	parse_sphere(t_world *world, char **input)
 	if (!input[3] || pop_color(&new->color, ft_split(input[3], ',')))
 		exit_err_init("Error\nWrong color range for sphere\n", 1, world);
 	new->next = NULL;
+	material_init(&new->material, 0);
 	ft_lstadd_back_sphere_mrt(&world->sphere, new);
 	return (0);
 }
