@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 10:00:02 by root              #+#    #+#             */
-/*   Updated: 2024/12/17 16:35:10 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/19 17:38:13 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ int	movement(int key_code, t_main *main)
 	printf("keycode: %i\n", key_code);
 	if (!main->world->selected)
 	{
-		main->world->selected = malloc(sizeof(t_obj));
 		set_selection(main->world->selected, main, CAMERA);
 		printf("Initiated\n");
 	}
