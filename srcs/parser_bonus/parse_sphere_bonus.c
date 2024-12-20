@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:34 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 18:55:20 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:19:55 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ int	parse_sphere(t_world *world, char **input)
 		new->diameter = ft_atof(input[2]);
 	if (input[3])
 		pop_color(&new->color, ft_split(input[3], ','));
-	if (input[4])
-		new->material = check_material(input[4]);
+	material_init(&new->material, check_material(input[4]));
 	new->next = NULL;
 	ft_lstadd_back_sphere_mrt(&world->sphere, new);
 	return (0);

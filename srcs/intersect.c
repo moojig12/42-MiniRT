@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersect.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/08 15:29:59 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/20 12:58:50 by nmandakh         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:13:32 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ t_intersect	intersect_sphere(t_ray ray, t_sphere *sphere, t_intersect inters)
 		if (c < INFINITY)
 			pop_intersec_sphere(&inters, c, ray, sphere);
 		// material_init(&inters.material, MIRROR);
-		inters.material = sphere->material
+		inters.material = sphere->material;
 	}
 	return (inters);
 }
