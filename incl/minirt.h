@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:45:45 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/20 13:09:09 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:25:38 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ typedef enum e_object_type {
 
 typedef enum e_material_type {
 	METAL = 1,
-	GLASS,
 	PLASTIC,
 	STANDARD,
 	METAL_ROUGH,
