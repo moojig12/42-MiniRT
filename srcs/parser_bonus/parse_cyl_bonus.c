@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cyl_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:01 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/08 18:56:02 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/20 12:55:49 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ int	parse_cyl(t_world *world, char **input)
 		pop_color(&new->color, ft_split(input[5], ','));
 	if (input[6])
 		new->material = check_material(input[6]);
+
+	if (input[6])
+		new->material = material_init(&new->material, check_material(input[6]));
 	new->next = NULL;
 	ft_lstadd_back_cyl_mrt(&world->cyl, new);
 	return (0);

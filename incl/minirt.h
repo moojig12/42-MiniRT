@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:45:45 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/19 17:30:38 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/20 12:58:57 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ typedef struct s_sphere {
 	t_vec			pos;
 	double			diameter;
 	t_rgb			color;
-	t_material_type	material;
+	t_material	material;
 	struct s_sphere	*next;
 }		t_sphere;
 
@@ -189,7 +189,7 @@ typedef struct s_plane {
 	t_vec			pos;
 	t_vec			norm;
 	t_rgb			color;
-	t_material_type	material;
+	t_material	material;
 	struct s_plane	*next;
 }		t_plane;
 
@@ -200,7 +200,7 @@ typedef struct s_cylinder {
 	double				diameter;
 	double				height;
 	t_rgb				color;
-	t_material_type		material;
+	t_material			material;
 	struct s_cylinder	*next;
 }		t_cyl;
 
