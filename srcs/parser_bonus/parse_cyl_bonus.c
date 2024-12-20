@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cyl_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 21:08:01 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/20 12:55:49 by nmandakh         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:20:08 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,21 +49,21 @@ int	parse_cyl(t_world *world, char **input)
 	if (size < 6 || size > 7)
 		exit_err_init("Error\nToo many args for cylinder\n", 1, world);
 	new = malloc(sizeof(t_cyl));
-	if (input[1])
-		pop_vec(&new->pos, ft_split(input[1], ','), NULL, 1);
-	if (input[2])
-		pop_vec(&new->norm, ft_split(input[2], ','), alloc_float(-1.0, 1.0), 0);
-	if (input[3])
+	if (!input[1] || pop_vec(&new->pos, ft_split(input[1], ','), NULL, 1))
+		exit_err_init("Error\nWrong vec range for cylinder", 1, world);
+	if (!input[2] || pop_vec(&new->norm, ft_split(input[2], ','), \
+		alloc_float(-1.0, 1.0), 0))
+		exit_err_init("Error\nWrong vec range for cylinder", 1, world);
+	if (input[3] && input[4])
+	{
 		new->diameter = ft_atof(input[3]);
-	if (input[4])
 		new->height = ft_atof(input[4]);
-	if (input[5])
-		pop_color(&new->color, ft_split(input[5], ','));
-	if (input[6])
-		new->material = check_material(input[6]);
-
-	if (input[6])
-		new->material = material_init(&new->material, check_material(input[6]));
+	}
+	else
+		exit_err_init("Error\nNo arguments for cylinder", 1, world);
+	if (!input[5] || pop_color(&new->color, ft_split(input[5], ',')))
+		exit_err_init("Error\nWrong color range for cylinder", 1, world);
+	material_init(&new->material, check_material(input[6]));
 	new->next = NULL;
 	ft_lstadd_back_cyl_mrt(&world->cyl, new);
 	return (0);

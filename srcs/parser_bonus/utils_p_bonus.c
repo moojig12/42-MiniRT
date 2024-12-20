@@ -6,7 +6,7 @@
 /*   By: fjoestin <fjoestin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/07 16:47:03 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/17 13:40:41 by fjoestin         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:25:12 by fjoestin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,18 @@ int	ft_strcmp(const char *s1, const char *s2)
 
 int	check_material(char *input)
 {
+	if (!input)
+		return (STANDARD);
 	if (ft_strcmp(input, "metal") == 0)
 		return (METAL);
-	if (ft_strcmp(input, "glass") == 0)
-		return (GLASS);
+	if (ft_strcmp(input, "metal rough") == 0)
+		return (METAL_ROUGH);
 	if (ft_strcmp(input, "plastic") == 0)
 		return (PLASTIC);
+	if (ft_strcmp(input, "mirror") == 0)
+		return (MIRROR);
+	if (ft_strcmp(input, "rock") == 0)
+		return (ROCK);
 	return (STANDARD);
 }
 

@@ -6,7 +6,7 @@
 /*   By: nmandakh <nmandakh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 13:45:45 by fjoestin          #+#    #+#             */
-/*   Updated: 2024/12/20 13:03:14 by nmandakh         ###   ########.fr       */
+/*   Updated: 2024/12/20 13:28:20 by nmandakh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ typedef enum e_object_type {
 
 typedef enum e_material_type {
 	METAL = 1,
-	GLASS,
 	PLASTIC,
 	STANDARD,
 	METAL_ROUGH,
@@ -181,7 +180,7 @@ typedef struct s_sphere {
 	t_vec			pos;
 	double			diameter;
 	t_rgb			color;
-	t_material	material;
+	t_material		material;
 	struct s_sphere	*next;
 }		t_sphere;
 
